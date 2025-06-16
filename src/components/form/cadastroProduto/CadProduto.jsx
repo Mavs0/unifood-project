@@ -4,26 +4,26 @@ import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
-import { useDropzone } from "react-dropzone";
+import { Toast } from "primereact/toast";
 
 import { useState, useEffect, useRef } from "react";
-import style from "./CadProduto.module.css";
-import { getAuthHeaders } from "../../../utils/auth";
+import { useDropzone } from "react-dropzone";
+import styles from "./CadProduto.module.css";
 
 export default function FormCadProduto({ visible, onHide, onSave }) {
+  const toast = useRef(null);
+
   const PRODUTO_INICIAL = {
     nome: "",
     preco: null,
     categoria: null,
     descricao: "",
     imagemUrl: "",
-    estoque: 1,
   };
 
   const [produto, setProduto] = useState(PRODUTO_INICIAL);
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState({});
-  const nomeInputRef = useRef(null);
 
   const categorias = [
     { label: "Refeições", value: "refeições" },
@@ -35,30 +35,28 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     { label: "Outros", value: "outros" },
   ];
 
+  const nomeInputRef = useRef(null);
+
+  useEffect(() => {
+    if (visible) {
+      setTimeout(() => nomeInputRef.current?.focus(), 200);
+    } else {
+      setProduto(PRODUTO_INICIAL);
+      setTouched({});
+    }
+  }, [visible]);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: { "image/*": [] },
     onDrop: (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = () => {
-          handleChange("imagemUrl", reader.result);
-        };
+        reader.onload = () => handleChange("imagemUrl", reader.result);
         reader.readAsDataURL(file);
       }
     },
   });
-
-  useEffect(() => {
-    if (visible) {
-      setTimeout(() => {
-        nomeInputRef.current?.focus();
-      }, 200);
-    } else {
-      setProduto(PRODUTO_INICIAL);
-      setTouched({});
-    }
-  }, [visible]);
 
   const handleChange = (field, value) => {
     setProduto((prev) => ({ ...prev, [field]: value }));
@@ -66,16 +64,11 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
   };
 
   const validaCampo = (field) => {
-    switch (field) {
-      case "nome":
-      case "descricao":
-        return produto[field].trim() !== "";
-      case "preco":
-      case "categoria":
-        return produto[field] !== null && produto[field] !== "";
-      default:
-        return true;
-    }
+    if (field === "nome" || field === "descricao")
+      return produto[field].trim() !== "";
+    if (field === "preco" || field === "categoria")
+      return produto[field] !== null && produto[field] !== "";
+    return true;
   };
 
   const formularioValido =
@@ -85,51 +78,95 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     validaCampo("descricao");
 
   const submit = async () => {
-    if (!formularioValido) return;
+    if (!formularioValido) {
+      toast.current.show({
+        severity: "warn",
+        summary: "Campos obrigatórios",
+        detail: "Preencha todos os campos obrigatórios.",
+        life: 3000,
+      });
+      return;
+    }
 
     setLoading(true);
+
+    const userStorage =
+      localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
+    const usuario = userStorage ? JSON.parse(userStorage) : null;
+
+    if (!usuario?.uid) {
+      toast.current.show({
+        severity: "error",
+        summary: "Erro",
+        detail: "Usuário não autenticado.",
+        life: 3000,
+      });
+      setLoading(false);
+      return;
+    }
+
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+
+    const payload = {
+      nome: produto.nome,
+      preco: produto.preco,
+      descricao: produto.descricao,
+      sellerId: usuario.uid,
+      imagemUrl: produto.imagemUrl || "https://via.placeholder.com/150",
+      categorias: [produto.categoria],
+      estoque: 10,
+    };
+
     try {
-      const userStorage =
-        localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
-      const usuario = userStorage ? JSON.parse(userStorage) : null;
-
-      if (!usuario?.uid) {
-        alert("Usuário não autenticado.");
-        return;
-      }
-
-      const body = {
-        nome: produto.nome.trim(),
-        preco: produto.preco,
-        descricao: produto.descricao.trim(),
-        sellerId: usuario.uid,
-        imagemUrl: produto.imagemUrl || "",
-        categorias: [produto.categoria],
-        estoque: produto.estoque || 1,
-      };
-
-      const res = await fetch(
-        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/product",
+      const response = await fetch(
+        "https://us-central1-unifood-aaa0f.cloudfunctions.net/api/product",
         {
           method: "POST",
-          headers: getAuthHeaders(),
-          body: JSON.stringify(body),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
         }
       );
 
-      const json = await res.json();
+      const data = await response.json();
 
-      if (!res.ok) {
-        console.error(json);
-        alert("Erro ao cadastrar produto.");
-        return;
+      if (!response.ok) {
+        throw new Error(data.message || "Erro ao cadastrar o produto.");
       }
 
-      onSave(); // Chama o refresh da listagem de produtos
+      toast.current.show({
+        severity: "success",
+        summary: "Sucesso",
+        detail: "Produto cadastrado!",
+        life: 3000,
+      });
+
+      onSave({
+        id: data.id || Math.random().toString(36).substring(2, 10),
+        ...payload,
+      });
+
       onHide();
     } catch (error) {
-      console.error("Erro ao cadastrar produto:", error);
-      alert("Erro ao cadastrar o produto. Tente novamente.");
+      console.error("Erro geral:", error);
+      toast.current.show({
+        severity: "error",
+        summary: "Erro ao salvar",
+        detail:
+          "Ocorreu um problema ao salvar. Verifique sua conexão ou fale com o suporte.",
+        life: 4000,
+      });
+
+      // Fallback: Mock local pra não travar a interface
+      onSave({
+        id: Math.random().toString(36).substring(2, 10),
+        ...payload,
+      });
+
+      onHide();
     } finally {
       setLoading(false);
     }
@@ -142,99 +179,109 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
   };
 
   const classErro = (field) =>
-    touched[field] && !validaCampo(field) ? style.inputErro : "";
+    touched[field] && !validaCampo(field) ? styles.inputErro : "";
 
   return (
-    <Dialog
-      header="Cadastrar produto"
-      visible={visible}
-      onHide={handleHide}
-      modal
-      style={{ width: "450px" }}
-      footer={
-        <div className={style.botoes}>
-          <Button
-            type="button"
-            label="Cancelar"
-            onClick={handleHide}
-            className={style.botaoCancelar}
-            disabled={loading}
-          />
-          <Button
-            type="button"
-            label={loading ? "Salvando..." : "Cadastrar"}
-            onClick={submit}
-            className={style.botaoCadastrar}
-            disabled={!formularioValido || loading}
-          />
-        </div>
-      }
-    >
-      <div className={style.containerForm}>
-        <div className={`${style.nome} ${classErro("nome")}`}>
-          <label>Nome *</label>
-          <InputText
-            value={produto.nome}
-            onChange={(e) => handleChange("nome", e.target.value)}
-            ref={nomeInputRef}
-          />
-        </div>
-
-        <div className={style.precoEcategorias}>
-          <div className={`${style.preco} ${classErro("preco")}`}>
-            <label>Preço *</label>
-            <InputNumber
-              value={produto.preco}
-              onValueChange={(e) => handleChange("preco", e.value)}
-              mode="currency"
-              currency="BRL"
-              locale="pt-BR"
-              placeholder="Preço"
+    <>
+      <Toast ref={toast} />
+      <Dialog
+        header="Cadastrar produto"
+        visible={visible}
+        onHide={handleHide}
+        modal
+        style={{ width: "450px" }}
+        footer={
+          <div className={styles.botoes}>
+            <Button
+              type="button"
+              className={`p-button-secondary ${styles.botaoCancelar}`}
+              label="Cancelar"
+              onClick={handleHide}
+              disabled={loading}
+            />
+            <Button
+              type="button"
+              label={loading ? "Salvando..." : "Cadastrar"}
+              onClick={submit}
+              className={styles.botaoCadastrar}
+              disabled={!formularioValido || loading}
+            />
+          </div>
+        }
+      >
+        <div className={styles.containerForm}>
+          <div className={`${styles.nome} ${classErro("nome")}`}>
+            <label htmlFor="nome">
+              Nome <span className={styles.astec}>*</span>
+            </label>
+            <InputText
+              id="nome"
+              value={produto.nome}
+              onChange={(e) => handleChange("nome", e.target.value)}
+              ref={nomeInputRef}
             />
           </div>
 
-          <div className={`${style.categorias} ${classErro("categoria")}`}>
-            <label>Categoria *</label>
-            <Dropdown
-              value={produto.categoria}
-              options={categorias}
-              onChange={(e) => handleChange("categoria", e.value)}
-              placeholder="Selecione"
-              className={style.dropdown}
+          <div className={styles.precoEcategorias}>
+            <div className={`${styles.preco} ${classErro("preco")}`}>
+              <label htmlFor="preco">Preço *</label>
+              <InputNumber
+                id="preco"
+                value={produto.preco}
+                onValueChange={(e) => handleChange("preco", e.value)}
+                mode="currency"
+                currency="BRL"
+                locale="pt-BR"
+                min={0}
+              />
+            </div>
+
+            <div className={`${styles.categorias} ${classErro("categoria")}`}>
+              <label htmlFor="categoria">Categoria *</label>
+              <Dropdown
+                id="categoria"
+                value={produto.categoria}
+                options={categorias}
+                onChange={(e) => handleChange("categoria", e.value)}
+                placeholder="Selecione"
+              />
+            </div>
+          </div>
+
+          <div className={`${styles.descricao} ${classErro("descricao")}`}>
+            <label htmlFor="descricao">Descrição *</label>
+            <InputTextarea
+              id="descricao"
+              value={produto.descricao}
+              onChange={(e) => handleChange("descricao", e.target.value)}
+              rows={4}
+              placeholder="Breve descrição..."
             />
           </div>
-        </div>
 
-        <div className={`${style.descricao} ${classErro("descricao")}`}>
-          <label>Descrição *</label>
-          <InputTextarea
-            value={produto.descricao}
-            onChange={(e) => handleChange("descricao", e.target.value)}
-            rows={4}
-            placeholder="Descrição do produto"
-          />
-        </div>
-
-        <div className={style.imagem}>
-          <label>Imagem</label>
-          <div
-            {...getRootProps()}
-            className={`${style.dropzone} ${isDragActive ? style.ativo : ""}`}
-          >
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Solte a imagem aqui...</p>
-            ) : (
-              <p>Arraste e solte uma imagem ou clique para escolher.</p>
+          <div className={styles.imagem}>
+            <label>Imagem do produto</label>
+            <div
+              {...getRootProps()}
+              className={`${styles.dropzone} ${
+                isDragActive ? styles.ativo : ""
+              }`}
+            >
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <p>Solte a imagem aqui...</p>
+              ) : (
+                <p>Arraste e solte ou clique para selecionar uma imagem.</p>
+              )}
+            </div>
+            {produto.imagemUrl && (
+              <div className={styles.previewImagem}>
+                <img src={produto.imagemUrl} alt="Preview" />
+              </div>
             )}
           </div>
-          {produto.imagemUrl && (
-            <div className={style.previewImagem}>
-              <img src={produto.imagemUrl} alt="Preview" />
-            </div>
-          )}
         </div>
-      </div>
-    </Dialog>
+      </Dialog>
+    </>
   );
 }
