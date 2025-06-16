@@ -5,13 +5,13 @@ import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD3TBGbRbZQ75bHVQW41kJVGLbXdjsbyxU",
-  authDomain: "unifood-aaa0f.firebaseapp.com",
-  projectId: "unifood-aaa0f",
-  storageBucket: "unifood-aaa0f.appspot.com",
-  messagingSenderId: "52534721759",
-  appId: "1:52534721759:web:296e50e8ed5ffb32f33d6a",
-  measurementId: "G-PR6PMFJ4RF",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
