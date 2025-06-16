@@ -1,0 +1,17 @@
+.topbarra {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  padding: 1rem 1rem;
+  background-color: #f7f8fa;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.rightIcons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: flex-end; 
+  flex-wrap: nowrap;
+}

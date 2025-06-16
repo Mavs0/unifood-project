@@ -1,0 +1,173 @@
+/* Dashboard.module.css */
+.dashboardContainer {
+    display: flex;
+    height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  .mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .pageBody {
+    flex: 1;
+    padding: 24px;
+    background-color: #f3f4f6;
+    overflow-y: auto;
+  }
+  
+  .header {
+    margin-bottom: 24px;
+  }
+  
+  .headerTop {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  @media (min-width: 768px) {
+    .headerTop {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .titleIcon {
+    font-size: 28px;
+    color: #f87171;
+  }
+  
+  .filtroGroup {
+    display: flex;
+    gap: 4px;
+  }
+  
+  .filtroButton {
+    padding: 8px 20px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #fca5a5;
+    background-color: white;
+    color: #374151;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .filtroButtonAtivo {
+    background-color: #ef4444;
+    color: white;
+  }
+  
+  .cardGrid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  
+  @media (min-width: 768px) {
+    .cardGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .card {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 16px;
+  }
+  
+  .cardTitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 6px;
+  }
+  
+  .cardValue {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1f2937;
+  }
+  
+  .cardSubtext {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 4px;
+  }
+  
+  .graficoGrid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 16px;
+  }
+  
+  @media (min-width: 1024px) {
+    .graficoGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .cardGrafico {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 16px;
+  }
+  
+  .cardGraficoFull {
+    grid-column: span 1;
+  }
+  
+  @media (min-width: 1024px) {
+    .cardGraficoFull {
+      grid-column: span 3;
+    }
+  }
+  
+  .graficoTitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 8px;
+  }
+  
+  .graficoValor {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 16px;
+  }
+  
+  .pizzaLegenda {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    font-size: 14px;
+  }
+  
+  .pizzaItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .pizzaCor {
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    display: inline-block;
+  }
+  

@@ -1,0 +1,114 @@
+.container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 2rem;
+    background-color: #f9fafb;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #111827;
+  }
+  
+  .filtrosWrapper {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .inputBusca {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    width: 300px;
+    font-size: 0.95rem;
+  }
+  
+  .selectStatus {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.95rem;
+    background-color: white;
+    color: #374151;
+  }
+  
+  .tableWrapper {
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  
+  .table th {
+    background-color: #ffeceb;
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.95rem;
+    color: #4b5563;
+  }
+  
+  .table td {
+    padding: 1rem;
+    font-size: 0.95rem;
+    color: #374151;
+    border-top: 1px solid #f3f4f6;
+  }
+  
+  .status {
+    padding: 0.3rem 0.7rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .pendente {
+    background-color: #fee2e2;
+    color: #b91c1c;
+  }
+  
+  .entregue {
+    background-color: #d1fae5;
+    color: #065f46;
+  }
+  
+  .cancelado {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+  
+  .viewBtn {
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  
+  .viewBtn:hover {
+    color: #111827;
+  }
+  

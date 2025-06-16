@@ -1,0 +1,55 @@
+
+.cont_submit {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+/*botão de criar conta*/
+.btnCriaConta, .btnLogin {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #f0716f;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    
+}
+.btnCriaConta{
+    margin-top: 1em;
+}
+
+
+
+/* Usado no botão de cadastro (não usado diretamente no JSX atual) */
+.btnCriaConta:hover {
+    background-color: #d3bdbc;
+}
+
+@media(max-width:768px){
+    
+    .cont_submit {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    
+}
+
+/*botão de criar conta*/
+.btnCriaConta, .btnLogin {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    margin-top: 0.60rem;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+}

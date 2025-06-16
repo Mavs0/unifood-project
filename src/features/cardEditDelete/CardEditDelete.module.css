@@ -1,0 +1,33 @@
+.card_container {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 6px;
+    z-index: 1000;
+    width: 145px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.acoesWrapper {
+    position: relative;
+}
+
+.botaoCustomizado {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: 500;
+    border: none;
+    width: 100%;
+    font-size: 14px;
+}
+
+.botaoCustomizadoDelete {
+    background-color: #fff0f0;
+    color: #d32f2f;
+    font-weight: 500;
+    border: none;
+    width: 100%;
+    font-size: 14px;
+}

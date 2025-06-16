@@ -1,0 +1,52 @@
+.usercadastro {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; 
+  flex-wrap: wrap;
+}
+/*formulario geral do cadastro*/
+.userform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rem;
+  min-height: 0;
+  position: relative;
+  align-items: center;
+
+}
+.userform ::placeholder{
+  color: #666;
+}
+/*imagem cadastro*/
+.img_box{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img_box img {
+  width: 500px;
+  height: auto;
+  object-fit: cover;
+}
+
+/*resposividade para telas menores*/
+@media (max-width: 768px) {
+  .usercadastro{
+    height: auto;
+  }
+  
+  .userform {
+    flex-direction: column-reverse;
+    gap: 0;
+    width: 100%;
+  }
+
+  .img_box img {
+    width: 40%;
+  }
+}

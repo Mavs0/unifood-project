@@ -1,0 +1,163 @@
+.container {
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.passoAPasso {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.passos {
+  color: #bbb;
+}
+
+.ativo {
+  color: #333;
+}
+
+.seta {
+  color: #ccc;
+}
+
+.resumoPedido {
+  margin-bottom: 2rem;
+}
+
+.cardResumo {
+  display: flex;
+  gap: 1rem;
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardResumo img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cardResumoInfo {
+  flex: 1;
+}
+
+.quantidadeControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.quantidadeBtn {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  border: none;
+  background-color: #eee;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.quantidadeBtn:hover {
+  background-color: #ddd;
+}
+
+.quantidadeValor {
+  min-width: 24px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.total {
+  font-weight: bold;
+  color: green;
+}
+
+.pagamento {
+  margin-top: 2rem;
+}
+
+.radioGroup {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+.formulario {
+  margin-top: 1rem;
+}
+
+.inputGroup {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex {
+  display: flex;
+  gap: 1rem;
+}
+
+.qrCodeContainer {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.btnFinalizar {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.cardPreview {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.cartao {
+  width: 320px;
+  height: 200px;
+  background: linear-gradient(135deg, #3246a8, #5b6ee1);
+  color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chip {
+  width: 50px;
+  height: 35px;
+  background-color: gold;
+  border-radius: 6px;
+}
+
+.numero {
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  margin-top: 1rem;
+}
+
+.detalhes {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}

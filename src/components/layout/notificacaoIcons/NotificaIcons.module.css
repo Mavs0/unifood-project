@@ -1,0 +1,105 @@
+.iconGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-right: 1.5rem;
+}
+
+.iconBox {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 1.2rem;
+  color: #007afd;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: #d3b0bc;
+}
+
+.iconPresent {
+  font-size: 1.1rem;
+  color: #191919;
+}
+
+.iconPresent:hover {
+  color: #d3b0bc;
+}
+
+.iconSetting {
+  font-size: 1.2rem;
+  color: #d86a6a;
+}
+
+.iconSetting:hover {
+  color: #d3b0bc;
+}
+
+.lightBlue {
+  background-color: #e1f0ff;
+}
+
+.gray {
+  background-color: #e8e9f1;
+}
+
+.pink {
+  background-color: #ffe4e8;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 3px 6px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.iconBox:nth-child(1) .badge {
+  background-color: #2196f3;
+}
+
+.iconBox:nth-child(2) .badge {
+  background-color: #2196f3;
+}
+
+.iconBox:nth-child(3) .badge {
+  background-color: #4a4e69;
+}
+
+.iconBox:nth-child(4) .badge {
+  background-color: #f44336;
+}
+
+@media (max-width: 768px) {
+  .iconGroup {
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .iconBox {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .icon, .iconPresent, .iconSetting {
+    font-size: 1rem;
+  }
+
+  .badge {
+    font-size: 0.5rem;
+  }
+}

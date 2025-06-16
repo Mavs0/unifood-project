@@ -1,0 +1,39 @@
+.option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f3f3f3;
+    padding: 5px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    width: 100px;
+    border: 2px solid #ccc;
+}
+
+/* Ao passar o mouse*/
+.option:hover {
+    transform: translateY(-4px);
+    background-color: #e0e0e0; 
+    border-color: #999;
+}
+
+/* Ao clicar */
+.option:active {
+    background-color: #d6d6d6; 
+    border-color: #888;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+}
+
+.avatarNome {
+    font-weight: 500;
+    color: #333;
+}

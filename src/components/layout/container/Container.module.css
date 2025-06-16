@@ -1,0 +1,26 @@
+.container{
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  padding: 0 1rem; 
+  box-sizing: border-box;
+}
+
+.header{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem 0;
+  width: 100%;
+  
+  
+}
+@media (max-width: 768px) {
+  .header {
+    justify-content: center; /* centraliza a logo */
+    padding: 1rem;
+  }
+}

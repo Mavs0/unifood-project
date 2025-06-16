@@ -1,0 +1,84 @@
+.container {
+    display: flex;
+    background-color: #f8f9fb;
+    min-height: 100vh;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 24px 40px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 24px 0 16px;
+    color: #333;
+  }
+  
+  .lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    transition: 0.2s;
+  }
+  
+  .card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+  
+  .nova {
+    border-left: 4px solid #4caf50;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .icon {
+    font-size: 18px;
+  }
+  
+  .titulo {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .badge {
+    margin-left: auto;
+    background-color: #4caf50;
+    color: white;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    text-transform: uppercase;
+  }
+  
+  .mensagem {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  
+  .hora {
+    font-size: 12px;
+    color: #888;
+    align-self: flex-end;
+  }
+  

@@ -1,0 +1,27 @@
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: 1rem;
+}
+
+.greeting {
+  font-weight: 500;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .userSection {
+    gap: 0.3rem;
+  }
+
+  .greeting {
+    font-size: 0.85rem;
+    width: 80px;
+  }
+
+  .p-avatar {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}

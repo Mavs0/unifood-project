@@ -1,0 +1,229 @@
+/* Estiliza o container principal do dialog */
+:global(.p-dialog) {
+    background-color: #F0F2F4; /* cor de fundo do dialog */
+    width: 41vw !important;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+  
+}
+
+/* Estiliza o cabeçalho */
+:global(.p-dialog .p-dialog-header) {
+    background-color: #F0F2F4;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    height: auto;
+    padding-top: 1em;
+}
+/* Estiliza o titulo do form */
+:global( .p-dialog .p-dialog-header .p-dialog-title ) {
+    background-color: #F0F2F4;
+    color: #344054;
+    font-size: 1.5rem;
+}
+
+/* Estiliza o conteúdo */
+:global(.p-dialog .p-dialog-content) {
+    background-color: #F0F2F4;
+    color: #344054;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+ /* container principal dentro do dialog */
+.containerForm {
+    background-color: #F0F2F4;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+ /* label de cada input */
+.containerForm label{
+    font-size: 14px; 
+    color: #344054;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* asterico do label*/
+.astec{
+    font-weight: 900;
+    color: red;
+    margin-left: 2px;
+}
+
+/* Preço e Categoria lado a lado */
+.precoEcategorias {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+/* Cada campo com label acima */
+.preco,
+.categorias {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Descrição ocupa toda a largura */
+.descricao textarea {
+    height: 40px;
+    resize: none; 
+}
+
+
+/* Estilização do componente imagem */
+:global(.p-fileupload-choose) {
+    background-color: white;
+    color: #667085;
+    font-size: 1rem;
+    width: 100%;
+    border: 1px solid #d2d7de;
+    height: 70px;
+    text-align: start;
+}
+
+
+/* estilização apenas de nome, preço e descrição */
+.nome input,
+.preco input,
+.descricao textarea{
+    width: 100%;
+    box-sizing: border-box;
+    height: 42px;
+}
+
+/* estilização para remover foto */
+.uploadComImagem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f9fafb;
+    border: 1px solid #d0d5dd;
+    border-radius: 3px;
+    padding: 0.5rem 0.75rem;
+    height: 70px;
+    font-size: 14px;
+    color: #344054;
+    width: 100%;
+}
+
+.nomeImagem {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.botaoRemover {
+    background: none;
+    border: none;
+    color: #667085;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.5rem;
+}
+
+.botaoRemover:hover {
+    color: #d32f2f;
+}
+.remove{
+    font-size: 20px;
+}
+
+/* Rodapé, cadastrar e cancelar */
+:global(.p-dialog .p-dialog-footer) {
+    padding: 0.5rem;
+    background-color: #F0F2F4;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid #d2d7de;
+}
+.botoes {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;  
+}
+.botaoCancelar{
+    background-color: #F0F2F4;
+    color: #667085;
+    border: none;
+    height: 38px;
+ 
+    border-radius: 8px;
+}
+
+.botaoCadastrar{
+    background-color: #f0716f;
+    color:white;
+    border: none;
+    height: 38px;
+   
+    border-radius: 8px;
+}
+
+.botaoCadastrar:disabled {
+  background-color: #d0d5dd;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+@media(max-width: 768px){
+    
+  .containerForm {
+    gap: 0.75rem;                /* menos espaço entre campos */
+  }
+
+  .containerForm label {
+    font-size: 12px;             /* fonte menor */
+    margin-bottom: 0.2rem;
+  }
+  /*estilização global*/
+  
+
+ 
+  .botaoCancelar,
+  .botaoCadastrar {
+    width: 100%;
+    height: 34px;
+    font-size: 13px;
+    padding: 0 1rem;
+  }
+
+  .uploadComImagem {
+    flex-direction: row; /* Manter ícone e nome na mesma linha */
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    height: auto; /* deixar altura se adaptar */
+    gap: 0.5rem;
+    flex-wrap: nowrap; /* evita quebra */
+  }
+
+  .nomeImagem {
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .botaoRemover {
+    flex-shrink: 0; 
+    white-space: nowrap;
+    display: flex;
+    text-align: center;
+  }
+
+  .remove {
+    font-size: 16px;
+  }
+
+  .botoes {
+    gap: 0.5rem;
+  }
+}
