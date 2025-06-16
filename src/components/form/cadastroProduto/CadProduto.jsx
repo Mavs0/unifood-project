@@ -4,14 +4,11 @@ import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
+import { useDropzone } from "react-dropzone";
 
 import { useState, useEffect, useRef } from "react";
 import style from "./CadProduto.module.css";
-
-// Firebase
-import { db } from "/firebase"; // ajuste o caminho se necessário
-import { collection, addDoc } from "firebase/firestore";
-import { useDropzone } from "react-dropzone";
+import { getAuthHeaders } from "../../../utils/auth";
 
 export default function FormCadProduto({ visible, onHide, onSave }) {
   const PRODUTO_INICIAL = {
@@ -20,12 +17,12 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     categoria: null,
     descricao: "",
     imagemUrl: "",
+    estoque: 1,
   };
 
   const [produto, setProduto] = useState(PRODUTO_INICIAL);
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState({});
-
   const nomeInputRef = useRef(null);
 
   const categorias = [
@@ -91,7 +88,6 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     if (!formularioValido) return;
 
     setLoading(true);
-
     try {
       const userStorage =
         localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
@@ -102,27 +98,34 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
         return;
       }
 
-      const produtoComMeta = {
+      const body = {
         nome: produto.nome.trim(),
         preco: produto.preco,
-        categoria: produto.categoria,
         descricao: produto.descricao.trim(),
-        uid: usuario.uid,
-        ultimaAtualizacao: new Date().toLocaleString("pt-BR"),
+        sellerId: usuario.uid,
+        imagemUrl: produto.imagemUrl || "",
+        categorias: [produto.categoria],
+        estoque: produto.estoque || 1,
       };
 
-      // Simula ou salva no Firebase:
-      try {
-        const docRef = await addDoc(collection(db, "produtos"), produtoComMeta);
-        onSave({ id: docRef.id, ...produtoComMeta });
-      } catch {
-        // Simulação com ID falso
-        onSave({
-          id: Math.random().toString(36).substring(2, 10),
-          ...produtoComMeta,
-        });
+      const res = await fetch(
+        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/product",
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+          body: JSON.stringify(body),
+        }
+      );
+
+      const json = await res.json();
+
+      if (!res.ok) {
+        console.error(json);
+        alert("Erro ao cadastrar produto.");
+        return;
       }
 
+      onSave(); // Chama o refresh da listagem de produtos
       onHide();
     } catch (error) {
       console.error("Erro ao cadastrar produto:", error);
@@ -152,16 +155,16 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
         <div className={style.botoes}>
           <Button
             type="button"
-            className={`${style.botaoCancelar} p-button p-button-secondary`}
             label="Cancelar"
             onClick={handleHide}
+            className={style.botaoCancelar}
             disabled={loading}
           />
           <Button
             type="button"
             label={loading ? "Salvando..." : "Cadastrar"}
             onClick={submit}
-            className={`${style.botaoCadastrar} p-button`}
+            className={style.botaoCadastrar}
             disabled={!formularioValido || loading}
           />
         </div>
@@ -169,48 +172,30 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     >
       <div className={style.containerForm}>
         <div className={`${style.nome} ${classErro("nome")}`}>
-          <label htmlFor="nome">
-            Nome <span className={style.astec}>*</span>
-          </label>
+          <label>Nome *</label>
           <InputText
-            id="nome"
             value={produto.nome}
             onChange={(e) => handleChange("nome", e.target.value)}
-            placeholder="Insira o nome do produto"
-            aria-invalid={touched.nome && !validaCampo("nome")}
-            aria-describedby="nome-error"
             ref={nomeInputRef}
           />
-          {touched.nome && !validaCampo("nome") && (
-            <small id="nome-error" className={style.erroMsg}>
-              Por favor, insira o nome do produto.
-            </small>
-          )}
         </div>
 
         <div className={style.precoEcategorias}>
           <div className={`${style.preco} ${classErro("preco")}`}>
-            <label htmlFor="preco">
-              Preço <span className={style.astec}>*</span>
-            </label>
+            <label>Preço *</label>
             <InputNumber
-              id="preco"
               value={produto.preco}
               onValueChange={(e) => handleChange("preco", e.value)}
               mode="currency"
               currency="BRL"
               locale="pt-BR"
-              placeholder="Insira o preço"
-              min={0}
+              placeholder="Preço"
             />
           </div>
 
           <div className={`${style.categorias} ${classErro("categoria")}`}>
-            <label htmlFor="categoria">
-              Categoria <span className={style.astec}>*</span>
-            </label>
+            <label>Categoria *</label>
             <Dropdown
-              id="categoria"
               value={produto.categoria}
               options={categorias}
               onChange={(e) => handleChange("categoria", e.value)}
@@ -221,20 +206,17 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
         </div>
 
         <div className={`${style.descricao} ${classErro("descricao")}`}>
-          <label htmlFor="descricao">
-            Descrição do produto <span className={style.astec}>*</span>
-          </label>
+          <label>Descrição *</label>
           <InputTextarea
-            id="descricao"
             value={produto.descricao}
             onChange={(e) => handleChange("descricao", e.target.value)}
             rows={4}
-            placeholder="Insira uma breve descrição"
+            placeholder="Descrição do produto"
           />
         </div>
-        <div className={style.imagem}>
-          <label>Imagem do produto</label>
 
+        <div className={style.imagem}>
+          <label>Imagem</label>
           <div
             {...getRootProps()}
             className={`${style.dropzone} ${isDragActive ? style.ativo : ""}`}
@@ -243,10 +225,9 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
             {isDragActive ? (
               <p>Solte a imagem aqui...</p>
             ) : (
-              <p>Arraste e solte uma imagem aqui, ou clique para selecionar.</p>
+              <p>Arraste e solte uma imagem ou clique para escolher.</p>
             )}
           </div>
-
           {produto.imagemUrl && (
             <div className={style.previewImagem}>
               <img src={produto.imagemUrl} alt="Preview" />

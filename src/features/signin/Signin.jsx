@@ -4,7 +4,6 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import estilos from "./SignIn.module.css";
-// import useToasty from "../context/ToastyProvider";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ export default function SignIn() {
 
     try {
       const res = await fetch(
-        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/auth/login",
+        "https://us-central1-unifood-aaa0f.cloudfunctions.net/api/auth/login'",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

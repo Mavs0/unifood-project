@@ -5,123 +5,58 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { ProgressSpinner } from "primereact/progressspinner";
-
 import { useState, useEffect } from "react";
 import CadastroProduto from "../../../components/form/cadastroProduto/CadProduto";
 import CardViewProduct from "../../../features/cardViewProduct/CardViewProduct";
-
-// Firebase
-import { db } from "/firebase";
-import { collection, getDocs, query, where, addDoc } from "firebase/firestore";
+import { getAuthHeaders } from "../../../utils/auth";
+import { Toast } from "primereact/toast";
+import { useRef } from "react";
 
 export default function MeusProdutos() {
   const [showForm, setShowForm] = useState(false);
   const [produtos, setProdutos] = useState([]);
   const [produtosFiltrados, setProdutosFiltrados] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [busca, setBusca] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const [categoriasDisponiveis, setCategoriasDisponiveis] = useState([]);
+  const toast = useRef(null);
 
   useEffect(() => {
-    const buscarProdutos = async () => {
-      try {
-        setLoading(true);
-        const userStorage =
-          localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
-        const usuario = userStorage ? JSON.parse(userStorage) : null;
-
-        if (!usuario?.uid) {
-          console.warn("Usuário não logado.");
-          return;
-        }
-
-        const produtosRef = collection(db, "produtos");
-        const produtosQuery = query(
-          produtosRef,
-          where("uid", "==", usuario.uid)
-        );
-        const snapshot = await getDocs(produtosQuery);
-
-        let lista = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        // Produtos mockados
-        const produtosMockados = [
-          // {
-          //   nome: "Tortilha Doce",
-          //   preco: 39,
-          //   categoria: "Sobremesa",
-          //   descricao: "Tortilha crocante recheada com cerejas frescas.",
-          //   imagemUrl:
-          //     "https://images.unsplash.com/photo-1606788075761-5ec9d7c4e6b4",
-          //   loja: "Loja da Dona Florinda",
-          //   uid: usuario.uid,
-          //   ultimaAtualizacao: "11/06/2025 14:30",
-          // },
-          {
-            nome: "Hambúrguer Artesanal",
-            preco: 25,
-            categoria: "Lanches",
-            descricao: "Hambúrguer suculento com ingredientes frescos.",
-            imagemUrl:
-              "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-            loja: "Burger House",
-            uid: usuario.uid,
-            ultimaAtualizacao: "11/06/2025 14:31",
-          },
-          {
-            nome: "Suco Detox",
-            preco: 10,
-            categoria: "Bebidas",
-            descricao: "Suco saudável com hortelã, limão e especiarias.",
-            imagemUrl:
-              "https://images.unsplash.com/photo-1617196038434-c43c9acb53b3",
-            loja: "Natureba Drinks",
-            uid: usuario.uid,
-            ultimaAtualizacao: "11/06/2025 14:32",
-          },
-          {
-            nome: "Salada Tropical",
-            preco: 18,
-            categoria: "Saladas",
-            descricao: "Salada leve com frutas, folhas e molho especial.",
-            imagemUrl:
-              "https://images.unsplash.com/photo-1519337265831-281ec6cc8514",
-            loja: "FitFood",
-            uid: usuario.uid,
-            ultimaAtualizacao: "11/06/2025 14:33",
-          },
-        ];
-
-        // Adiciona os produtos mockados à lista
-        lista = [...lista, ...produtosMockados];
-
-        setProdutos(lista);
-        setProdutosFiltrados(lista);
-
-        const categoriasUnicas = [
-          ...new Set(lista.map((p) => p.categoria).filter(Boolean)),
-        ];
-        setCategoriasDisponiveis(
-          categoriasUnicas.map((c) => ({ label: c, value: c }))
-        );
-      } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     buscarProdutos();
   }, []);
 
   useEffect(() => {
     filtrarProdutos();
   }, [busca, categoriaSelecionada, produtos]);
+
+  async function buscarProdutos() {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/product",
+        {
+          headers: getAuthHeaders(),
+        }
+      );
+      if (!res.ok) throw new Error("Erro ao buscar produtos");
+
+      const lista = await res.json();
+      setProdutos(lista);
+      setProdutosFiltrados(lista);
+
+      const categoriasUnicas = [
+        ...new Set(lista.map((p) => p.categorias?.[0]).filter(Boolean)),
+      ];
+      setCategoriasDisponiveis(
+        categoriasUnicas.map((c) => ({ label: c, value: c }))
+      );
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const filtrarProdutos = () => {
     let filtrados = produtos;
@@ -133,43 +68,46 @@ export default function MeusProdutos() {
     }
 
     if (categoriaSelecionada) {
-      filtrados = filtrados.filter((p) => p.categoria === categoriaSelecionada);
+      filtrados = filtrados.filter(
+        (p) => p.categorias && p.categorias.includes(categoriaSelecionada)
+      );
     }
 
     setProdutosFiltrados(filtrados);
   };
 
-  const salvarProduto = async (novoProduto) => {
-    const userStorage =
-      localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
-    const usuario = userStorage ? JSON.parse(userStorage) : null;
-
-    if (!usuario?.uid) {
-      alert("Usuário não autenticado.");
-      return;
-    }
-
-    if (novoProduto.id) {
-      setProdutos((prev) => [...prev, novoProduto]);
-      return;
-    }
-
-    const produtoComData = {
-      ...novoProduto,
-      uid: usuario.uid,
-      ultimaAtualizacao: new Date().toLocaleString("pt-BR"),
-    };
-
+  const excluirProduto = async (id) => {
     try {
-      const docRef = await addDoc(collection(db, "produtos"), produtoComData);
-      setProdutos((prev) => [...prev, { id: docRef.id, ...produtoComData }]);
+      const res = await fetch(
+        `http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/product/${id}`,
+        {
+          method: "DELETE",
+          headers: getAuthHeaders(),
+        }
+      );
+      if (!res.ok) throw new Error("Erro ao excluir produto");
+
+      setProdutos((prev) => prev.filter((p) => p.id !== id));
+      toast.current.show({
+        severity: "success",
+        summary: "Produto excluído",
+        detail: "Produto removido com sucesso!",
+        life: 3000,
+      });
     } catch (error) {
-      console.error("Erro ao salvar produto:", error);
+      console.error("Erro ao excluir produto:", error);
+      toast.current.show({
+        severity: "error",
+        summary: "Erro",
+        detail: "Não foi possível excluir o produto.",
+        life: 3000,
+      });
     }
   };
 
   return (
     <div className={styles.layout}>
+      <Toast ref={toast} />
       <NavBarraSide />
       <div className={styles.mainContent}>
         <NavBarraTop />
@@ -185,7 +123,6 @@ export default function MeusProdutos() {
             />
           </div>
 
-          {/* Filtros */}
           <div className={styles.filtros}>
             <InputText
               value={busca}
@@ -201,13 +138,15 @@ export default function MeusProdutos() {
             />
           </div>
 
-          {/* Loading ou Listagem */}
           {loading ? (
             <div className={styles.loading}>
               <ProgressSpinner />
             </div>
           ) : (
-            <CardViewProduct produtos={produtosFiltrados} />
+            <CardViewProduct
+              produtos={produtosFiltrados}
+              onDelete={excluirProduto}
+            />
           )}
         </div>
       </div>
@@ -215,7 +154,7 @@ export default function MeusProdutos() {
       <CadastroProduto
         visible={showForm}
         onHide={() => setShowForm(false)}
-        onSave={salvarProduto}
+        onSave={buscarProdutos}
       />
     </div>
   );
