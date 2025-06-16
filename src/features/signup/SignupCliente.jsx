@@ -1,264 +1,197 @@
-import { useState } from "react";
-
-import style from "./SignupCliente.module.css";
-
-import Input from "../../components/form/input/Input";
-import Submit from "../../components/form/submit/Submit";
-
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
+import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
 import { GoogleLogin } from "@react-oauth/google";
 
-/*icone de mostrar senha*/
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import estilos from "./SignupCliente.module.css";
 
-import { auth, db } from "../../../firebase";
-import { useToast } from "../../components/toast/ToastContext";
-import { useNavigate } from "react-router-dom"; // adicione se ainda não tiver
+export default function SignUpCliente() {
+  const navigate = useNavigate();
+  const toast = useRef(null);
 
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-
-export default function Signup({ txtBtn }) {
   const [dados, setDados] = useState({
     nome: "",
     sobrenome: "",
-    email: "",
     telefone: "",
+    email: "",
     senha: "",
-    confirmacaoSenha: "",
-    aceitarTermos: "",
+    confirmarSenha: "",
   });
 
-  //mudança de estado dos objetos
   function handleChange(e) {
-    const { name, value, type, checked } = e.target;
-    setDados({
-      ...dados,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    const { name, value } = e.target;
+    setDados({ ...dados, [name]: value });
   }
 
-  const [senha, setSenha] = useState(false);
-  const [confirmSenha, setConfirmSenha] = useState(false);
-
-  const { addToast } = useToast(); // ✅ USA O CONTEXTO DE TOAST
-
-  function handleChange(e) {
-    const { name, value, type, checked } = e.target;
-    setDados({
-      ...dados,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  }
-
-  function validarFormulario(dados) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+  function validar() {
     if (
-      Object.entries(dados).some(
-        ([key, val]) => key !== "aceitarTermos" && !val
-      )
+      !dados.nome ||
+      !dados.sobrenome ||
+      !dados.telefone ||
+      !dados.email ||
+      !dados.senha ||
+      !dados.confirmarSenha
     ) {
-      return "Por favor, preencha todos os campos obrigatórios.";
+      return "Preencha todos os campos.";
     }
-
-    if (!emailRegex.test(dados.email)) {
-      return "Por favor, insira um email válido.";
-    }
-
-    if (dados.senha !== dados.confirmacaoSenha) {
+    if (dados.senha !== dados.confirmarSenha) {
       return "As senhas não coincidem.";
     }
-
-    if (!dados.aceitarTermos) {
-      return "Você precisa aceitar os termos e políticas para continuar.";
-    }
-
     return null;
   }
 
-  const navigate = useNavigate();
-
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
-
-    const erro = validarFormulario(dados);
+    const erro = validar();
     if (erro) {
-      addToast({ tipo: "erro", mensagem: erro });
+      toast.current.show({
+        severity: "warn",
+        summary: "Atenção",
+        detail: erro,
+      });
       return;
     }
 
-    // 🔐 Aqui você pode simular salvar no Firestore se quiser...
-
-    // ✅ Simula cadastro bem-sucedido
-    addToast({
-      tipo: "sucesso",
-      mensagem: "Cadastro realizado com sucesso!",
-    });
-
-    // Espera 1s e redireciona para login
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
-  }
-
-  const loginComGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      const res = await fetch(
+        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/users/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: dados.nome.trim(),
+            lastName: dados.sobrenome.trim(),
+            telefone: dados.telefone.trim(),
+            email: dados.email.trim().toLowerCase(),
+            password: dados.senha,
+            role: "cliente",
+          }),
+        }
+      );
 
-      console.log("Usuário autenticado com Google:");
-      console.log("Nome:", user.displayName);
-      console.log("Email:", user.email);
-      console.log("UID:", user.uid);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Erro ao registrar");
 
-      addToast({
-        tipo: "sucesso",
-        mensagem: `Login com Google realizado com sucesso!`,
+      toast.current.show({
+        severity: "success",
+        summary: "Cadastro feito!",
+        detail: "Você será redirecionado...",
       });
 
-      // Aqui você pode redirecionar ou salvar os dados do usuário
-    } catch (error) {
-      console.error("Erro no login com Google:", error);
-      addToast({
-        tipo: "erro",
-        mensagem: "Erro ao autenticar com o Google.",
+      setTimeout(() => navigate("/login"), 1000);
+    } catch (err) {
+      toast.current.show({
+        severity: "error",
+        summary: "Falha no cadastro",
+        detail: err.message,
       });
     }
+  }
+
+  const responseGoogle = (response) => {
+    console.log(response);
   };
 
   return (
-    <form className={style.formCadastro} onSubmit={submit}>
-      <h2 className={style.titulo}>Cadastre-se</h2>
-      <p className={style.subtitulo}>
-        Vamos preparar tudo para que você possa acessar sua conta pessoal.
-      </p>
+    <div className={estilos.container}>
+      <Toast ref={toast} />
+      <div className={estilos.formWrapper}>
+        <h2 className={estilos.titulo}>Cadastro de Cliente</h2>
+        <form onSubmit={submit} className={estilos.form}>
+          <div className={estilos.formRow}>
+            <div className={estilos.inputGroup}>
+              <label>Nome</label>
+              <InputText
+                name="nome"
+                value={dados.nome}
+                onChange={handleChange}
+                placeholder="Digite seu nome"
+                className="p-inputtext-lg"
+              />
+            </div>
+            <div className={estilos.inputGroup}>
+              <label>Sobrenome</label>
+              <InputText
+                name="sobrenome"
+                value={dados.sobrenome}
+                onChange={handleChange}
+                placeholder="Digite seu sobrenome"
+                className="p-inputtext-lg"
+              />
+            </div>
+          </div>
 
-      <div className={style.formRow}>
-        <Input
-          type="text"
-          text="Nome"
-          name="nome"
-          placeholder="Digite seu nome"
-          handleOnChange={handleChange}
-          value={dados.nome}
-          customClass="inputInfoBasicas"
-        />
-        <Input
-          type="text"
-          text="Sobrenome"
-          name="sobrenome"
-          placeholder="Digite seu sobrenome"
-          handleOnChange={handleChange}
-          value={dados.sobrenome}
-          customClass="inputInfoBasicas"
-        />
-      </div>
+          <div className={estilos.inputGroup}>
+            <label>Telefone</label>
+            <InputText
+              name="telefone"
+              value={dados.telefone}
+              onChange={handleChange}
+              placeholder="Digite seu telefone"
+              className="p-inputtext-lg"
+            />
+          </div>
 
-      <div className={style.formRow}>
-        <Input
-          type="email"
-          text="Email"
-          name="email"
-          placeholder="Digite seu email"
-          handleOnChange={handleChange}
-          value={dados.email}
-          customClass="inputInfoBasicas"
-        />
-        <Input
-          type="tel"
-          text="Telefone"
-          name="telefone"
-          mask="(99) 99999-9999"
-          placeholder="(92) 00000-0000"
-          handleOnChange={handleChange}
-          value={dados.telefone}
-          customClass="inputInfoBasicas"
-        />
-      </div>
+          <div className={estilos.inputGroup}>
+            <label>Email</label>
+            <InputText
+              name="email"
+              value={dados.email}
+              onChange={handleChange}
+              placeholder="Digite seu email"
+              className="p-inputtext-lg"
+            />
+          </div>
 
-      <div className={style.formGroupPassword}>
-        <div className={style.passwordWrapper}>
-          <Input
-            type={senha ? "text" : "password"}
-            text="Senha"
-            name="senha"
-            placeholder="Digite sua senha"
-            handleOnChange={handleChange}
-            value={dados.senha}
-            customClass="inputSenha"
-          />
-          <span
-            className={style.vizuSenha}
-            onClick={() => setSenha(!senha)}
-            style={{ cursor: "pointer" }}
+          <div className={estilos.passwordGroup}>
+            <div className={estilos.inputGroup}>
+              <label>Senha</label>
+              <Password
+                name="senha"
+                value={dados.senha}
+                onChange={handleChange}
+                feedback={false}
+                toggleMask
+                placeholder="Digite sua senha"
+                className="p-inputtext-lg"
+              />
+            </div>
+
+            <div className={estilos.inputGroup}>
+              <label>Confirmar Senha</label>
+              <Password
+                name="confirmarSenha"
+                value={dados.confirmarSenha}
+                onChange={handleChange}
+                feedback={false}
+                toggleMask
+                placeholder="Confirme sua senha"
+                className="p-inputtext-lg"
+              />
+            </div>
+          </div>
+
+          <Button
+            type="submit"
+            className={`${estilos.botaoCadastrar} p-button-lg`}
           >
-            {senha ? (
-              <FaEyeSlash className={style.iconVizu} />
-            ) : (
-              <FaEye className={style.iconVizu} />
-            )}
-          </span>
-        </div>
-      </div>
+            Cadastrar
+          </Button>
 
-      <div className={style.formGroupPassword}>
-        <div className={style.passwordWrapper}>
-          <Input
-            type={confirmSenha ? "text" : "password"}
-            text="Confirme sua senha"
-            name="confirmacaoSenha"
-            placeholder="Confirme sua senha"
-            handleOnChange={handleChange}
-            value={dados.confirmacaoSenha}
-            customClass="inputSenha"
+          <div className={estilos.divider}>Ou</div>
+
+          <GoogleLogin
+            onSuccess={responseGoogle}
+            onError={responseGoogle}
+            useOneTap
+            theme="outline"
+            className={estilos.googleBtn}
           />
-          <span
-            className={style.vizuSenha}
-            onClick={() => setConfirmSenha(!confirmSenha)}
-            style={{ cursor: "pointer" }}
-          >
-            {confirmSenha ? (
-              <FaEyeSlash className={style.iconVizu} />
-            ) : (
-              <FaEye className={style.iconVizu} />
-            )}
-          </span>
-        </div>
+        </form>
       </div>
-
-      <div className={style.checkboxContainer}>
-        <Input
-          type="checkbox"
-          name="aceitarTermos"
-          checked={dados.aceitarTermos}
-          handleOnChange={handleChange}
-          customClass={style.checkedinput}
-        />
-        <label>
-          Eu concordo com todos os{" "}
-          <a href="#" className={style.termo}>
-            Termos
-          </a>{" "}
-          e{" "}
-          <a href="#" className={style.termo}>
-            Políticas de Privacidade
-          </a>
-        </label>
-      </div>
-
-      <Submit text={txtBtn} customClass="btnCriaConta" />
-      <p className={style.loginLink}>
-        Já possui uma conta? <a href="/login">Login</a>
-      </p>
-
-      <div className={style.divider}>Ou faça login com</div>
-
-      <div className={style.googleLogin}>
-        <button className={style.googleBtn} onClick={loginComGoogle}>
-          Entrar com Google
-        </button>
-      </div>
-    </form>
+    </div>
   );
 }

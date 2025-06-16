@@ -8,7 +8,9 @@ export default function AvatarUser() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/user");
+        const res = await fetch("http://localhost:3000/api/user", {
+          headers: getAuthHeaders(),
+        });
         if (!res.ok) throw new Error("Erro ao buscar usuário");
         const data = await res.json();
         setUserName(data.name || "Usuário");
@@ -23,7 +25,7 @@ export default function AvatarUser() {
 
   return (
     <div className={styles.userSection}>
-      <span className={styles.greeting}>Olá, Manuela</span>
+      <span className={styles.greeting}>Olá, {userName}</span>
       <Avatar icon="pi pi-user" shape="circle" size="large" />
     </div>
   );
