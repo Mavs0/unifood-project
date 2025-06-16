@@ -5,8 +5,8 @@
 **Clone o repositório**
 
 ```bash
-git clone git@github.com:UniFood-Team/unifood-frontend.git
-cd unifood-frontend
+[git clone git@github.com:UniFood-Team/unifood-frontend.git](https://github.com/Mavs0/unifood-project)
+cd unifood-project
 ```
 **Instale as dependências:**
 ``` bash
