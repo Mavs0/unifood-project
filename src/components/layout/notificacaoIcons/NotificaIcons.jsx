@@ -16,12 +16,12 @@ export default function NotificationIcons() {
         <span className={styles.badge}>3</span>
       </div>
 
-      <div
+      {/* <div
         className={`${styles.iconBox} ${styles.lightBlue}`}
         onClick={() => navigate("/mensagens")}
       >
         <PiChatCircleText className={styles.icon} />
-      </div>
+      </div> */}
 
       <div
         className={`${styles.iconBox} ${styles.gray}`}

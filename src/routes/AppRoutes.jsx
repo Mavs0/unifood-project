@@ -17,6 +17,10 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Pedidos from "../pages/Pedidos/Pedidos";
 import ProximosEventos from "../pages/Eventos/ProximosEventos";
 
+import ReviewsLojas from "../pages/Reviews/Reviews";
+import PaginaReviewsProdutosDaLoja from "../pages/Reviews/[lojaId]/produtos/PaginaReviewsProdutosDaLoja";
+import PaginaReviewGeralLoja from "../pages/Reviews/[lojaId]/geral/PaginaReviewGeralLoja";
+
 export default function AppRoutes() {
   console.log("Rotas renderizadas"); // Adicione isso
   return (
@@ -32,6 +36,16 @@ export default function AppRoutes() {
         <Route path="/comidas" element={<Comidas />} />
         <Route path="/pedidos" element={<Pedidos />} />
         <Route path="/eventos" element={<ProximosEventos />} />
+
+        <Route path="/reviews" element={<ReviewsLojas />} />
+        <Route
+          path="/reviews/:lojaId/produtos"
+          element={<PaginaReviewsProdutosDaLoja />}
+        />
+        <Route
+          path="/reviews/:lojaId/geral"
+          element={<PaginaReviewGeralLoja />}
+        />
 
         <Route path="/pagamento" element={<Pagamento />} />
 

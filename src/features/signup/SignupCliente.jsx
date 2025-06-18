@@ -101,95 +101,86 @@ export default function SignUpCliente() {
       <div className={estilos.formWrapper}>
         <h2 className={estilos.titulo}>Cadastro de Cliente</h2>
         <form onSubmit={submit} className={estilos.form}>
-          <div className={estilos.formRow}>
-            <div className={estilos.inputGroup}>
-              <label>Nome</label>
-              <InputText
-                name="nome"
-                value={dados.nome}
-                onChange={handleChange}
-                placeholder="Digite seu nome"
-                className="p-inputtext-lg"
-              />
-            </div>
-            <div className={estilos.inputGroup}>
-              <label>Sobrenome</label>
-              <InputText
-                name="sobrenome"
-                value={dados.sobrenome}
-                onChange={handleChange}
-                placeholder="Digite seu sobrenome"
-                className="p-inputtext-lg"
-              />
-            </div>
-          </div>
+          <h2>Cadastre-se</h2>
+          <p>
+            Vamos preparar tudo para que você possa acessar sua conta pessoal.
+          </p>
 
-          <div className={estilos.inputGroup}>
-            <label>Telefone</label>
+          <div className={estilos.row}>
             <InputText
-              name="telefone"
-              value={dados.telefone}
+              placeholder="Nome"
+              name="nome"
+              value={dados.nome}
               onChange={handleChange}
-              placeholder="Digite seu telefone"
-              className="p-inputtext-lg"
+              className={estilos.input}
+            />
+            <InputText
+              placeholder="Sobrenome"
+              name="sobrenome"
+              value={dados.sobrenome}
+              onChange={handleChange}
+              className={estilos.input}
             />
           </div>
 
-          <div className={estilos.inputGroup}>
-            <label>Email</label>
-            <InputText
-              name="email"
-              value={dados.email}
+          <InputText
+            placeholder="Email"
+            name="email"
+            value={dados.email}
+            onChange={handleChange}
+            className={estilos.input}
+          />
+
+          <InputText
+            placeholder="Telefone"
+            name="telefone"
+            value={dados.telefone}
+            onChange={handleChange}
+            className={estilos.input}
+          />
+
+          <div className={estilos.row}>
+            <Password
+              placeholder="Senha"
+              name="senha"
+              value={dados.senha}
               onChange={handleChange}
-              placeholder="Digite seu email"
-              className="p-inputtext-lg"
+              feedback={false}
+              toggleMask
+              className={estilos.input}
+            />
+
+            <Password
+              placeholder="Confirme sua senha"
+              name="confirmarSenha"
+              value={dados.confirmarSenha}
+              onChange={handleChange}
+              feedback={false}
+              toggleMask
+              className={estilos.input}
             />
           </div>
 
-          <div className={estilos.passwordGroup}>
-            <div className={estilos.inputGroup}>
-              <label>Senha</label>
-              <Password
-                name="senha"
-                value={dados.senha}
-                onChange={handleChange}
-                feedback={false}
-                toggleMask
-                placeholder="Digite sua senha"
-                className="p-inputtext-lg"
-              />
-            </div>
-
-            <div className={estilos.inputGroup}>
-              <label>Confirmar Senha</label>
-              <Password
-                name="confirmarSenha"
-                value={dados.confirmarSenha}
-                onChange={handleChange}
-                feedback={false}
-                toggleMask
-                placeholder="Confirme sua senha"
-                className="p-inputtext-lg"
-              />
-            </div>
+          <div className={estilos.termos}>
+            <input type="checkbox" required /> Eu concordo com todos os{" "}
+            <a href="#">Termos</a> e <a href="#">Políticas de Privacidade</a>
           </div>
 
-          <Button
-            type="submit"
-            className={`${estilos.botaoCadastrar} p-button-lg`}
-          >
-            Cadastrar
+          <Button type="submit" className={estilos.botao}>
+            Criar conta
           </Button>
 
-          <div className={estilos.divider}>Ou</div>
+          <p className={estilos.login}>
+            Já possui uma conta? <a href="/login">Login</a>
+          </p>
 
-          <GoogleLogin
-            onSuccess={responseGoogle}
-            onError={responseGoogle}
-            useOneTap
-            theme="outline"
-            className={estilos.googleBtn}
-          />
+          <div className={estilos.orDivider}>
+            <span>Ou faça login com</span>
+          </div>
+
+          <div className={estilos.googleBtn}>
+            <GoogleLogin onSuccess={responseGoogle} onError={responseGoogle} />
+          </div>
         </form>
       </div>
     </div>

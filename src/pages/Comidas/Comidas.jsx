@@ -8,7 +8,7 @@ import VisualizarProduto from "../../components/form/visualizarProduto/Visualiza
 import { InputText } from "primereact/inputtext";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuthHeaders } from "../../utils/api"; // helper centralizado pra pegar token
+import { buscarProdutos } from "../../utils/api"; // Agora usando o mock!
 
 export default function Comidas() {
   const [produtos, setProdutos] = useState([]);
@@ -31,28 +31,20 @@ export default function Comidas() {
   ];
 
   useEffect(() => {
-    buscarProdutos();
+    carregarProdutos();
   }, []);
 
-  async function buscarProdutos() {
+  async function carregarProdutos() {
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://us-central1-unifood-aaa0f.cloudfunctions.net/api/product",
-        {
-          headers: getAuthHeaders(),
-        }
-      );
-      if (!res.ok) throw new Error("Erro ao carregar produtos");
-
-      const lista = await res.json();
+      const lista = await buscarProdutos(); // Puxando do mock
       setProdutos(lista);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
       toast.current.show({
         severity: "error",
         summary: "Erro",
-        detail: "Falha ao carregar produtos da API",
+        detail: "Falha ao carregar produtos.",
       });
     } finally {
       setLoading(false);
@@ -67,33 +59,11 @@ export default function Comidas() {
   });
 
   const adicionarAoCarrinho = async (produto) => {
-    try {
-      const res = await fetch(
-        "https://us-central1-unifood-aaa0f.cloudfunctions.net/api/cart/add",
-        {
-          method: "POST",
-          headers: getAuthHeaders(),
-          body: JSON.stringify({
-            productId: produto.id,
-            quantidade: 1,
-          }),
-        }
-      );
-      if (!res.ok) throw new Error("Erro ao adicionar ao carrinho");
-
-      toast.current.show({
-        severity: "success",
-        summary: "Sucesso",
-        detail: `${produto.nome} adicionado ao carrinho!`,
-      });
-    } catch (error) {
-      console.error("Erro ao adicionar ao carrinho:", error);
-      toast.current.show({
-        severity: "error",
-        summary: "Erro",
-        detail: "Falha ao adicionar ao carrinho",
-      });
-    }
+    toast.current.show({
+      severity: "success",
+      summary: "Adicionado!",
+      detail: `${produto.nome} foi adicionado ao carrinho.`,
+    });
   };
 
   const handleComprarAgora = (produto) => {
@@ -150,7 +120,7 @@ export default function Comidas() {
                   <div className={styles.info}>
                     <div className={styles.nomePreco}>
                       <h4>{produto.nome}</h4>
-                      <span>R${produto.preco}</span>
+                      <span>R$ {produto.preco.toFixed(2)}</span>
                     </div>
                     <p className={styles.loja}>{produto.loja}</p>
                   </div>

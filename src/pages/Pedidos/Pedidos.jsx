@@ -4,7 +4,7 @@ import { Tooltip } from "@mui/material";
 import NavBarraSide from "../../components/layout/navBarraSide/NavBarraSide";
 import NavBarraTop from "../../components/layout/navBarraTop/NavBarraTop";
 import ModalAcompanhamentoPedido from "../../components/form/acompanharPedido/AcompanharPedido";
-import { getAuthHeaders } from "../../utils/auth";
+import { buscarPedidos } from "../../utils/api";
 import styles from "./Pedidos.module.css";
 
 export default function PaginaPedidos() {
@@ -14,21 +14,13 @@ export default function PaginaPedidos() {
   const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
 
   useEffect(() => {
-    buscarPedidos();
+    buscarPedidosData();
   }, []);
 
-  async function buscarPedidos() {
+  async function buscarPedidosData() {
     setLoading(true);
     try {
-      const res = await fetch(
-        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/order",
-        {
-          headers: getAuthHeaders(),
-        }
-      );
-      if (!res.ok) throw new Error("Erro ao buscar pedidos");
-
-      const listaPedidos = await res.json();
+      const listaPedidos = await buscarPedidos();
       setPedidos(listaPedidos);
     } catch (error) {
       console.error("Erro ao carregar pedidos:", error);
@@ -71,7 +63,7 @@ export default function PaginaPedidos() {
                     <tr key={pedido.id}>
                       <td>{pedido.id}</td>
                       <td>{pedido.userId}</td>
-                      <td>{pedido.total || "R$ - "}</td>
+                      <td>R$ {pedido.total?.toFixed(2) || "-"}</td>
                       <td>{pedido.status}</td>
                       <td>
                         <Tooltip title="Acompanhar pedido">
@@ -94,7 +86,7 @@ export default function PaginaPedidos() {
             <ModalAcompanhamentoPedido
               pedido={pedidoSelecionado}
               onClose={fecharModal}
-              recarregar={buscarPedidos}
+              recarregar={buscarPedidosData}
             />
           )}
         </main>

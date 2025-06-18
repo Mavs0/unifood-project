@@ -10,36 +10,20 @@
     background-color: #f7f8fa;
   }
   
-  .grid {
+  .produtosGrid {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
     margin-top: 20px;
   }
-
-  .filtros {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .inputBusca {
-    flex: 1;
-  }
-  
-  .dropdownFiltro {
-    width: 200px;
-  }
-  
   
   .card {
-    width: 200px;
+    width: 180px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     cursor: pointer;
-    padding: 15px;
-    text-align: center;
+    padding: 10px;
     transition: transform 0.2s ease;
   }
   
@@ -54,13 +38,18 @@
     border-radius: 8px;
   }
   
-  .card h3 {
-    margin: 10px 0 5px;
+  .card h4 {
+    margin: 8px 0 4px;
     font-size: 1rem;
   }
   
   .card p {
     font-size: 0.9rem;
-    color: #555;
+    font-weight: bold;
+  }
+  
+  .card small {
+    color: #777;
+    font-size: 0.8rem;
   }
   
