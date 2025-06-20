@@ -4,39 +4,19 @@ import NavBarraTop from "../../../components/layout/navBarraTop/NavBarraTop";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
+import { Toast } from "primereact/toast";
+import { Dialog } from "primereact/dialog";
 import { useState, useEffect, useRef } from "react";
 import CadastroProduto from "../../../components/form/cadastroProduto/CadProduto";
-import { Toast } from "primereact/toast";
-
-const produtosMock = [
-  {
-    id: "1",
-    nome: "Brigadeiro Clássico",
-    preco: 3.5,
-    imagemUrl:
-      "https://firebasestorage.googleapis.com/v0/b/seu-projeto-id.appspot.com/o/produtos%2Fbrigadeiro.jpg?alt=media",
-    categorias: ["Doces e Sobremesas"],
-  },
-  {
-    id: "2",
-    nome: "Brownie de Chocolate",
-    preco: 8.0,
-    imagemUrl:
-      "https://firebasestorage.googleapis.com/v0/b/seu-projeto-id.appspot.com/o/produtos%2Fbrownie.jpg?alt=media",
-    categorias: ["Lanches", "Doces e Sobremesas"],
-  },
-  {
-    id: "3",
-    nome: "Suco Natural",
-    preco: 6.0,
-    imagemUrl:
-      "https://firebasestorage.googleapis.com/v0/b/seu-projeto-id.appspot.com/o/produtos%2Fsuco.jpg?alt=media",
-    categorias: ["Bebidas"],
-  },
-];
+// import EditarProduto from "../../../components/form/editarProduto/EditarProduto";
+import { buscarProdutos, deletarProduto } from "../../../utils/api";
 
 export default function MeusProdutos() {
   const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [produtoParaExcluir, setProdutoParaExcluir] = useState(null);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [produtos, setProdutos] = useState([]);
   const [produtosFiltrados, setProdutosFiltrados] = useState([]);
   const [busca, setBusca] = useState("");
@@ -54,11 +34,28 @@ export default function MeusProdutos() {
   ];
 
   useEffect(() => {
-    setProdutos(produtosMock);
-    setProdutosFiltrados(produtosMock);
+    carregarProdutos();
   }, []);
 
   useEffect(() => {
+    filtrarProdutos();
+  }, [busca, categoriaSelecionada, produtos]);
+
+  async function carregarProdutos() {
+    try {
+      const lista = await buscarProdutos();
+      setProdutos(lista);
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+      toast.current.show({
+        severity: "error",
+        summary: "Erro",
+        detail: "Falha ao carregar produtos.",
+      });
+    }
+  }
+
+  function filtrarProdutos() {
     let filtrados = produtos;
 
     if (busca) {
@@ -74,16 +71,34 @@ export default function MeusProdutos() {
     }
 
     setProdutosFiltrados(filtrados);
-  }, [busca, categoriaSelecionada, produtos]);
+  }
 
-  const excluirProduto = (id) => {
-    setProdutos((prev) => prev.filter((p) => p.id !== id));
-    toast.current.show({
-      severity: "success",
-      summary: "Produto excluído",
-      detail: "Produto removido com sucesso!",
-      life: 3000,
-    });
+  const excluirProduto = async () => {
+    if (!produtoParaExcluir) return;
+
+    try {
+      await deletarProduto(produtoParaExcluir.id);
+
+      toast.current.show({
+        severity: "success",
+        summary: "Produto excluído",
+        detail: "Produto removido com sucesso!",
+        life: 3000,
+      });
+
+      carregarProdutos();
+    } catch (error) {
+      console.error("Erro ao excluir produto:", error);
+      toast.current.show({
+        severity: "error",
+        summary: "Erro",
+        detail: "Falha ao excluir produto.",
+        life: 3000,
+      });
+    } finally {
+      setConfirmDeleteOpen(false);
+      setProdutoParaExcluir(null);
+    }
   };
 
   return (
@@ -147,8 +162,8 @@ export default function MeusProdutos() {
                       />
                     </td>
                     <td>{produto.nome}</td>
-                    <td>{produto.categorias.join(", ")}</td>
-                    <td>R$ {produto.preco.toFixed(2)}</td>
+                    <td>{produto.categorias?.join(", ") || "-"}</td>
+                    <td>R$ {produto.preco?.toFixed(2) || "-"}</td>
                     <td>
                       <Button
                         icon="pi pi-pencil"
@@ -161,7 +176,10 @@ export default function MeusProdutos() {
                       <Button
                         icon="pi pi-trash"
                         className={styles.deleteBtn}
-                        onClick={() => excluirProduto(produto.id)}
+                        onClick={() => {
+                          setProdutoParaExcluir(produto);
+                          setConfirmDeleteOpen(true);
+                        }}
                       />
                     </td>
                   </tr>
@@ -172,11 +190,53 @@ export default function MeusProdutos() {
         </main>
       </div>
 
+      {/* Formulário de cadastro */}
       <CadastroProduto
         visible={showForm}
         onHide={() => setShowForm(false)}
-        onSave={() => {}}
+        onSave={carregarProdutos}
       />
+
+      {/* Formulário de edição (se desejar reativar depois) */}
+      {/* {showEditForm && produtoSelecionado && (
+        <EditarProduto
+          produto={produtoSelecionado}
+          visible={showEditForm}
+          onHide={() => setShowEditForm(false)}
+          onSave={carregarProdutos}
+        />
+      )} */}
+
+      <Dialog
+        header="Confirmar Exclusão"
+        visible={confirmDeleteOpen}
+        style={{ width: "350px" }}
+        modal
+        footer={
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}
+          >
+            <Button
+              label="Cancelar"
+              icon="pi pi-times"
+              onClick={() => setConfirmDeleteOpen(false)}
+              className="p-button-text"
+            />
+            <Button
+              label="Confirmar"
+              icon="pi pi-check"
+              severity="danger"
+              onClick={excluirProduto}
+            />
+          </div>
+        }
+        onHide={() => setConfirmDeleteOpen(false)}
+      >
+        <p>
+          Tem certeza que deseja excluir o produto{" "}
+          <strong>{produtoParaExcluir?.nome}</strong>?
+        </p>
+      </Dialog>
     </div>
   );
 }

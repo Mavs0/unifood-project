@@ -26,10 +26,40 @@ export default function Pagamento() {
   const [nomeCartao, setNomeCartao] = useState("");
   const [validade, setValidade] = useState("");
   const [cvv, setCvv] = useState("");
+  const [cupomSelecionado, setCupomSelecionado] = useState(null);
+
+  const cuponsDisponiveis = [
+    { id: 1, descricao: "10% de desconto", tipo: "percentual", valor: 10 },
+    { id: 2, descricao: "R$5,00 de desconto", tipo: "fixo", valor: 5 },
+  ];
 
   const aumentarQuantidade = () => setQuantidade((prev) => prev + 1);
   const diminuirQuantidade = () =>
     setQuantidade((prev) => (prev > 1 ? prev - 1 : 1));
+
+  const aplicarCupom = (cupom) => {
+    setCupomSelecionado(cupom);
+    toast.current.show({
+      severity: "info",
+      summary: "Cupom aplicado",
+      detail: `${cupom.descricao}`,
+      life: 3000,
+    });
+  };
+
+  const calcularTotal = () => {
+    let total = produto.preco * quantidade;
+
+    if (cupomSelecionado) {
+      if (cupomSelecionado.tipo === "percentual") {
+        total = total - (total * cupomSelecionado.valor) / 100;
+      } else if (cupomSelecionado.tipo === "fixo") {
+        total = total - cupomSelecionado.valor;
+      }
+    }
+
+    return total > 0 ? total : 0;
+  };
 
   const finalizarCompra = () => {
     toast.current.show({
@@ -44,7 +74,7 @@ export default function Pagamento() {
     }, 3200);
   };
 
-  const valorTotal = produto.preco * quantidade;
+  const valorTotal = calcularTotal();
 
   return (
     <div className="flex">
@@ -53,6 +83,28 @@ export default function Pagamento() {
         <Toast ref={toast} />
 
         <h2>Pagamento</h2>
+
+        {/* Listagem de Cupons */}
+        <div className={styles.cuponsWrapper}>
+          <h3>Meus Cupons Disponíveis 🎁</h3>
+          {cuponsDisponiveis.length > 0 ? (
+            <ul className={styles.listaCupons}>
+              {cuponsDisponiveis.map((cupom) => (
+                <li
+                  key={cupom.id}
+                  className={`${styles.cupomItem} ${
+                    cupomSelecionado?.id === cupom.id ? styles.selecionado : ""
+                  }`}
+                  onClick={() => aplicarCupom(cupom)}
+                >
+                  {cupom.descricao}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Nenhum cupom disponível no momento.</p>
+          )}
+        </div>
 
         <div className={styles.contentWrapper}>
           <div className={styles.resumoPedido}>
@@ -89,6 +141,7 @@ export default function Pagamento() {
             </p>
           </div>
 
+          {/* Área de pagamento */}
           <div className={styles.pagamento}>
             <h3>Tipo de Pagamento</h3>
             <div className={styles.radioGroup}>

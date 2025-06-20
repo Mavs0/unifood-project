@@ -1,0 +1,75 @@
+.container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .mainContent {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    background-color: #f7f8fa;
+  }
+  
+  .titulo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+  
+  .roletaSection {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .botaoRoleta {
+    background-color: #ff7f50;
+    color: white;
+    border: none;
+    margin-top: 1rem;
+  }
+  
+  .botaoRoleta:hover {
+    background-color: #e0663d;
+  }
+  
+  .recompensasSection {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .recompensasSection ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .recompensaItem {
+    background-color: #fef3c7;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #92400e;
+  }
+  
+  /* Responsivo */
+  @media (max-width: 768px) {
+    .mainContent {
+      padding: 1rem;
+    }
+  
+    .titulo {
+      font-size: 1.5rem;
+    }
+  
+    .roletaSection,
+    .recompensasSection {
+      padding: 1rem;
+    }
+  }
+  

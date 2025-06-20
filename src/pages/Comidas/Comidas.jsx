@@ -8,7 +8,7 @@ import VisualizarProduto from "../../components/form/visualizarProduto/Visualiza
 import { InputText } from "primereact/inputtext";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { buscarProdutos } from "../../utils/api"; // Agora usando o mock!
+import { buscarProdutos } from "../../utils/api";
 
 export default function Comidas() {
   const [produtos, setProdutos] = useState([]);
@@ -21,13 +21,13 @@ export default function Comidas() {
   const navigate = useNavigate();
 
   const categorias = [
-    { label: "Refeições", value: "refeições" },
-    { label: "Lanches", value: "lanches" },
+    { label: "Refeições", value: "Refeições" },
+    { label: "Lanches", value: "Lanches" },
     { label: "Doces e Sobremesas", value: "Doces e Sobremesas" },
-    { label: "Bebidas", value: "bebidas" },
+    { label: "Bebidas", value: "Bebidas" },
     { label: "Alimentos Saudáveis", value: "Alimentos Saudáveis" },
     { label: "Combos e Kits", value: "Combos e Kits" },
-    { label: "Outros", value: "outros" },
+    { label: "Outros", value: "Outros" },
   ];
 
   useEffect(() => {
@@ -37,14 +37,13 @@ export default function Comidas() {
   async function carregarProdutos() {
     setLoading(true);
     try {
-      const lista = await buscarProdutos(); // Puxando do mock
+      const lista = await buscarProdutos();
       setProdutos(lista);
     } catch (error) {
-      console.error("Erro ao buscar produtos:", error);
       toast.current.show({
         severity: "error",
         summary: "Erro",
-        detail: "Falha ao carregar produtos.",
+        detail: "Erro ao carregar produtos.",
       });
     } finally {
       setLoading(false);
@@ -52,7 +51,7 @@ export default function Comidas() {
   }
 
   const produtosFiltrados = produtos.filter((produto) => {
-    const nomeMatch = produto.nome?.toLowerCase().includes(busca.toLowerCase());
+    const nomeMatch = produto.nome.toLowerCase().includes(busca.toLowerCase());
     const categoriaMatch =
       !categoriaSelecionada || produto.categoria === categoriaSelecionada;
     return nomeMatch && categoriaMatch;
@@ -61,8 +60,8 @@ export default function Comidas() {
   const adicionarAoCarrinho = async (produto) => {
     toast.current.show({
       severity: "success",
-      summary: "Adicionado!",
-      detail: `${produto.nome} foi adicionado ao carrinho.`,
+      summary: "Carrinho",
+      detail: `${produto.nome} adicionado ao carrinho.`,
     });
   };
 
@@ -82,9 +81,9 @@ export default function Comidas() {
             <h2 className={styles.titulo}>Comidas</h2>
             <InputText
               placeholder="Buscar produto..."
-              className={styles.inputBusca}
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
+              className={styles.inputBusca}
             />
           </div>
 
@@ -103,7 +102,7 @@ export default function Comidas() {
           </div>
 
           {loading ? (
-            <p>Carregando produtos...</p>
+            <p>Carregando...</p>
           ) : (
             <div className={styles.gridProdutos}>
               {produtosFiltrados.map((produto) => (
@@ -118,11 +117,9 @@ export default function Comidas() {
                     className={styles.imagemProduto}
                   />
                   <div className={styles.info}>
-                    <div className={styles.nomePreco}>
-                      <h4>{produto.nome}</h4>
-                      <span>R$ {produto.preco.toFixed(2)}</span>
-                    </div>
-                    <p className={styles.loja}>{produto.loja}</p>
+                    <h4>{produto.nome}</h4>
+                    <span>R$ {produto.preco.toFixed(2)}</span>
+                    <p>{produto.loja}</p>
                   </div>
                 </div>
               ))}

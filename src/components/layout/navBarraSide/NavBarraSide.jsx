@@ -1,61 +1,109 @@
-import { NavLink } from 'react-router-dom';
-import styles from './NavBarraSide.module.css';
-
-// ícones
-import { HiOutlineHome } from "react-icons/hi";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import styles from "./NavBarraSide.module.css";
+import { HiOutlineHome, HiOutlinePencilAlt } from "react-icons/hi";
 import { RiPencilLine, RiCupLine, RiCalendarEventLine } from "react-icons/ri";
-import { HiOutlinePencilAlt } from "react-icons/hi";
 import { MdOutlineBorderAll } from "react-icons/md";
-import { PiListBold } from "react-icons/pi"; // ícone de menu opcional
+import { PiListBold } from "react-icons/pi";
+import { FiSun, FiMoon } from "react-icons/fi";
+import { getUserRole } from "../../../utils/auth";
 
 export default function NavBarraSide() {
+  const role = getUserRole();
+  const [collapsed, setCollapsed] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.ctrlKey && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        setCollapsed((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
+
+  useEffect(() => {
+    document.body.setAttribute("data-theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
+  const toggleTheme = () => setDarkMode((prev) => !prev);
+  const toggleSidebar = () => setCollapsed((prev) => !prev);
+
+  const links = [
+    {
+      to: "/dashboard",
+      label: "Dashboard",
+      icon: <HiOutlineHome />,
+      roles: ["vendedor"],
+    },
+    {
+      to: "/reviews",
+      label: "Reviews",
+      icon: <RiPencilLine />,
+      roles: ["cliente", "vendedor"],
+    },
+    {
+      to: "/comidas",
+      label: "Comidas",
+      icon: <RiCupLine />,
+      roles: ["cliente", "vendedor"],
+    },
+    {
+      to: "/pedidos",
+      label: "Pedidos",
+      icon: <HiOutlinePencilAlt />,
+      roles: ["cliente", "vendedor"],
+    },
+    {
+      to: "/meusProdutos",
+      label: "Meus Produtos",
+      icon: <MdOutlineBorderAll />,
+      roles: ["vendedor"],
+    },
+    {
+      to: "/eventos",
+      label: "Eventos",
+      icon: <RiCalendarEventLine />,
+      roles: ["cliente", "vendedor"],
+    },
+  ];
+
   return (
-    <div className={styles.navbarraside}>
-      <div className={styles.iconeBarra}>
-        <PiListBold className={styles.iconMenu} />
+    <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}>
+      <div className={styles.topBar}>
+        <PiListBold className={styles.iconMenu} onClick={toggleSidebar} />
       </div>
 
-      <NavLink to="/dashboard" className={({ isActive }) =>
-        isActive ? `${styles.menuItem} ${styles.active}` : styles.menuItem
-      }>
-        <HiOutlineHome className={styles.icon}/>
-        <span>Dashboard</span>
-      </NavLink>
+      <div className={styles.linksWrapper}>
+        {links
+          .filter((link) => link.roles.includes(role))
+          .map((link, index) => (
+            <NavLink
+              key={index}
+              to={link.to}
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.menuItem} ${styles.active}`
+                  : styles.menuItem
+              }
+            >
+              <div className={styles.icon}>{link.icon}</div>
+              {!collapsed && <span>{link.label}</span>}
+              {collapsed && (
+                <span className={styles.tooltip}>{link.label}</span>
+              )}
+            </NavLink>
+          ))}
+      </div>
 
-      <NavLink to="/reviews" className={({ isActive }) =>
-        isActive ? `${styles.menuItem} ${styles.active}` : styles.menuItem
-      }>
-        <RiPencilLine className={styles.icon} />
-        <span>Reviews</span>
-      </NavLink>
-
-      <NavLink to="/comidas" className={({ isActive }) =>
-        isActive ? `${styles.menuItem} ${styles.active}` : styles.menuItem
-      }>
-        <RiCupLine className={styles.icon} />
-        <span>Comidas</span>
-      </NavLink>
-
-      <NavLink to="/pedidos" className={({ isActive }) =>
-        isActive ? `${styles.menuItem} ${styles.active}` : styles.menuItem
-      }>
-        <HiOutlinePencilAlt className={styles.icon} />
-        <span>Pedidos</span>
-      </NavLink>
-
-      <NavLink to="/eventos" className={({ isActive }) =>
-        isActive ? `${styles.menuItem} ${styles.active}` : styles.menuItem
-      }>
-        <RiCalendarEventLine className={styles.icon} />
-        <span>Eventos</span>
-      </NavLink>
-
-      <NavLink to="/meusProdutos" className={({ isActive }) =>
-        isActive ? `${styles.menuItem} ${styles.active}` : styles.menuItem
-      }>
-        <MdOutlineBorderAll className={styles.icon} />
-        <span>Meus Produtos</span>
-      </NavLink>
+      <div className={styles.bottomControls}>
+        <button onClick={toggleTheme} className={styles.themeToggle}>
+          {darkMode ? <FiSun /> : <FiMoon />}
+          {!collapsed && <span>{darkMode ? "Claro" : "Escuro"}</span>}
+        </button>
+      </div>
     </div>
   );
 }

@@ -15,6 +15,21 @@
     background-color: #f9fafb;
     font-family: 'Inter', sans-serif;
   }
+  .filtrosWrapper {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .inputBusca {
+    width: 250px;
+  }
+  
+  .selectStatus {
+    width: 200px;
+  }
+  
   
   .title {
     font-size: 1.5rem;

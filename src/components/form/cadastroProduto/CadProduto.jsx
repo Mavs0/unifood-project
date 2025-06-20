@@ -160,7 +160,6 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
         life: 4000,
       });
 
-      // Fallback: Mock local pra não travar a interface
       onSave({
         id: Math.random().toString(36).substring(2, 10),
         ...payload,
@@ -224,7 +223,9 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
 
           <div className={styles.precoEcategorias}>
             <div className={`${styles.preco} ${classErro("preco")}`}>
-              <label htmlFor="preco">Preço *</label>
+              <label htmlFor="preco">
+                Preço <span className={styles.astec}>*</span>
+              </label>{" "}
               <InputNumber
                 id="preco"
                 value={produto.preco}
@@ -237,7 +238,9 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
             </div>
 
             <div className={`${styles.categorias} ${classErro("categoria")}`}>
-              <label htmlFor="categoria">Categoria *</label>
+              <label htmlFor="categoria">
+                Categoria <span className={styles.astec}>*</span>
+              </label>{" "}
               <Dropdown
                 id="categoria"
                 value={produto.categoria}
@@ -249,7 +252,9 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
           </div>
 
           <div className={`${styles.descricao} ${classErro("descricao")}`}>
-            <label htmlFor="descricao">Descrição *</label>
+            <label htmlFor="descricao">
+              Descrição <span className={styles.astec}>*</span>
+            </label>{" "}
             <InputTextarea
               id="descricao"
               value={produto.descricao}
@@ -260,7 +265,9 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
           </div>
 
           <div className={styles.imagem}>
-            <label>Imagem do produto</label>
+            <label>
+              Imagem do produto <span className={styles.astec}>*</span>
+            </label>
             <div
               {...getRootProps()}
               className={`${styles.dropzone} ${

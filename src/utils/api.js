@@ -1,109 +1,189 @@
-// api.js
-import { getAuthHeaders } from "./auth"; // Certifique-se de importar de auth.js
+import { getAuthHeaders, saveTokens, clearTokens } from "./auth"; // Certifique-se de importar de auth.js
 
-export const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
-export function getApiUrl() {
-  return API_URL;
+// Core Fetch com Refresh Token
+export async function apiFetch(endpoint, options = {}, retry = true) {
+  const url = `${API_URL}${
+    endpoint.startsWith("/") ? endpoint : "/" + endpoint
+  }`;
+  const headers = {
+    ...getAuthHeaders(),
+    ...(options.headers || {}),
+    "Content-Type": "application/json",
+  };
+
+  try {
+    const res = await fetch(url, { ...options, headers });
+
+    if (res.status === 401 && retry) {
+      const refreshed = await tryRefreshToken();
+      if (refreshed) {
+        return apiFetch(endpoint, options, false);
+      } else {
+        clearTokens();
+        throw new Error("Sessão expirada. Faça login novamente.");
+      }
+    }
+
+    if (!res.ok) {
+      const errorJson = await res.json().catch(() => ({}));
+      throw new Error(
+        errorJson.message || errorJson.error || "Erro na requisição"
+      );
+    }
+
+    return res;
+  } catch (error) {
+    console.error(`Erro API: ${error.message}`);
+    throw error;
+  }
 }
 
-// Função para buscar pedidos
-export async function buscarPedidos() {
-  // Simula um pequeno atraso (ex: 800ms)
-  await new Promise((resolve) => setTimeout(resolve, 800));
-
-  // Dados fictícios de pedidos
-  return [
-    {
-      id: "PED-1001",
-      userId: "João Silva",
-      total: 49.9,
-      status: "Pendente",
-    },
-    {
-      id: "PED-1002",
-      userId: "Maria Oliveira",
-      total: 89.5,
-      status: "Aguardando Entrega",
-    },
-    {
-      id: "PED-1003",
-      userId: "Lucas Pereira",
-      total: 120.0,
-      status: "Entregue",
-    },
-    {
-      id: "PED-1004",
-      userId: "Amanda Costa",
-      total: 65.3,
-      status: "Cancelado",
-    },
-    {
-      id: "PED-1005",
-      userId: "Felipe Souza",
-      total: 33.7,
-      status: "A caminho",
-    },
-  ];
+// Helpers simples
+export async function apiGet(endpoint, extraOptions = {}) {
+  return apiFetch(endpoint, { method: "GET", ...extraOptions });
 }
 
+export async function apiPost(endpoint, body, extraOptions = {}) {
+  return apiFetch(endpoint, {
+    method: "POST",
+    body: JSON.stringify(body),
+    ...extraOptions,
+  });
+}
+
+/* ===============================
+    API - Usuários - Vendedor
+=============================== */
+export async function registrarVendedor(dados) {
+  const res = await apiPost("/users/register", {
+    ...dados,
+    role: "vendedor", // força o role para vendedor
+  });
+  return res.json();
+}
+
+export async function apiPatch(endpoint, body, extraOptions = {}) {
+  return apiFetch(endpoint, {
+    method: "PATCH",
+    body: JSON.stringify(body),
+    ...extraOptions,
+  });
+}
+
+export async function apiDelete(endpoint, extraOptions = {}) {
+  return apiFetch(endpoint, {
+    method: "DELETE",
+    ...extraOptions,
+  });
+}
+
+// Auto Refresh
+async function tryRefreshToken() {
+  const refreshToken =
+    localStorage.getItem("refreshToken") ||
+    sessionStorage.getItem("refreshToken");
+  if (!refreshToken) return false;
+
+  try {
+    const res = await fetch(`${API_URL}/auth/refresh-auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!res.ok) return false;
+
+    const json = await res.json();
+    saveTokens(json.accessToken, json.refreshToken);
+    return true;
+  } catch (error) {
+    console.error("Erro ao fazer refresh token:", error);
+    return false;
+  }
+}
+
+/* ===============================
+    API - Produtos
+=============================== */
+
+// Buscar todos os produtos
 export async function buscarProdutos() {
-  await new Promise((resolve) => setTimeout(resolve, 800));
+  const res = await apiGet("/product");
+  return res.json();
+}
 
-  return [
-    {
-      id: "PROD-001",
-      nome: "Hambúrguer Duplo",
-      preco: 25.9,
-      categoria: "lanches",
-      loja: "Lanchonete Universitária",
-      imagemUrl:
-        "https://firebasestorage.googleapis.com/v0/b/1:52534721759:web:296e50e8ed5ffb32f33d6a.appspot.com/o/produtos%2Fhamburguer.jpg?alt=media",
-    },
-    {
-      id: "PROD-002",
-      nome: "Prato Executivo",
-      preco: 32.5,
-      categoria: "refeições",
-      loja: "Restaurante Central",
-      imagemUrl:
-        "https://firebasestorage.googleapis.com/v0/b/1:52534721759:web:296e50e8ed5ffb32f33d6a.appspot.com/o/produtos%2Fprato.jpg?alt=media",
-    },
-    {
-      id: "PROD-003",
-      nome: "Bolo de Chocolate",
-      preco: 12.0,
-      categoria: "Doces e Sobremesas",
-      loja: "Doceria Campus",
-      imagemUrl:
-        "https://firebasestorage.googleapis.com/v0/b/seu-projeto-id.appspot.com/o/produtos%2Fbolo.jpg?alt=media",
-    },
-    {
-      id: "PROD-004",
-      nome: "Suco Natural",
-      preco: 8.5,
-      categoria: "bebidas",
-      loja: "Cantina Saúde",
-      imagemUrl:
-        "https://firebasestorage.googleapis.com/v0/b/1:52534721759:web:296e50e8ed5ffb32f33d6a.appspot.com/o/produtos%2Fsuco.jpg?alt=media",
-    },
-    {
-      id: "PROD-005",
-      nome: "Salada Fitness",
-      preco: 18.0,
-      categoria: "Alimentos Saudáveis",
-      loja: "Veggie Point",
-      imagemUrl:
-        "https://firebasestorage.googleapis.com/v0/b/1:52534721759:web:296e50e8ed5ffb32f33d6aappspot.com/o/produtos%2Fsalada.jpg?alt=media",
-    },
-    {
-      id: "PROD-006",
-      nome: "Combo Lanche + Suco",
-      preco: 29.9,
-      categoria: "Combos e Kits",
-      loja: "Food Truck Campus",
-      imagemUrl:
-        "https://firebasestorage.googleapis.com/v0/b/1:52534721759:web:296e50e8ed5ffb32f33d6a.appspot.com/o/produtos%2Fcombo.jpg?alt=media",
-    },
-  ];
+// Buscar produto por ID
+export async function buscarProdutoPorId(id) {
+  const res = await apiGet(`/product/${id}`);
+  return res.json();
+}
+
+// Criar novo produto
+export async function criarProduto(dados) {
+  const res = await apiPost("/product", dados);
+  return res.json();
+}
+
+// Atualizar produto
+export async function atualizarProduto(id, dados) {
+  const res = await apiPatch(`/product/${id}`, dados);
+  return res.json();
+}
+
+// Deletar produto
+export async function deletarProduto(id) {
+  return apiDelete(`/product/${id}`);
+}
+
+/* ===============================
+    API - Pedidos
+=============================== */
+
+export async function buscarPedidos() {
+  const res = await apiGet("/order");
+  return res.json();
+}
+
+export async function buscarPedidoPorId(id) {
+  const res = await apiGet(`/order/${id}`);
+  return res.json();
+}
+
+export async function finalizarPedido(dados) {
+  const res = await apiPost("/order/finalize", dados);
+  return res.json();
+}
+
+export async function cancelarPedido(id) {
+  const res = await apiPatch(`/order/${id}/cancel`, {});
+  return res.json();
+}
+
+/* ===============================
+    API - Auth
+=============================== */
+
+export async function loginUsuario(email, password) {
+  const res = await apiPost("/auth/login", { email, password });
+  return res.json();
+}
+
+export async function logoutUsuario() {
+  await apiPost("/auth/logout", {});
+}
+
+/* ===============================
+    API - Usuários
+=============================== */
+
+export async function registrarUsuario(dados) {
+  const res = await apiPost("/users/register", dados);
+  return res.json();
+}
+
+export async function buscarPerfil() {
+  const res = await apiGet("/users/profile");
+  return res.json();
 }

@@ -11,15 +11,18 @@ import { PrimeReactProvider } from "primereact/api";
 
 import { ToastProvider } from "./components/toast/ToastContext";
 import ToastContainer from "./components/toast/ToastContainer";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
   return (
-    <PrimeReactProvider>
-      <ToastProvider>
-        <ToastContainer />
-        <AppRoutes />
-      </ToastProvider>
-    </PrimeReactProvider>
+    <ThemeProvider>
+      <PrimeReactProvider>
+        <ToastProvider>
+          <ToastContainer />
+          <AppRoutes />
+        </ToastProvider>
+      </PrimeReactProvider>
+    </ThemeProvider>
   );
 }
 

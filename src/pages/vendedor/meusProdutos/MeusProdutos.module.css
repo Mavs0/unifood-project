@@ -7,6 +7,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  background-color: #f7f8fa;
 }
 .editBtn {
   background: none;
@@ -30,6 +31,7 @@
 .deleteBtn:hover {
   color: #991b1b;
 }
+
 
 .content {
   flex: 1;

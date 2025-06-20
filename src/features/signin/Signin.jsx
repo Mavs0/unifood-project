@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-
+import { Toast } from "primereact/toast";
+import { loginUsuario } from "../../utils/api";
 import estilos from "./SignIn.module.css";
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const { addToast } = useToasty();
+  const toast = useRef(null);
 
   const [dados, setDados] = useState({
     email: "",
     senha: "",
-    lembreDeMim: false,
   });
 
   const handleChange = (field, value) => {
@@ -22,79 +22,36 @@ export default function SignIn() {
 
   async function submit(e) {
     e.preventDefault();
-
-    if (!dados.email || !dados.senha) {
-      addToast({ tipo: "erro", mensagem: "Preencha todos os campos." });
-      return;
-    }
-
     try {
-      const res = await fetch(
-        "https://us-central1-unifood-aaa0f.cloudfunctions.net/api/auth/login'",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: dados.email.trim().toLowerCase(),
-            password: dados.senha,
-          }),
-        }
-      );
-
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message || "Erro ao fazer login.");
-
-      const storage = dados.lembreDeMim ? localStorage : sessionStorage;
-      storage.setItem("token", json.token);
-      storage.setItem("refreshToken", json.refreshToken);
-
-      addToast({ tipo: "sucesso", mensagem: "Login realizado com sucesso!" });
-      navigate("/meusprodutos");
-    } catch (err) {
-      addToast({ tipo: "erro", mensagem: err.message });
+      await loginUsuario(dados.email, dados.senha);
+      toast.current.show({ severity: "success", summary: "Login feito!" });
+      navigate("/comidas");
+    } catch (error) {
+      toast.current.show({
+        severity: "error",
+        summary: "Erro no Login",
+        detail: error.message,
+      });
     }
   }
 
   return (
     <div className={estilos.formCadastro}>
+      <Toast ref={toast} />
       <h1 className={estilos.titulo}>Login</h1>
       <form onSubmit={submit}>
-        <div className={estilos.emailContainer}>
-          <label>Email</label>
-          <InputText
-            value={dados.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-            placeholder="Digite seu e-mail"
-            type="email"
-          />
-        </div>
-
-        <div className={estilos.passwordWrapper}>
-          <label>Senha</label>
-          <Password
-            value={dados.senha}
-            onChange={(e) => handleChange("senha", e.target.value)}
-            toggleMask
-            placeholder="Digite sua senha"
-            feedback={false}
-          />
-        </div>
-
-        <label className={estilos.checkboxContainer}>
-          <input
-            type="checkbox"
-            name="lembreDeMim"
-            checked={dados.lembreDeMim}
-            onChange={(e) =>
-              setDados((prev) => ({
-                ...prev,
-                lembreDeMim: e.target.checked,
-              }))
-            }
-          />
-          Lembrar de mim
-        </label>
-
+        <InputText
+          value={dados.email}
+          onChange={(e) => handleChange("email", e.target.value)}
+          placeholder="E-mail"
+        />
+        <Password
+          value={dados.senha}
+          onChange={(e) => handleChange("senha", e.target.value)}
+          toggleMask
+          placeholder="Senha"
+          feedback={false}
+        />
         <Button
           type="submit"
           label="Entrar"
