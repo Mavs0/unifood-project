@@ -1,117 +1,113 @@
 .container {
-  display: flex;
-  height: 100vh;
+
+  z-index: 2;
   background-color: #fff;
-}
-
-.leftSide {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f9f9f9;
-}
-
-.leftSide img {
-  max-width: 80%;
-  height: auto;
-}
-
-.rightSide {
-  flex: 2;
-  padding: 80px 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* Faz centralizar verticalmente */
-  min-height: 100vh;         /* Garante o preenchimento total da altura */
-}
-
-.formWrapper {
-  max-width: 500px;
   margin: 0 auto;
 }
 
+.formWrapper {
+  width: 100%;
+}
 
 .titulo {
-  font-size: 2.2rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  margin-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formRow {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.inputGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.passwordGroup {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.inputGroup label,
+.passwordGroup label {
+  font-size: 0.85rem;
+}
+
+
+:global(.p-icon-field) {
+    width: 100%;
+}
+
+:global(.p-inputtext-lg .p-inputtext) {
+    font-size: 1rem;
+    padding: 0.625rem 0.625rem;
+    width: 100%;
+}
+:global(.p-inputtext.p-inputtext-lg) {
+    font-size: 1rem;
+    padding: 0.625rem 0.625rem;
+    width: 100%;
+}
+:global(.p-password) {
+    position: relative;
+    display: flex !important;
+    width: 100%;
+}
+
+
+.botaoCadastrar {
+  background-color: #f0716f;
+  border: none;
   font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  padding: 0.70rem;
+  border-radius: 5px;
+  color: white;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+}
+
+.botaoCadastrar:hover {
+  background-color: #bb4c4257;
+}
+
+.loginLink {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 1em;
   color: #333;
 }
 
-.form h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-}
-
-.form p {
-  color: #555;
-  margin-bottom: 25px;
-}
-
-.row {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.input {
-  width: 100%;
-}
-
-.termos {
-  font-size: 0.9rem;
-  margin: 20px 0;
-}
-
-.termos a {
-  color: #e53935;
-  text-decoration: none;
-  margin: 0 3px;
-}
-
-.botao {
-  background-color: #e53935;
-  color: white;
-  border: none;
-  padding: 14px 0;
-  border-radius: 6px;
-  font-weight: 600;
-  text-align: center;
-  display: block;
-  margin: 20px auto;
-  max-width: 300px;
-  width: 100%;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.botao:hover {
-  background-color: #c62828;
-  transform: scale(1.03);
-}
-
-.login {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 0.95rem;
-}
-
-.login a {
-  color: #e53935;
-  text-decoration: none;
+.loginClick {
+  color: #f0716f;
   font-weight: 500;
+  margin-left: 5px;
+  cursor: pointer;
 }
 
-.orDivider {
+.divider {
   text-align: center;
+  margin: 2rem 0 1rem;
+  font-size: 0.85rem;
   color: #999;
-  margin: 30px 0 15px;
   position: relative;
-  font-size: 0.9rem;
 }
 
-.orDivider::before,
-.orDivider::after {
+.divider::before,
+.divider::after {
+
   content: "";
   height: 1px;
   background: #ddd;
@@ -120,53 +116,70 @@
   width: 35%;
 }
 
-.orDivider::before {
+.divider::before {
   left: 0;
 }
 
-.orDivider::after {
+.divider::after {
   right: 0;
 }
 
-.googleBtn {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
 
-.form > *:not(:last-child) {
-  margin-bottom: 16px;
-}
 
-/* Melhor centralização vertical se sobrar espaço */
-@media (min-height: 700px) {
-  .rightSide {
+/* Responsivo */
+@media (max-width: 768px) {
+  .container{
+    display: flex;
     justify-content: center;
   }
-}
-
-/* Responsivo para mobile */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    height: auto;
+  .formWrapper {
+    width: 350px;
+  }
+  .titulo {
+    font-size: 1rem;
+    display: block;
+  }
+  .formRow {
+    margin-bottom: 0.3rem;
+  }
+  .inputGroup label,
+  .passwordGroup label {
+    font-size: 0.70rem;
+  }
+  :global(.p-inputtext-lg .p-inputtext) {
+    font-size: 0.8rem;
+    padding: 0.625rem 0.625rem;
+ 
+  }
+  :global(.p-inputtext.p-inputtext-lg) {
+    font-size: 0.8rem;
+    padding: 0.625rem 0.625rem;
+   
+  }
+  .passwordGroup {
+    margin-bottom: 0.3rem;
   }
 
-  .leftSide {
-    display: none;
+
+  .botaoCadastrar {
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    height: 38px;
   }
 
-  .rightSide {
-    width: 100%;
-    padding: 30px 20px;
+  .loginLink {
+    font-size: 0.85rem;
   }
 
-  .row {
-    flex-direction: column;
-    gap: 10px;
+  .divider {
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
   }
 
-  .botao {
-    max-width: 100%;
+  .divider::before,
+  .divider::after {
+    width: 30%;
   }
+
 }

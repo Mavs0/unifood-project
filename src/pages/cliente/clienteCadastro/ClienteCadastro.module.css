@@ -1,4 +1,3 @@
-/*container geral do cadastro*/
 .usercadastro {
   height: 100vh;
   display: flex;
@@ -35,7 +34,10 @@
 
 /*resposividade para telas menores*/
 @media (max-width: 768px) {
-  
+  .usercadastro{
+    height: auto;
+    gap: 1rem;
+  }
   .userform {
     flex-direction: column;
     gap: 0;
