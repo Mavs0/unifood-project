@@ -9,7 +9,7 @@ import { Dialog } from "primereact/dialog";
 import { useState, useEffect, useRef } from "react";
 import CadastroProduto from "../../../components/form/cadastroProduto/CadProduto";
 // import EditarProduto from "../../../components/form/editarProduto/EditarProduto";
-import { buscarProdutos, deletarProduto } from "../../../utils/api";
+// import { buscarProdutos, deletarProduto } from "../../../utils/api";
 
 export default function MeusProdutos() {
   const [showForm, setShowForm] = useState(false);
@@ -17,7 +17,15 @@ export default function MeusProdutos() {
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [produtoParaExcluir, setProdutoParaExcluir] = useState(null);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-  const [produtos, setProdutos] = useState([]);
+  const [produtos, setProdutos] = useState([
+    {
+      id: 1,
+      nome: "Hambúrguer Artesanal",
+      categorias: ["Lanches"],
+      preco: 15.9,
+      imagemUrl: "https://via.placeholder.com/50",
+    },
+  ]);
   const [produtosFiltrados, setProdutosFiltrados] = useState([]);
   const [busca, setBusca] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
@@ -43,8 +51,19 @@ export default function MeusProdutos() {
 
   async function carregarProdutos() {
     try {
-      const lista = await buscarProdutos();
-      setProdutos(lista);
+      // const lista = await buscarProdutos();
+      // setProdutos(lista);
+
+      // Mock temporário
+      setProdutos([
+        {
+          id: 1,
+          nome: "Hambúrguer Artesanal",
+          categorias: ["Lanches"],
+          preco: 15.9,
+          imagemUrl: "https://via.placeholder.com/50",
+        },
+      ]);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
       toast.current.show({
@@ -77,7 +96,7 @@ export default function MeusProdutos() {
     if (!produtoParaExcluir) return;
 
     try {
-      await deletarProduto(produtoParaExcluir.id);
+      // await deletarProduto(produtoParaExcluir.id);
 
       toast.current.show({
         severity: "success",
@@ -115,7 +134,7 @@ export default function MeusProdutos() {
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
               placeholder="Buscar por nome..."
-              className={styles.inputBusca}
+              className={styles.inputPadrao}
             />
             <Dropdown
               value={categoriaSelecionada}
@@ -123,7 +142,7 @@ export default function MeusProdutos() {
               onChange={(e) => setCategoriaSelecionada(e.value)}
               placeholder="Filtrar por categoria"
               showClear
-              className={styles.inputBusca}
+              className={styles.inputPadrao}
             />
             <div className={styles.botaoWrapper}>
               <Button
@@ -190,22 +209,11 @@ export default function MeusProdutos() {
         </main>
       </div>
 
-      {/* Formulário de cadastro */}
       <CadastroProduto
         visible={showForm}
         onHide={() => setShowForm(false)}
         onSave={carregarProdutos}
       />
-
-      {/* Formulário de edição (se desejar reativar depois) */}
-      {/* {showEditForm && produtoSelecionado && (
-        <EditarProduto
-          produto={produtoSelecionado}
-          visible={showEditForm}
-          onHide={() => setShowEditForm(false)}
-          onSave={carregarProdutos}
-        />
-      )} */}
 
       <Dialog
         header="Confirmar Exclusão"

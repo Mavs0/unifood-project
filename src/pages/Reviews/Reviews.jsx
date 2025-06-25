@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
-import { getAuthHeaders } from "../../utils/auth";
+import { Rating } from "primereact/rating";
 import "primeicons/primeicons.css";
 
 export default function ReviewsLojas() {
@@ -17,6 +17,8 @@ export default function ReviewsLojas() {
   const [busca, setBusca] = useState("");
   const [filtroNota, setFiltroNota] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const lojasPorPagina = 15;
 
   const opcoesNotas = [
     { label: "Todas as notas", value: null },
@@ -26,33 +28,30 @@ export default function ReviewsLojas() {
   ];
 
   useEffect(() => {
-    buscarLojas();
+    carregarLojas();
   }, []);
 
-  async function buscarLojas() {
+  const carregarLojas = () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/users?role=vendedor`,
-        {
-          headers: getAuthHeaders(),
+      const lojasSalvas = JSON.parse(localStorage.getItem("lojasUsuario"));
+      if (lojasSalvas && lojasSalvas.length > 0) {
+        setLojas(lojasSalvas);
+      } else {
+        const mock = [];
+        for (let i = 1; i <= 50; i++) {
+          mock.push({
+            id: i,
+            nome: `Loja ${i}`,
+            nota: (Math.random() * 2 + 3).toFixed(1),
+            imagem: "https://via.placeholder.com/150",
+          });
         }
-      );
-      if (!res.ok) throw new Error("Erro ao buscar lojas");
-
-      const lista = await res.json();
-
-      // Adapta a estrutura esperada para o frontend
-      const adaptadas = lista.map((user) => ({
-        id: user.id,
-        nome: `${user.firstName} ${user.lastName}`,
-        nota: user.notaMedia || 4.5, // Fallback para se o backend ainda não enviar nota
-        imagem: user.imagemUrl || "https://via.placeholder.com/150",
-      }));
-
-      setLojas(adaptadas);
+        setLojas(mock);
+        localStorage.setItem("lojasUsuario", JSON.stringify(mock));
+      }
     } catch (error) {
-      console.error("Erro ao buscar lojas:", error);
+      console.error("Erro ao carregar lojas:", error);
       toast.current.show({
         severity: "error",
         summary: "Erro",
@@ -61,32 +60,40 @@ export default function ReviewsLojas() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const lojasFiltradas = lojas.filter((loja) => {
     const nomeMatch = loja.nome.toLowerCase().includes(busca.toLowerCase());
-    const notaMatch = !filtroNota || loja.nota >= filtroNota;
+    const notaMatch = !filtroNota || parseFloat(loja.nota) <= filtroNota;
     return nomeMatch && notaMatch;
   });
+
+  const totalPaginas = Math.ceil(lojasFiltradas.length / lojasPorPagina);
+  const inicio = (paginaAtual - 1) * lojasPorPagina;
+  const lojasPaginadas = lojasFiltradas.slice(inicio, inicio + lojasPorPagina);
+
+  const mudarPagina = (novaPagina) => {
+    if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+      setPaginaAtual(novaPagina);
+    }
+  };
 
   return (
     <div className={styles.container}>
       <Toast ref={toast} />
       <NavBarraSide />
+
       <div className={styles.mainContent}>
         <NavBarraTop />
         <h2>Reviews das Lojas</h2>
 
         <div className={styles.filtros}>
-          <span className="p-input-icon-left">
-            <i className="pi pi-search" />
-            <InputText
-              placeholder="Buscar loja..."
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-              className={styles.inputBusca}
-            />
-          </span>
+          <InputText
+            placeholder="Buscar loja..."
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            className={styles.inputBusca}
+          />
 
           <Dropdown
             value={filtroNota}
@@ -94,29 +101,58 @@ export default function ReviewsLojas() {
             onChange={(e) => setFiltroNota(e.value)}
             placeholder="Filtrar por nota"
             className={styles.dropdownFiltro}
+            showClear
           />
         </div>
 
         {loading ? (
           <p>Carregando lojas...</p>
         ) : (
-          <div className={styles.grid}>
-            {lojasFiltradas.length > 0 ? (
-              lojasFiltradas.map((loja) => (
-                <div
-                  key={loja.id}
-                  className={styles.card}
-                  onClick={() => navigate(`/reviews/${loja.id}/produtos`)}
+          <>
+            <div className={styles.grid}>
+              {lojasPaginadas.length > 0 ? (
+                lojasPaginadas.map((loja) => (
+                  <div
+                    key={loja.id}
+                    className={styles.card}
+                    onClick={() => navigate(`/reviews/${loja.id}/geral`)}
+                  >
+                    <img src={loja.imagem} alt={loja.nome} />
+                    <h3>{loja.nome}</h3>
+                    <Rating
+                      value={parseFloat(loja.nota)}
+                      readOnly
+                      stars={5}
+                      cancel={false}
+                      className={styles.rating}
+                    />
+                  </div>
+                ))
+              ) : (
+                <p>Nenhuma loja encontrada.</p>
+              )}
+            </div>
+
+            {totalPaginas > 1 && (
+              <div className={styles.paginacao}>
+                <button
+                  onClick={() => mudarPagina(paginaAtual - 1)}
+                  disabled={paginaAtual === 1}
                 >
-                  <img src={loja.imagem} alt={loja.nome} />
-                  <h3>{loja.nome}</h3>
-                  <p>⭐ {loja.nota.toFixed(1)}</p>
-                </div>
-              ))
-            ) : (
-              <p>Nenhuma loja encontrada.</p>
+                  Anterior
+                </button>
+                <span>
+                  Página {paginaAtual} de {totalPaginas}
+                </span>
+                <button
+                  onClick={() => mudarPagina(paginaAtual + 1)}
+                  disabled={paginaAtual === totalPaginas}
+                >
+                  Próxima
+                </button>
+              </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

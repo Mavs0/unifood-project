@@ -1,7 +1,7 @@
 .dashboardContainer {
   display: flex;
   height: 100vh;
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .mainContent {
@@ -18,7 +18,8 @@
 }
 
 body.dark .pageBody {
-  background-color: #121212;
+  background-color: #111827;
+  color: #f9fafb;
 }
 
 .header {
@@ -49,7 +50,7 @@ body.dark .pageBody {
 }
 
 body.dark .title {
-  color: #f3f4f6;
+  color: #f9fafb;
 }
 
 .titleIcon {
@@ -75,8 +76,8 @@ body.dark .title {
 }
 
 body.dark .filtroButton {
-  background-color: #1e1e1e;
-  color: #d1d5db;
+  background-color: #374151;
+  color: #f9fafb;
   border-color: #f87171;
 }
 
@@ -110,8 +111,8 @@ body.dark .filtroButtonAtivo {
 }
 
 body.dark .card {
-  background-color: #1e1e1e;
-  color: #f3f4f6;
+  background-color: #1f2937;
+  color: #f9fafb;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -131,7 +132,7 @@ body.dark .cardTitle {
 }
 
 body.dark .cardValue {
-  color: #f3f4f6;
+  color: #f9fafb;
 }
 
 .cardSubtext {
@@ -164,8 +165,8 @@ body.dark .cardSubtext {
 }
 
 body.dark .cardGrafico {
-  background-color: #1e1e1e;
-  color: #f3f4f6;
+  background-color: #1f2937;
+  color: #f9fafb;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -197,7 +198,7 @@ body.dark .graficoTitle {
 }
 
 body.dark .graficoValor {
-  color: #f3f4f6;
+  color: #f9fafb;
 }
 
 .pizzaLegenda {
@@ -208,7 +209,7 @@ body.dark .graficoValor {
 }
 
 body.dark .pizzaLegenda {
-  color: #f3f4f6;
+  color: #f9fafb;
 }
 
 .pizzaItem {

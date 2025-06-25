@@ -2,20 +2,31 @@ import styles from "./Comidas.module.css";
 import NavBarraSide from "../../components/layout/navBarraSide/NavBarraSide";
 import NavBarraTop from "../../components/layout/navBarraTop/NavBarraTop";
 import { Dropdown } from "primereact/dropdown";
-import { FaFilter } from "react-icons/fa";
 import { Toast } from "primereact/toast";
 import VisualizarProduto from "../../components/form/visualizarProduto/VisualizarProduto";
 import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { buscarProdutos } from "../../utils/api";
+// import { buscarProdutos } from "../../utils/api";
 
 export default function Comidas() {
-  const [produtos, setProdutos] = useState([]);
+  const [produtos, setProdutos] = useState([
+    {
+      id: 1,
+      nome: "Pizza de Calabresa",
+      preco: 29.9,
+      imagemUrl: "https://via.placeholder.com/300x140.png?text=Pizza",
+      categoria: "Refeições",
+      loja: "Cantina do Campus",
+      descricao: "Deliciosa pizza com calabresa, queijo e cebola.",
+    },
+  ]);
+
   const [busca, setBusca] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const toast = useRef(null);
   const navigate = useNavigate();
@@ -37,8 +48,21 @@ export default function Comidas() {
   async function carregarProdutos() {
     setLoading(true);
     try {
-      const lista = await buscarProdutos();
-      setProdutos(lista);
+      // const lista = await buscarProdutos();
+      // setProdutos(lista);
+
+      // Mock
+      setProdutos([
+        {
+          id: 1,
+          nome: "Pizza de Calabresa",
+          preco: 29.9,
+          imagemUrl: "https://via.placeholder.com/300x140.png?text=Pizza",
+          categoria: "Refeições",
+          loja: "Cantina do Campus",
+          descricao: "Deliciosa pizza com calabresa, queijo e cebola.",
+        },
+      ]);
     } catch (error) {
       toast.current.show({
         severity: "error",
@@ -69,6 +93,11 @@ export default function Comidas() {
     navigate("/pagamento", { state: { produto } });
   };
 
+  const limparFiltros = () => {
+    setBusca("");
+    setCategoriaSelecionada(null);
+  };
+
   return (
     <div className={styles.layout}>
       <Toast ref={toast} />
@@ -77,28 +106,33 @@ export default function Comidas() {
         <NavBarraTop />
 
         <div className={styles.container}>
-          <div className={styles.topo}>
-            <h2 className={styles.titulo}>Comidas</h2>
+          <h2 className={styles.titulo}>Comidas</h2>
+
+          <div className={styles.filtrosWrapper}>
             <InputText
-              placeholder="Buscar produto..."
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              className={styles.inputBusca}
+              placeholder="Buscar por nome..."
+              className={styles.inputPadrao}
             />
-          </div>
 
-          <div className={styles.filtro}>
-            <span className={styles.labelFiltro}>
-              <FaFilter className={styles.iconFiltro} />
-              Filtrar por:
-            </span>
             <Dropdown
               value={categoriaSelecionada}
               options={categorias}
               onChange={(e) => setCategoriaSelecionada(e.value)}
-              placeholder="Selecione a categoria"
-              className={styles.dropdownFiltro}
+              placeholder="Filtrar por categoria"
+              showClear
+              className={styles.inputPadrao}
             />
+
+            <div className={styles.botaoWrapper}>
+              <Button
+                label="Limpar Filtros"
+                icon="pi pi-filter-slash"
+                className={styles.botaoCustomizado}
+                onClick={limparFiltros}
+              />
+            </div>
           </div>
 
           {loading ? (
@@ -119,7 +153,7 @@ export default function Comidas() {
                   <div className={styles.info}>
                     <h4>{produto.nome}</h4>
                     <span>R$ {produto.preco.toFixed(2)}</span>
-                    <p>{produto.loja}</p>
+                    <p className={styles.loja}>{produto.loja}</p>
                   </div>
                 </div>
               ))}

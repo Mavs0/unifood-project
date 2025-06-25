@@ -57,7 +57,7 @@ export default function SignUpCliente() {
 
     try {
       const res = await fetch(
-        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/users/register",
+        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/api/users/register",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -132,7 +132,6 @@ export default function SignUpCliente() {
                 onChange={handleChange}
                 placeholder="Digite seu telefone"
                 className="p-inputtext-lg"
-                
               />
             </div>
 
@@ -148,9 +147,6 @@ export default function SignUpCliente() {
             </div>
           </div>
 
-          
-
-          
           <div className={estilos.passwordGroup}>
             <label>Senha</label>
             <Password
@@ -161,11 +157,8 @@ export default function SignUpCliente() {
               toggleMask
               placeholder="Digite sua senha"
               className={`p-inputtext-lg ${estilos.inputFull}`}
-
-              
             />
           </div>
-          
 
           <div className={estilos.passwordGroup}>
             <label>Confirmar Senha</label>
@@ -179,7 +172,6 @@ export default function SignUpCliente() {
               className="p-inputtext-lg"
             />
           </div>
-          
 
           <Button
             type="submit"

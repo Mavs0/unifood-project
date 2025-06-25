@@ -6,12 +6,18 @@ import { RiPencilLine, RiCupLine, RiCalendarEventLine } from "react-icons/ri";
 import { MdOutlineBorderAll } from "react-icons/md";
 import { PiListBold } from "react-icons/pi";
 import { FiSun, FiMoon } from "react-icons/fi";
-import { getUserRole } from "../../../utils/auth";
 
 export default function NavBarraSide() {
-  const role = getUserRole();
   const [collapsed, setCollapsed] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [role, setRole] = useState("vendedor"); // Default temporário
+
+  useEffect(() => {
+    const savedRole = localStorage.getItem("userRole");
+    if (savedRole) {
+      setRole(savedRole);
+    }
+  }, []);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -62,12 +68,12 @@ export default function NavBarraSide() {
       icon: <MdOutlineBorderAll />,
       roles: ["vendedor"],
     },
-    {
-      to: "/eventos",
-      label: "Eventos",
-      icon: <RiCalendarEventLine />,
-      roles: ["cliente", "vendedor"],
-    },
+    // {
+    //   to: "/eventos",
+    //   label: "Eventos",
+    //   icon: <RiCalendarEventLine />,
+    //   roles: ["cliente", "vendedor"],
+    // },
   ];
 
   return (

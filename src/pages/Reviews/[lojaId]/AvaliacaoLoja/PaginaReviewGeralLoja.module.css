@@ -1,0 +1,148 @@
+.container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 20px 40px;
+  overflow-y: auto;
+  background-color: #f7f8fa;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.notaGeral h1 {
+  font-size: 2.5rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.estrela {
+  color: #fbc02d;
+  margin-left: 8px;
+  font-size: 2rem;
+}
+
+.notaGeral p {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.estrelasDistribuicao {
+  margin-bottom: 20px;
+}
+
+.barraEstrela {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background-color: #f0f0f0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tagAtiva {
+  background-color: #ffcc80;
+  font-weight: bold;
+}
+
+.colunaAvaliacao,
+.colunaComentarios {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.topoComentario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.notaComentario {
+  color: #fbc02d;
+  font-weight: bold;
+}
+
+.comentario {
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.comentario p {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  .mainContent {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+
+  .notaGeral h1 {
+    color: #f9fafb;
+  }
+
+  .notaGeral p {
+    color: #d1d5db;
+  }
+
+  .colunaAvaliacao,
+  .colunaComentarios {
+    background-color: #1f2937;
+    color: #f9fafb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .tag {
+    background-color: #374151;
+    color: #f9fafb;
+  }
+
+  .tagAtiva {
+    background-color: #f59e0b;
+    color: #fff;
+  }
+
+  .comentario {
+    background-color: #374151;
+    color: #f9fafb;
+  }
+
+  .comentario p {
+    color: #f9fafb;
+  }
+}

@@ -3,7 +3,7 @@ import styles from "./VisualizarProduto.module.css";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
-import { ShoppingCart, CreditCard } from "lucide-react";
+import { ShoppingCart, CreditCard, X } from "lucide-react";
 
 const VisualizarProduto = ({ produto, onClose }) => {
   const navigate = useNavigate();
@@ -11,25 +11,36 @@ const VisualizarProduto = ({ produto, onClose }) => {
   if (!produto) return null;
 
   const adicionarAoCarrinho = () => {
-    const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho")) || [];
-    const novoCarrinho = [...carrinhoAtual, produto];
-    localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
-    toast.success("Produto adicionado ao carrinho!");
+    try {
+      const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho")) || [];
+      const novoCarrinho = [...carrinhoAtual, produto];
+      localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
+      toast.success("Produto adicionado ao carrinho!");
+    } catch (error) {
+      console.error("Erro ao adicionar ao carrinho:", error);
+      toast.error("Erro ao adicionar ao carrinho!");
+    }
   };
 
   const comprarAgora = () => {
-    const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho")) || [];
-    const novoCarrinho = [...carrinhoAtual, produto];
-    localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
-    navigate("/pagamento");
+    try {
+      const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho")) || [];
+      const novoCarrinho = [...carrinhoAtual, produto];
+      localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
+      navigate("/pagamento");
+    } catch (error) {
+      console.error("Erro ao preparar a compra:", error);
+      toast.error("Erro ao iniciar a compra!");
+    }
   };
 
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <button className={styles.fechar} onClick={onClose}>
-          ✕
+          <X size={20} />
         </button>
+
         <h2 className={styles.titulo}>{produto.nome}</h2>
         <img
           src={produto.imagem}
@@ -50,7 +61,8 @@ const VisualizarProduto = ({ produto, onClose }) => {
           <div className={styles.coluna}>
             <p className={styles.descricao}>{produto.descricao}</p>
             <p className={styles.preco}>
-              <strong>Preço:</strong> R${produto.preco}
+              <strong>Preço:</strong> R$
+              {produto.preco.toFixed(2).replace(".", ",")}
             </p>
           </div>
         </div>
@@ -65,7 +77,7 @@ const VisualizarProduto = ({ produto, onClose }) => {
           </Button>
           <Button className={styles.botaoComprar} onClick={comprarAgora}>
             <CreditCard size={16} className={styles.icone} />
-            Comprar agora
+            Comprar Agora
           </Button>
         </div>
       </div>

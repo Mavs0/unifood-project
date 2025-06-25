@@ -1,86 +1,32 @@
-.container {
-  padding: 2rem;
-  max-width: 600px;
-  margin: 0 auto;
+.gridContainer {
+  display: grid;
+  grid-template-columns: 5fr 2fr;
+  gap: 1rem;
+  padding: 1rem;
+  font-family: 'Inter', sans-serif;
+  background-color: #f7f8fa;
+  min-height: 100vh;
 }
 
-.passoAPasso {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-}
-
-.cuponsWrapper {
-  background-color: #fff5f5;
-  padding: 1rem 1.5rem;
+.colResumo,
+.colPagamento {
+  background-color: white;
   border-radius: 12px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.cuponsWrapper h3 {
-  margin-bottom: 0.75rem;
-  color: #b91c1c;
-  font-size: 1.2rem;
-}
-
-.listaCupons {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.cupomItem {
-  background-color: #fde2e2;
-  border: 1px solid #fca5a5;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: #7f1d1d;
-  transition: all 0.2s ease;
-}
-
-.cupomItem:hover {
-  background-color: #fca5a5;
-  color: #fff;
-}
-
-.selecionado {
-  background-color: #ef4444 !important;
-  color: white !important;
-  border-color: #b91c1c;
-}
-
-
-.passos {
-  color: #bbb;
-}
-
-.ativo {
-  color: #333;
-}
-
-.seta {
-  color: #ccc;
-}
-
-.resumoPedido {
-  margin-bottom: 2rem;
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .cardResumo {
   display: flex;
   gap: 1rem;
-  background: #fff;
-  border-radius: 10px;
+  border: 1px solid #e5e7eb;
   padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   margin-bottom: 1rem;
   align-items: center;
   justify-content: space-between;
@@ -93,10 +39,6 @@
   border-radius: 8px;
 }
 
-.cardResumoInfo {
-  flex: 1;
-}
-
 .quantidadeControls {
   display: flex;
   align-items: center;
@@ -104,46 +46,21 @@
   margin-top: 0.5rem;
 }
 
-.quantidadeBtn {
-  width: 32px;
-  height: 32px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+.btnRemove {
+  background: none;
   border: none;
-  background-color: #eee;
-  border-radius: 6px;
+  color: #dc2626;
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
-.quantidadeBtn:hover {
-  background-color: #ddd;
-}
-
-.quantidadeValor {
-  min-width: 24px;
-  text-align: center;
-  font-weight: bold;
-}
-
-.total {
-  font-weight: bold;
-  color: green;
-}
-
-.pagamento {
-  margin-top: 2rem;
+.btnRemove:hover {
+  color: #991b1b;
 }
 
 .radioGroup {
   display: flex;
-  gap: 2rem;
-  margin: 1rem 0;
-}
-
-.formulario {
-  margin-top: 1rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .inputGroup {
@@ -158,52 +75,117 @@
 }
 
 .qrCodeContainer {
-  background: #f9f9f9;
+  background-color: #f9f9f9;
   padding: 1rem;
   border-radius: 10px;
   text-align: center;
-  margin-bottom: 1rem;
-}
-
-.btnFinalizar {
-  margin-top: 2rem;
-  width: 100%;
-}
-
-.cardPreview {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-}
-
-.cartao {
-  width: 320px;
-  height: 200px;
-  background: linear-gradient(135deg, #3246a8, #5b6ee1);
-  color: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.chip {
-  width: 50px;
-  height: 35px;
-  background-color: gold;
-  border-radius: 6px;
-}
-
-.numero {
-  font-size: 1.4rem;
-  letter-spacing: 2px;
   margin-top: 1rem;
 }
 
-.detalhes {
+.cuponsWrapper {
+  background-color: #fff5f5;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.listaCupons {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cupomItem {
+  background-color: #fde2e2;
+  border: 1px solid #fca5a5;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
   font-size: 0.9rem;
+  color: #7f1d1d;
+  transition: 0.2s ease;
+}
+
+.cupomItem:hover {
+  background-color: #fca5a5;
+  color: #fff;
+}
+
+.selecionado {
+  background-color: #ef4444 !important;
+  color: white !important;
+  border-color: #b91c1c;
+}
+
+.btnFinalizar {
+  background-color: #f0716f;
+  color: white;
+  border: none;
+  margin-top: 1rem;
+}
+
+.btnFinalizar:hover {
+  background-color: #c887869c;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .gridContainer {
+    background-color: #111827;
+  }
+
+  .colResumo,
+  .colPagamento {
+    background-color: #1f2937;
+    color: #f9fafb;
+    box-shadow: none;
+  }
+
+  .cardResumo {
+    background-color: #374151;
+    border: 1px solid #4b5563;
+  }
+
+  .btnRemove {
+    color: #f87171;
+  }
+
+  .btnRemove:hover {
+    color: #dc2626;
+  }
+
+  .cuponsWrapper {
+    background-color: #1f2937;
+  }
+
+  .cupomItem {
+    background-color: #374151;
+    border: 1px solid #f87171;
+    color: #f9fafb;
+  }
+
+  .cupomItem:hover {
+    background-color: #f87171;
+    color: white;
+  }
+
+  .selecionado {
+    background-color: #dc2626 !important;
+    border-color: #991b1b;
+  }
+
+  .qrCodeContainer {
+    background-color: #374151;
+  }
+
+  .btnFinalizar {
+    background-color: #f0716f;
+  }
+
+  .btnFinalizar:hover {
+    background-color: #c887869c;
+  }
 }

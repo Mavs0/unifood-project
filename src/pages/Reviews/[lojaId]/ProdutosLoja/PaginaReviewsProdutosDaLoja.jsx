@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./PaginaReviewsProdutosDaLoja.module.css";
 import NavBarraSide from "../../../../components/layout/navBarraSide/NavBarraSide";
 import NavBarraTop from "../../../../components/layout/navBarraTop/NavBarraTop";
+import LojaTabs from "../../components/LojaTabs";
 import { useNavigate, useParams } from "react-router-dom";
 
 const produtosMock = [
@@ -37,6 +38,8 @@ export default function PaginaReviewsProdutosDaLoja() {
       <NavBarraSide />
       <div className={styles.mainContent}>
         <NavBarraTop />
+        <LojaTabs />
+
         <h2>Produtos da Loja</h2>
 
         <div className={styles.produtosGrid}>

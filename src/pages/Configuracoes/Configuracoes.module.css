@@ -1,90 +1,138 @@
 .layout {
-    display: flex;
-  }
-  
+  display: flex;
+  font-family: 'Inter', sans-serif;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 2rem;
+  background-color: #f7f8fa;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+.formWrapper {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  display: flex;
+  gap: 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.coluna {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #374151;
+}
+
+/* Padronização de inputs */
+.input,
+.inputMetade {
+  margin-bottom: 0.8rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  background-color: white;
+  color: #374151;
+}
+
+.input:focus,
+.inputMetade:focus {
+  border-color: #f87171;
+  outline: none;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.botaoPerfil {
+  background-color: #f87171;
+  color: white;
+  margin-top: 1rem;
+  align-self: center;
+  width: 60%;
+}
+
+.botaoPagamento {
+  background-color: #f87171;
+  color: white;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  align-self: center;
+  width: 60%;
+}
+
+.botaoSenha {
+  background-color: #f87171;
+  color: white;
+  margin-top: 1rem;
+  align-self: center;
+  width: 60%;
+}
+
+.helperTextErro {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin-top: -0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
   .mainContent {
-    flex: 1;
-    padding: 2rem;
-    background-color: #f7f8fa;
+    background-color: #1f2937;
+    color: #f9fafb;
   }
-  
-  .title {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    color: #111827;
-  }
-  
+
   .formWrapper {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    display: flex;
-    gap: 2rem;
+    background-color: #111827;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   }
-  
-  .coluna {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+
+  .title {
+    color: #f9fafb;
   }
-  
+
   .sectionTitle {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    color: #374151;
+    color: #f9fafb;
   }
-  
-  .input {
-    margin-bottom: 0.8rem;
-    width: 100%;
-  }
-  
+
+  .input,
   .inputMetade {
-    width: 100%;
-    margin-bottom: 0.8rem;
+    background-color: #374151;
+    color: #f9fafb;
+    border: 1px solid #4b5563;
   }
-  
-  .row {
-    display: flex;
-    gap: 1rem;
+
+  .input:focus,
+  .inputMetade:focus {
+    border-color: #f87171;
   }
-  
-  .checkboxWrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .botaoPerfil {
-    background-color: #f87171;
-    color: white;
-    margin-top: 1rem;
-    align-self: center;
-    width: 60%;
-  }
-  
-  .botaoPagamento {
-    background-color: #fbbf24;
-    color: white;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-    align-self: center;
-    width: 60%;
-  }
-  
-  .botaoSenha {
-    background-color: #6366f1;
-    color: white;
-    margin-top: 1rem;
-    align-self: center;
-    width: 60%;
-  }
-  
+
   .helperTextErro {
-    color: #dc2626;
-    font-size: 0.8rem;
-    margin-top: -0.4rem;
-    margin-bottom: 0.8rem;
+    color: #fca5a5;
   }
-  
+}

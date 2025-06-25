@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./PaginaReviewGeralLoja.module.css";
 import NavBarraSide from "../../../../components/layout/navBarraSide/NavBarraSide";
 import NavBarraTop from "../../../../components/layout/navBarraTop/NavBarraTop";
+import LojaTabs from "../../components/LojaTabs";
 import { ProgressBar } from "primereact/progressbar";
 
 const comentariosMock = [
@@ -31,17 +32,10 @@ const tagsFeedback = [
   "Bons ingredientes (111)",
 ];
 
-const estrelasDistribuicao = {
-  5: 300,
-  4: 50,
-  3: 30,
-  2: 15,
-  1: 12,
-};
+const estrelasDistribuicao = { 5: 300, 4: 50, 3: 30, 2: 15, 1: 12 };
 
 export default function PaginaReviewGeralLoja() {
   const [tagSelecionada, setTagSelecionada] = useState(null);
-
   const comentariosFiltrados = tagSelecionada
     ? comentariosMock.filter((c) =>
         c.texto.toLowerCase().includes(tagSelecionada.toLowerCase())
@@ -53,10 +47,11 @@ export default function PaginaReviewGeralLoja() {
       <NavBarraSide />
       <div className={styles.mainContent}>
         <NavBarraTop />
+        <LojaTabs />
+
         <h2>Brigadeiro da Raquel ⭐ 5.0</h2>
 
         <div className={styles.grid}>
-          {/* Coluna da Avaliação */}
           <div className={styles.colunaAvaliacao}>
             <div className={styles.notaGeral}>
               <h1>
@@ -64,7 +59,6 @@ export default function PaginaReviewGeralLoja() {
               </h1>
               <p>407 avaliações</p>
             </div>
-
             <div className={styles.estrelasDistribuicao}>
               {Object.keys(estrelasDistribuicao)
                 .sort((a, b) => b - a)
@@ -77,7 +71,6 @@ export default function PaginaReviewGeralLoja() {
                   </div>
                 ))}
             </div>
-
             <div className={styles.tags}>
               {tagsFeedback.map((tag, idx) => (
                 <span
@@ -95,7 +88,6 @@ export default function PaginaReviewGeralLoja() {
             </div>
           </div>
 
-          {/* Coluna de Comentários */}
           <div className={styles.colunaComentarios}>
             <h3>Comentários</h3>
             {comentariosFiltrados.map((c, idx) => (

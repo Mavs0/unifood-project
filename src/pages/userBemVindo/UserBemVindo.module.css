@@ -5,6 +5,9 @@
   justify-content: center;
   position: relative; 
   flex-wrap: wrap;
+  font-family: 'Inter', sans-serif;
+  background-color: #f7f8fa;
+  color: #111827;
 }
 
 .cadastrocontainer {
@@ -13,10 +16,9 @@
   justify-content: center;
   gap: 2rem;
   min-height: 0;
- 
 }
 
-.img_box{
+.img_box {
   flex: 1;
   display: flex;
   align-items: center;
@@ -30,9 +32,11 @@
 }
 
 @media (max-width: 768px) {
-  .wrapper{
-    height: 0;
+  .wrapper {
+    height: auto;
+    flex-direction: column;
   }
+
   .cadastrocontainer {
     flex-direction: column-reverse;
     padding: 2rem;
@@ -41,5 +45,13 @@
 
   .img_box img {
     width: 50%;
+  }
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  .wrapper {
+    background-color: #111827;
+    color: #f9fafb;
   }
 }

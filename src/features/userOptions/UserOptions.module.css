@@ -7,33 +7,58 @@
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
     width: 100px;
     border: 2px solid #ccc;
-}
-
-/* Ao passar o mouse*/
-.option:hover {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* Hover */
+  .option:hover {
     transform: translateY(-4px);
-    background-color: #e0e0e0; 
+    background-color: #e0e0e0;
     border-color: #999;
-}
-
-/* Ao clicar */
-.option:active {
-    background-color: #d6d6d6; 
+  }
+  
+  /* Active */
+  .option:active {
+    background-color: #d6d6d6;
     border-color: #888;
-}
-
-.avatar {
+  }
+  
+  .avatar {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 0.5rem;
-}
-
-.avatarNome {
+  }
+  
+  .avatarNome {
     font-weight: 500;
     color: #333;
-}
+  }
+  
+  /* DARK MODE */
+  @media (prefers-color-scheme: dark) {
+    .option {
+      background-color: #1f2937;
+      border-color: #4b5563;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+  
+    .option:hover {
+      background-color: #374151;
+      border-color: #6b7280;
+    }
+  
+    .option:active {
+      background-color: #4b5563;
+      border-color: #9ca3af;
+    }
+  
+    .avatarNome {
+      color: #f9fafb;
+    }
+  }
+  

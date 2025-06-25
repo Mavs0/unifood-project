@@ -1,4 +1,4 @@
-.nav_logo{
+.nav_logo {
     width: 100%;
     position: absolute;
     top: 0;
@@ -7,16 +7,19 @@
     background-color: white;
     z-index: 1;
     font-family: 'Inter', sans-serif;
-}
-.LogoUnifood{
+  }
+  
+  .LogoUnifood {
     color: #000000;
     font-weight: bold;
     font-size: 2em;
-}
-.food{
+  }
+  
+  .food {
     color: #d63432;
-}
-@media (max-width: 768px) {
+  }
+  
+  @media (max-width: 768px) {
     .nav_logo {
       position: static;
       width: 100%;
@@ -24,8 +27,22 @@
       background-color: white;
       padding-bottom: 0;
       padding-top: 0;
-        height: 50px;
-    
+      height: 50px;
+    }
+  }
+  
+  /* DARK MODE */
+  @media (prefers-color-scheme: dark) {
+    .nav_logo {
+      background-color: #1f2937;
+    }
+  
+    .LogoUnifood {
+      color: #f9fafb;
+    }
+  
+    .food {
+      color: #fb6b60;
     }
   }
   

@@ -3,23 +3,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative; 
+  position: relative;
   flex-wrap: wrap;
+  font-family: 'Inter', sans-serif;
 }
-/*formulario geral do cadastro*/
+
+/* Formulário geral do cadastro */
 .userform {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2rem;
   min-height: 0;
-
 }
-.userform ::placeholder{
+
+/* Placeholder padrão */
+.userform ::placeholder {
   color: #666;
 }
-/*imagem cadastro*/
-.img_box{
+
+/* Imagem de cadastro */
+.img_box {
   flex: 1;
   display: flex;
   align-items: center;
@@ -32,12 +36,13 @@
   object-fit: cover;
 }
 
-/*resposividade para telas menores*/
+/* Responsividade */
 @media (max-width: 768px) {
-  .usercadastro{
+  .usercadastro {
     height: auto;
     gap: 1rem;
   }
+
   .userform {
     flex-direction: column;
     gap: 0;
@@ -45,5 +50,17 @@
 
   .img_box img {
     width: 40%;
+  }
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  .userform ::placeholder {
+    color: #ccc;
+  }
+
+  .usercadastro {
+    background-color: #111827;
+    color: #f9fafb;
   }
 }

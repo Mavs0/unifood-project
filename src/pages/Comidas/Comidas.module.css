@@ -1,116 +1,165 @@
-/*layout geral*/
-
+/* Layout geral */
 .layout {
-    display: flex;
-    height: 100vh;
-  }
+  display: flex;
+  height: 100vh;
+}
 
-  
-  
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f7f8fa;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.titulo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+/* Filtros e Busca - Padrão MeusProdutos */
+.filtrosWrapper {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.inputPadrao {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  width: 300px;
+  font-size: 0.95rem;
+  height: 40px;
+}
+
+.botaoWrapper {
+  margin-left: auto;
+}
+
+.botaoCustomizado {
+  background-color: #f0716f;
+  color: white;
+  border: none;
+}
+
+.botaoCustomizado:hover {
+  background-color: #c887869c;
+}
+
+/* Grid de produtos */
+.gridProdutos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.cardProduto {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+}
+
+.cardProduto:hover {
+  transform: translateY(-5px);
+}
+
+.imagemProduto {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.info {
+  padding: 1rem;
+}
+
+.nomePreco {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.loja {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.3rem;
+}
+
+.dialogImage {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.dialogCategoria {
+  background: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
   .mainContent {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #f7f8fa;
-  }
-  
-  .container {
-    padding: 2rem;
-  }
-  
-  .topo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  
-  .titulo {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-  
-  .barraBusca {
-    margin-bottom: 1rem;
-  }
-  
-  .inputBusca {
-    width: 300px;
-  }
-  
-  .filtro {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .labelFiltro {
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-  }
-  
-  .iconFiltro {
-    margin-right: 0.3rem;
-  }
-  
-  .dropdownFiltro {
-    width: 250px;
-  }
-  .gridProdutos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .cardProduto {
-    background: white;
-    border-radius: 1rem;
-    overflow: hidden;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s;
-  }
-  
-  .cardProduto:hover {
-    transform: translateY(-5px);
-  }
-  
-  .imagemProduto {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-  }
-  
-  .info {
-    padding: 1rem;
-  }
-  
-  .nomePreco {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .loja {
-    font-size: 0.85rem;
-    color: #888;
-    margin-top: 0.3rem;
+    background-color: #111827;
   }
 
-  .dialogImage {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 1rem;
+  .container {
+    background-color: #111827;
+    color: #f9fafb;
   }
-  
+
+  .titulo {
+    color: #f9fafb;
+  }
+
+  .labelFiltro {
+    color: #f9fafb;
+  }
+
+  .inputPadrao,
+  .inputBusca,
+  .dropdownFiltro {
+    background-color: #374151;
+    color: #f9fafb;
+    border: 1px solid #4b5563;
+  }
+
+  .cardProduto {
+    background: #374151;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .loja {
+    color: #d1d5db;
+  }
+
   .dialogCategoria {
-    background: #f0f0f0;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.85rem;
+    background: #374151;
+    color: #f9fafb;
   }
-  
+
+  .botaoCustomizado {
+    background-color: #f0716f;
+    color: white;
+  }
+
+  .botaoCustomizado:hover {
+    background-color: #c887869c;
+  }
+}

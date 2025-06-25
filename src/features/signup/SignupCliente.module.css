@@ -1,8 +1,8 @@
 .container {
-
   z-index: 2;
   background-color: #fff;
   margin: 0 auto;
+  font-family: 'Inter', sans-serif;
 }
 
 .formWrapper {
@@ -39,39 +39,36 @@
   display: flex;
   flex-direction: column;
 }
+
 .inputGroup label,
 .passwordGroup label {
   font-size: 0.85rem;
 }
 
-
-:global(.p-icon-field) {
-    width: 100%;
-}
-
-:global(.p-inputtext-lg .p-inputtext) {
-    font-size: 1rem;
-    padding: 0.625rem 0.625rem;
-    width: 100%;
-}
-:global(.p-inputtext.p-inputtext-lg) {
-    font-size: 1rem;
-    padding: 0.625rem 0.625rem;
-    width: 100%;
-}
+/* PrimeReact fields */
+:global(.p-icon-field),
 :global(.p-password) {
-    position: relative;
-    display: flex !important;
-    width: 100%;
+  width: 100%;
 }
 
+:global(.p-password) {
+  position: relative;
+  display: flex !important;
+}
+
+:global(.p-inputtext-lg .p-inputtext),
+:global(.p-inputtext.p-inputtext-lg) {
+  font-size: 1rem;
+  padding: 0.625rem;
+  width: 100%;
+}
 
 .botaoCadastrar {
   background-color: #f0716f;
   border: none;
   font-weight: bold;
   font-size: 1rem;
-  padding: 0.70rem;
+  padding: 0.7rem;
   border-radius: 5px;
   color: white;
   transition: background-color 0.3s;
@@ -107,7 +104,6 @@
 
 .divider::before,
 .divider::after {
-
   content: "";
   height: 1px;
   background: #ddd;
@@ -124,42 +120,40 @@
   right: 0;
 }
 
-
-
 /* Responsivo */
 @media (max-width: 768px) {
-  .container{
+  .container {
     display: flex;
     justify-content: center;
   }
+
   .formWrapper {
     width: 350px;
   }
+
   .titulo {
     font-size: 1rem;
     display: block;
   }
+
   .formRow {
     margin-bottom: 0.3rem;
   }
+
   .inputGroup label,
   .passwordGroup label {
     font-size: 0.70rem;
   }
-  :global(.p-inputtext-lg .p-inputtext) {
-    font-size: 0.8rem;
-    padding: 0.625rem 0.625rem;
- 
-  }
+
+  :global(.p-inputtext-lg .p-inputtext),
   :global(.p-inputtext.p-inputtext-lg) {
     font-size: 0.8rem;
-    padding: 0.625rem 0.625rem;
-   
+    padding: 0.625rem;
   }
+
   .passwordGroup {
     margin-bottom: 0.3rem;
   }
-
 
   .botaoCadastrar {
     font-size: 0.95rem;
@@ -181,5 +175,38 @@
   .divider::after {
     width: 30%;
   }
+}
 
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+
+  .loginLink {
+    color: #d1d5db;
+  }
+
+  .divider {
+    color: #9ca3af;
+  }
+
+  .divider::before,
+  .divider::after {
+    background: #4b5563;
+  }
+
+  .botaoCadastrar {
+    background-color: #f87171;
+    color: white;
+  }
+
+  .botaoCadastrar:hover {
+    background-color: #ef4444;
+  }
+
+  .loginClick {
+    color: #fb7185;
+  }
 }

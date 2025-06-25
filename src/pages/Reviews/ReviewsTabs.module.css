@@ -1,0 +1,87 @@
+.container {
+    display: flex;
+    height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f7f8fa;
+  }
+  
+  .pageBody {
+    flex: 1;
+    padding: 1.5rem 2rem;
+  }
+  
+  .title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #111827;
+  }
+  
+  .tabsWrapper {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tab {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background-color: #f3f4f6;
+    color: #374151;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+  }
+  
+  .tab:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .activeTab {
+    background-color: #f0716f;
+    color: white;
+    font-weight: 600;
+  }
+  
+  .tabContent {
+    padding-top: 1rem;
+  }
+  
+  /* Dark Mode */
+  body[data-theme="dark"] .mainContent {
+    background-color: #1f2937;
+  }
+  
+  body[data-theme="dark"] .pageBody {
+    background-color: #1f2937;
+    color: #111827;
+  }
+  
+  body[data-theme="dark"] .title {
+    color: #f3f4f6;
+  }
+  
+  body[data-theme="dark"] .tabsWrapper {
+    border-bottom: 1px solid #374151;
+  }
+  
+  body[data-theme="dark"] .tab {
+    background-color: #374151;
+    color: #d1d5db;
+  }
+  
+  body[data-theme="dark"] .tab:hover {
+    background-color: #4b5563;
+  }
+  
+  body[data-theme="dark"] .activeTab {
+    background-color: #f87171;
+    color: #111827;
+  }
+  

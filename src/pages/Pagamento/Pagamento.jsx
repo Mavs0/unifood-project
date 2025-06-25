@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { RadioButton } from "primereact/radiobutton";
@@ -13,29 +13,76 @@ export default function Pagamento() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const produto = location.state?.produto || {
-    nome: "Produto Exemplo",
-    preco: 39,
-    loja: "Loja Genérica",
-    imagemUrl: "https://via.placeholder.com/100",
-  };
-
+  const [carrinho, setCarrinho] = useState([]);
   const [tipoPagamento, setTipoPagamento] = useState("cartao");
-  const [quantidade, setQuantidade] = useState(1);
   const [numeroCartao, setNumeroCartao] = useState("");
   const [nomeCartao, setNomeCartao] = useState("");
   const [validade, setValidade] = useState("");
   const [cvv, setCvv] = useState("");
   const [cupomSelecionado, setCupomSelecionado] = useState(null);
 
-  const cuponsDisponiveis = [
-    { id: 1, descricao: "10% de desconto", tipo: "percentual", valor: 10 },
-    { id: 2, descricao: "R$5,00 de desconto", tipo: "fixo", valor: 5 },
-  ];
+  useEffect(() => {
+    const carrinhoSalvo = JSON.parse(localStorage.getItem("carrinhoUsuario"));
+    if (carrinhoSalvo && carrinhoSalvo.length > 0) {
+      setCarrinho(carrinhoSalvo);
+    } else {
+      const mock = [
+        {
+          id: 1,
+          nome: "Pizza Calabresa",
+          preco: 39,
+          loja: "Cantina Campus",
+          imagemUrl: "https://via.placeholder.com/100",
+          quantidade: 1,
+        },
+        {
+          id: 2,
+          nome: "Suco Natural",
+          preco: 9,
+          loja: "Cantina Campus",
+          imagemUrl: "https://via.placeholder.com/100",
+          quantidade: 1,
+        },
+        {
+          id: 3,
+          nome: "Brownie",
+          preco: 12,
+          loja: "Doce Uni",
+          imagemUrl: "https://via.placeholder.com/100",
+          quantidade: 1,
+        },
+      ];
+      setCarrinho(mock);
+      localStorage.setItem("carrinhoUsuario", JSON.stringify(mock));
+    }
+  }, []);
 
-  const aumentarQuantidade = () => setQuantidade((prev) => prev + 1);
-  const diminuirQuantidade = () =>
-    setQuantidade((prev) => (prev > 1 ? prev - 1 : 1));
+  const cuponsUsuario = JSON.parse(localStorage.getItem("cuponsUsuario")) || [];
+  const cuponsDisponiveis = [...cuponsUsuario];
+
+  const aumentarQuantidade = (id) => {
+    const atualizado = carrinho.map((item) =>
+      item.id === id ? { ...item, quantidade: item.quantidade + 1 } : item
+    );
+    setCarrinho(atualizado);
+    localStorage.setItem("carrinhoUsuario", JSON.stringify(atualizado));
+  };
+
+  const diminuirQuantidade = (id) => {
+    const atualizado = carrinho.map((item) =>
+      item.id === id && item.quantidade > 1
+        ? { ...item, quantidade: item.quantidade - 1 }
+        : item
+    );
+    setCarrinho(atualizado);
+    localStorage.setItem("carrinhoUsuario", JSON.stringify(atualizado));
+  };
+
+  const removerProduto = (id) => {
+    const atualizado = carrinho.filter((item) => item.id !== id);
+    setCarrinho(atualizado);
+    localStorage.setItem("carrinhoUsuario", JSON.stringify(atualizado));
+  };
 
   const aplicarCupom = (cupom) => {
     setCupomSelecionado(cupom);
@@ -48,13 +95,16 @@ export default function Pagamento() {
   };
 
   const calcularTotal = () => {
-    let total = produto.preco * quantidade;
+    let total = carrinho.reduce(
+      (sum, item) => sum + item.preco * item.quantidade,
+      0
+    );
 
     if (cupomSelecionado) {
       if (cupomSelecionado.tipo === "percentual") {
-        total = total - (total * cupomSelecionado.valor) / 100;
+        total -= (total * cupomSelecionado.valor) / 100;
       } else if (cupomSelecionado.tipo === "fixo") {
-        total = total - cupomSelecionado.valor;
+        total -= cupomSelecionado.valor;
       }
     }
 
@@ -69,6 +119,8 @@ export default function Pagamento() {
       life: 3000,
     });
 
+    localStorage.removeItem("carrinhoUsuario");
+
     setTimeout(() => {
       navigate("/comidas");
     }, 3200);
@@ -79,182 +131,151 @@ export default function Pagamento() {
   return (
     <div className="flex">
       <NavBarraSide />
-      <div className={styles.container}>
+      <div className={styles.gridContainer}>
         <Toast ref={toast} />
 
-        <h2>Pagamento</h2>
-
-        {/* Listagem de Cupons */}
-        <div className={styles.cuponsWrapper}>
-          <h3>Meus Cupons Disponíveis 🎁</h3>
-          {cuponsDisponiveis.length > 0 ? (
-            <ul className={styles.listaCupons}>
-              {cuponsDisponiveis.map((cupom) => (
-                <li
-                  key={cupom.id}
-                  className={`${styles.cupomItem} ${
-                    cupomSelecionado?.id === cupom.id ? styles.selecionado : ""
-                  }`}
-                  onClick={() => aplicarCupom(cupom)}
-                >
-                  {cupom.descricao}
-                </li>
-              ))}
-            </ul>
+        {/* Coluna Resumo */}
+        <div className={styles.colResumo}>
+          <h2>Resumo do Pedido</h2>
+          {carrinho.length > 0 ? (
+            carrinho.map((produto) => (
+              <div key={produto.id} className={styles.cardResumo}>
+                <img src={produto.imagemUrl} alt={produto.nome} />
+                <div>
+                  <p>
+                    <strong>{produto.nome}</strong>
+                  </p>
+                  <p>Loja: {produto.loja}</p>
+                  <p>Preço: R${produto.preco.toFixed(2)}</p>
+                  <div className={styles.quantidadeControls}>
+                    <Button
+                      label="-"
+                      onClick={() => diminuirQuantidade(produto.id)}
+                      className="p-button-outlined p-button-danger"
+                    />
+                    <span>{produto.quantidade}</span>
+                    <Button
+                      label="+"
+                      onClick={() => aumentarQuantidade(produto.id)}
+                      className="p-button-outlined p-button-success"
+                    />
+                  </div>
+                </div>
+                <Button
+                  icon="pi pi-times"
+                  className={styles.btnRemove}
+                  onClick={() => removerProduto(produto.id)}
+                />
+              </div>
+            ))
           ) : (
-            <p>Nenhum cupom disponível no momento.</p>
+            <p>Seu carrinho está vazio.</p>
           )}
+          <p>
+            <strong>Total:</strong> R${valorTotal.toFixed(2)}
+          </p>
         </div>
 
-        <div className={styles.contentWrapper}>
-          <div className={styles.resumoPedido}>
-            <h3>Resumo do Pedido</h3>
-            <div className={styles.cardResumo}>
-              <img src={produto.imagemUrl} alt={produto.nome} />
-              <div>
-                <p>
-                  <strong>{produto.nome}</strong>
-                </p>
-                <p>Loja: {produto.loja}</p>
-                <p>Preço: R${produto.preco.toFixed(2)}</p>
-                <div className={styles.quantidadeControls}>
-                  <Button
-                    label="-"
-                    onClick={diminuirQuantidade}
-                    className="p-button-outlined p-button-danger"
+        {/* Coluna Pagamento */}
+        <div className={styles.colPagamento}>
+          <h2>Tipo de Pagamento</h2>
+
+          <div className={styles.radioGroup}>
+            {["cartao", "pix", "dinheiro"].map((tipo) => (
+              <div key={tipo}>
+                <RadioButton
+                  inputId={tipo}
+                  name="pagamento"
+                  value={tipo}
+                  onChange={(e) => setTipoPagamento(e.value)}
+                  checked={tipoPagamento === tipo}
+                />
+                <label htmlFor={tipo}>
+                  {tipo === "cartao"
+                    ? "Cartão de Crédito/Débito"
+                    : tipo.toUpperCase()}
+                </label>
+              </div>
+            ))}
+          </div>
+
+          {/* Cupons dentro da área de pagamento */}
+          {cuponsDisponiveis.length > 0 && (
+            <div className={styles.cuponsWrapper}>
+              <h3>Meus Cupons Disponíveis 🎁</h3>
+              <ul className={styles.listaCupons}>
+                {cuponsDisponiveis.map((cupom) => (
+                  <li
+                    key={cupom.id}
+                    className={`${styles.cupomItem} ${
+                      cupomSelecionado?.id === cupom.id
+                        ? styles.selecionado
+                        : ""
+                    }`}
+                    onClick={() => aplicarCupom(cupom)}
+                  >
+                    {cupom.descricao}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {tipoPagamento === "cartao" && (
+            <div>
+              <div className={styles.inputGroup}>
+                <label>Número do Cartão</label>
+                <InputText
+                  value={numeroCartao}
+                  onChange={(e) => setNumeroCartao(e.target.value)}
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <label>Nome no Cartão</label>
+                <InputText
+                  value={nomeCartao}
+                  onChange={(e) => setNomeCartao(e.target.value)}
+                />
+              </div>
+              <div className={styles.flex}>
+                <div className={styles.inputGroup}>
+                  <label>Validade</label>
+                  <InputText
+                    value={validade}
+                    onChange={(e) => setValidade(e.target.value)}
                   />
-                  <span>{quantidade}</span>
-                  <Button
-                    label="+"
-                    onClick={aumentarQuantidade}
-                    className="p-button-outlined p-button-success"
+                </div>
+                <div className={styles.inputGroup}>
+                  <label>CVV</label>
+                  <InputText
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value)}
                   />
                 </div>
               </div>
             </div>
-            <p>
-              <strong>Frete:</strong> R$0,00
-            </p>
-            <p>
-              <strong>Total:</strong>{" "}
-              <span className={styles.total}>R${valorTotal.toFixed(2)}</span>
-            </p>
-          </div>
+          )}
 
-          {/* Área de pagamento */}
-          <div className={styles.pagamento}>
-            <h3>Tipo de Pagamento</h3>
-            <div className={styles.radioGroup}>
-              <div>
-                <RadioButton
-                  inputId="cartao"
-                  name="pagamento"
-                  value="cartao"
-                  onChange={(e) => setTipoPagamento(e.value)}
-                  checked={tipoPagamento === "cartao"}
-                />
-                <label htmlFor="cartao">Cartão de Crédito/Débito</label>
-              </div>
-              <div>
-                <RadioButton
-                  inputId="pix"
-                  name="pagamento"
-                  value="pix"
-                  onChange={(e) => setTipoPagamento(e.value)}
-                  checked={tipoPagamento === "pix"}
-                />
-                <label htmlFor="pix">PIX</label>
-              </div>
-              <div>
-                <RadioButton
-                  inputId="dinheiro"
-                  name="pagamento"
-                  value="dinheiro"
-                  onChange={(e) => setTipoPagamento(e.value)}
-                  checked={tipoPagamento === "dinheiro"}
-                />
-                <label htmlFor="dinheiro">Dinheiro</label>
-              </div>
+          {tipoPagamento === "pix" && (
+            <div className={styles.qrCodeContainer}>
+              <p>Escaneie o QR Code para pagar via PIX:</p>
+              <QRCode
+                value={`Pagamento UniFood - Total: R$${valorTotal.toFixed(2)}`}
+                size={180}
+              />
             </div>
+          )}
 
-            {tipoPagamento === "cartao" && (
-              <div className={styles.formularioCartaoWrapper}>
-                <div className={styles.visualCartao}>
-                  <div className={styles.cartaoExibicao}>
-                    <div className={styles.numero}>
-                      {numeroCartao || "•••• •••• •••• ••••"}
-                    </div>
-                    <div className={styles.nome}>
-                      {nomeCartao || "NOME NO CARTÃO"}
-                    </div>
-                    <div className={styles.footerCartao}>
-                      <span>{validade || "MM/AA"}</span>
-                      <span>{cvv || "CVV"}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.formulario}>
-                  <div className={styles.inputGroup}>
-                    <label>Número do Cartão</label>
-                    <InputText
-                      placeholder="1234 5678 9012 3456"
-                      value={numeroCartao}
-                      onChange={(e) => setNumeroCartao(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.inputGroup}>
-                    <label>Nome no Cartão</label>
-                    <InputText
-                      placeholder="FULANO DE TAL"
-                      value={nomeCartao}
-                      onChange={(e) => setNomeCartao(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.flex}>
-                    <div className={styles.inputGroup}>
-                      <label>Validade</label>
-                      <InputText
-                        placeholder="MM/AA"
-                        value={validade}
-                        onChange={(e) => setValidade(e.target.value)}
-                      />
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>CVV</label>
-                      <InputText
-                        placeholder="123"
-                        value={cvv}
-                        onChange={(e) => setCvv(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          {tipoPagamento === "dinheiro" && (
+            <p>O pagamento será feito na entrega.</p>
+          )}
 
-            {tipoPagamento === "pix" && (
-              <div className={styles.qrCodeContainer}>
-                <p>Escaneie o QR Code abaixo para pagar via PIX:</p>
-                <QRCode
-                  value={`Pagamento UniFood - Produto: ${
-                    produto.nome
-                  } - R$${valorTotal.toFixed(2)}`}
-                  size={180}
-                />
-              </div>
-            )}
-
-            {tipoPagamento === "dinheiro" && (
-              <p>O pagamento será feito na entrega.</p>
-            )}
-
-            <Button
-              label="Finalizar Compra"
-              icon="pi pi-check"
-              className={styles.btnFinalizar}
-              onClick={finalizarCompra}
-            />
-          </div>
+          <Button
+            label="Finalizar Compra"
+            icon="pi pi-check"
+            className={styles.btnFinalizar}
+            onClick={finalizarCompra}
+          />
         </div>
       </div>
     </div>

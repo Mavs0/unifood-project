@@ -9,29 +9,6 @@
   flex-direction: column;
   background-color: #f7f8fa;
 }
-.editBtn {
-  background: none;
-  border: none;
-  color: #6b7280;
-  cursor: pointer;
-  margin-right: 0.5rem;
-}
-
-.editBtn:hover {
-  color: #374151;
-}
-
-.deleteBtn {
-  background: none;
-  border: none;
-  color: #dc2626; /* Vermelho */
-  cursor: pointer;
-}
-
-.deleteBtn:hover {
-  color: #991b1b;
-}
-
 
 .content {
   flex: 1;
@@ -55,26 +32,28 @@
   align-items: center;
 }
 
-.botaoWrapper {
-  margin-left: auto;
-}
-
-.inputBusca {
+.inputPadrao {
   padding: 0.5rem 1rem;
   border-radius: 8px;
   border: 1px solid #d1d5db;
   width: 300px;
   font-size: 0.95rem;
+  height: 40px;
 }
 
-
-.selectStatus {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+.p-inputtext,
+.p-dropdown {
+  width: 300px;
+  height: 40px;
   font-size: 0.95rem;
-  background-color: white;
-  color: #374151;
+}
+
+.p-dropdown-label {
+  padding-top: 6px;
+}
+
+.botaoWrapper {
+  margin-left: auto;
 }
 
 .botaoCustomizado {
@@ -115,21 +94,75 @@
   border-top: 1px solid #f3f4f6;
 }
 
-.viewBtn {
+.editBtn {
   background: none;
   border: none;
   color: #6b7280;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: color 0.2s;
+  margin-right: 0.5rem;
 }
 
-.viewBtn:hover {
-  color: #111827;
+.editBtn:hover {
+  color: #374151;
 }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
+.deleteBtn {
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  color: #991b1b;
+}
+
+@media (prefers-color-scheme: dark) {
+  .mainContent {
+    background-color: #1f2937;
+  }
+
+  .content {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+
+  .table {
+    background-color: #1f2937;
+  }
+
+  .table th {
+    background-color: #374151;
+    color: #f9fafb;
+  }
+
+  .table td {
+    color: #d1d5db;
+    border-top: 1px solid #374151;
+  }
+
+  .title {
+    color: #f9fafb;
+  }
+
+  .inputPadrao,
+  .p-inputtext,
+  .p-dropdown {
+    background-color: #374151;
+    color: #f9fafb;
+    border: 1px solid #4b5563;
+  }
+
+  .p-dropdown-label {
+    color: #f9fafb;
+  }
+
+  .botaoCustomizado {
+    background-color: #f0716f;
+    color: white;
+  }
+
+  .botaoCustomizado:hover {
+    background-color: #c887869c;
+  }
 }

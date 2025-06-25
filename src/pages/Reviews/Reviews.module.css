@@ -1,66 +1,153 @@
 .container {
-    display: flex;
-    height: 100vh;
-  }
-  
+  display: flex;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 20px 40px;
+  overflow-y: auto;
+  background-color: #f7f8fa;
+}
+
+.grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.filtros {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.inputBusca {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  height: 40px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  width: 10px;
+}
+.rating .p-rating-icon {
+  color: #f0716f;
+}
+
+.rating .p-rating-icon.pi-star-fill {
+  color: #f0716f;
+}
+
+
+.dropdownFiltro {
+  width: 200px;
+}
+
+.card {
+  width: 200px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card h3 {
+  margin: 10px 0 5px;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.paginacao button {
+  padding: 0.5rem 1rem;
+  background-color: #f0716f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.paginacao button:hover {
+  background-color: #dc2626;
+}
+
+.paginacao button:disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.paginacao span {
+  font-weight: 500;
+  color: #374151;
+}
+
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
   .mainContent {
-    flex: 1;
-    padding: 20px 40px;
-    overflow-y: auto;
-    background-color: #f7f8fa;
-  }
-  
-  .grid {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 20px;
+    background-color: #111827;
+    color: #f9fafb;
   }
 
-  .filtros {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
   .inputBusca {
-    flex: 1;
+    background-color: #374151;
+    color: #f9fafb;
+    border: 1px solid #4b5563;
   }
-  
-  .dropdownFiltro {
-    width: 200px;
-  }
-  
-  
+
   .card {
-    width: 200px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    cursor: pointer;
-    padding: 15px;
-    text-align: center;
-    transition: transform 0.2s ease;
+    background-color: #1f2937;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
-  
-  .card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .card img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
+
   .card h3 {
-    margin: 10px 0 5px;
-    font-size: 1rem;
+    color: #f9fafb;
   }
-  
+
   .card p {
-    font-size: 0.9rem;
-    color: #555;
+    color: #d1d5db;
   }
-  
+
+  .paginacao span {
+    color: #f9fafb;
+  }
+
+  .paginacao button:disabled {
+    background-color: #374151;
+    color: #9ca3af;
+  }
+}

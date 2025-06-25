@@ -8,7 +8,6 @@ import VendedorCadastro from "../pages/vendedor/vendedorCadastro/VendedorCadastr
 import MeusProdutos from "../pages/vendedor/meusProdutos/MeusProdutos";
 import Comidas from "../pages/Comidas/Comidas";
 import Pagamento from "../pages/Pagamento/Pagamento";
-
 import Notificacoes from "../pages/Notificacoes/Notificacoes";
 import Mensagens from "../pages/Mensagens/Mensagens";
 import Recompensas from "../pages/Recompensas/Recompensas";
@@ -17,19 +16,19 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Pedidos from "../pages/Pedidos/Pedidos";
 import ProximosEventos from "../pages/Eventos/ProximosEventos";
 
-import ReviewsLojas from "../pages/Reviews/Reviews";
-import PaginaReviewsProdutosDaLoja from "../pages/Reviews/[lojaId]/produtos/PaginaReviewsProdutosDaLoja";
-import PaginaReviewGeralLoja from "../pages/Reviews/[lojaId]/geral/PaginaReviewGeralLoja";
+import Reviews from "../pages/Reviews/Reviews";
+import ReviewsTabs from "../pages/Reviews/ReviewsTabs";
+import PaginaReviewsProdutosDaLoja from "../pages/Reviews/[lojaId]/ProdutosLoja/PaginaReviewsProdutosDaLoja";
+import PaginaReviewGeralLoja from "../pages/Reviews/[lojaId]/AvaliacaoLoja/PaginaReviewGeralLoja";
 
 export default function AppRoutes() {
-  console.log("Rotas renderizadas"); // Adicione isso
   return (
     <Router>
       <Routes>
         <Route path="/" element={<UserBemVindo />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/clienteCadastro" element={<ClienteCadastro />} />
         <Route path="/vendedorCadastro" element={<VendedorCadastro />} />
-        <Route path="/login" element={<Login />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/meusprodutos" element={<MeusProdutos />} />
@@ -37,18 +36,19 @@ export default function AppRoutes() {
         <Route path="/pedidos" element={<Pedidos />} />
         <Route path="/eventos" element={<ProximosEventos />} />
 
-        <Route path="/reviews" element={<ReviewsLojas />} />
-        <Route
-          path="/reviews/:lojaId/produtos"
-          element={<PaginaReviewsProdutosDaLoja />}
-        />
+        {/* Reviews */}
+        <Route path="/reviews" element={<Reviews />} />
+
         <Route
           path="/reviews/:lojaId/geral"
           element={<PaginaReviewGeralLoja />}
         />
+        <Route
+          path="/reviews/:lojaId/produtos"
+          element={<PaginaReviewsProdutosDaLoja />}
+        />
 
         <Route path="/pagamento" element={<Pagamento />} />
-
         <Route path="/notificacoes" element={<Notificacoes />} />
         <Route path="/mensagens" element={<Mensagens />} />
         <Route path="/recompensas" element={<Recompensas />} />
