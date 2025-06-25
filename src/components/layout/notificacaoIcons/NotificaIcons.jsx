@@ -9,7 +9,7 @@ export default function NotificationIcons() {
   return (
     <div className={styles.iconGroup}>
       {/* Notificações */}
-      <div
+      {/* <div
         className={`${styles.iconBox} ${styles.lightBlue}`}
         onClick={() => navigate("/notificacoes")}
         data-pr-tooltip="Notificações"
@@ -17,7 +17,7 @@ export default function NotificationIcons() {
       >
         <PiBell className={styles.icon} />
         <span className={styles.badge}>3</span>
-      </div>
+      </div> */}
 
       {/* Recompensas */}
       <div
