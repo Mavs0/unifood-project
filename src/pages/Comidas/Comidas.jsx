@@ -8,7 +8,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { buscarProdutos } from "../../utils/api";
+import { buscarProdutos } from "../../utils/api";
 
 export default function Comidas() {
   const [produtos, setProdutos] = useState([
@@ -48,8 +48,8 @@ export default function Comidas() {
   async function carregarProdutos() {
     setLoading(true);
     try {
-      // const lista = await buscarProdutos();
-      // setProdutos(lista);
+      const lista = await buscarProdutos();
+      setProdutos(lista);
 
       // Mock
       setProdutos([
@@ -122,17 +122,8 @@ export default function Comidas() {
               onChange={(e) => setCategoriaSelecionada(e.value)}
               placeholder="Filtrar por categoria"
               showClear
-              className={styles.inputPadrao}
+              className={styles.inputPadraoDropdown}
             />
-
-            <div className={styles.botaoWrapper}>
-              <Button
-                label="Limpar Filtros"
-                icon="pi pi-filter-slash"
-                className={styles.botaoCustomizado}
-                onClick={limparFiltros}
-              />
-            </div>
           </div>
 
           {loading ? (

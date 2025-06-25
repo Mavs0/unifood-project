@@ -30,10 +30,10 @@
   flex: 1;
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  height: 40px;
   border: 1px solid #d1d5db;
+  width: 300px;
   font-size: 0.95rem;
-  width: 10px;
+  height: 40px;
 }
 .rating .p-rating-icon {
   color: #f0716f;
@@ -43,10 +43,15 @@
   color: #f0716f;
 }
 
-
-.dropdownFiltro {
-  width: 200px;
+.inputPadraoDropdown {
+  padding: 0rem 0.5rem 0.5rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  width: 300px;
+  font-size: 0.95rem;
+  height: 40px;
 }
+
 
 .card {
   width: 200px;
@@ -124,6 +129,12 @@
   }
 
   .inputBusca {
+    background-color: #374151;
+    color: #f9fafb;
+    border: 1px solid #4b5563;
+  }
+
+  .inputPadraoDropdown {
     background-color: #374151;
     color: #f9fafb;
     border: 1px solid #4b5563;

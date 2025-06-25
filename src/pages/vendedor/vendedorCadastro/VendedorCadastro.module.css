@@ -1,27 +1,84 @@
+:root {
+  --fundo-dark: #111827;
+  --texto-dark: #f2f2f2;
+  --placeholder-dark: #aaaaaa;
+  --input-bg-dark: #2c2c2c;
+  --salmao: #f0716f;
+  --borda-dark: #444;
+}
+
+body {
+  background-color: var(--fundo-dark);
+  color: var(--texto-dark);
+  font-family: 'Inter', sans-serif;
+}
+
 .usercadastro {
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative; 
+  position: relative;
   flex-wrap: wrap;
+  background-color: var(--fundo-dark);
+  color: var(--texto-dark);
 }
-/*formulario geral do cadastro*/
+
+/* Formulário principal */
 .userform {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8rem;
+  gap: 2rem;
   min-height: 0;
   position: relative;
-  align-items: center;
+  flex-wrap: wrap;
+}
 
+/* Placeholder padrão para modo escuro */
+.userform ::placeholder {
+  color: var(--placeholder-dark);
 }
-.userform ::placeholder{
-  color: #666;
+
+/* Campo de input/textarea padrão em modo escuro */
+.userform input,
+.userform textarea,
+.userform .p-inputtext,
+.userform .p-dropdown,
+.userform .p-password input {
+  background-color: var(--input-bg-dark);
+  color: var(--texto-dark);
+  border: 1px solid var(--borda-dark);
+  border-radius: 4px;
+  font-size: 1rem;
+  padding: 0.6rem;
 }
-/*imagem cadastro*/
-.img_box{
+
+/* Labels */
+.userform label {
+  color: var(--texto-dark);
+}
+
+/* Botões */
+.userform button,
+.botaoCadastro {
+  background-color: var(--salmao);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: opacity 0.3s ease;
+}
+
+.userform button:hover,
+.botaoCadastro:hover {
+  opacity: 0.9;
+}
+
+/* Imagem lateral */
+.img_box {
   flex: 1;
   display: flex;
   align-items: center;
@@ -29,24 +86,27 @@
 }
 
 .img_box img {
-  width: 500px;
+  width: 440px;
+  max-width: 100%;
   height: auto;
   object-fit: cover;
 }
 
-/*resposividade para telas menores*/
+/* Responsividade */
 @media (max-width: 768px) {
-  .usercadastro{
+  .usercadastro {
     height: auto;
+    padding: 2rem 1rem;
   }
-  
+
   .userform {
     flex-direction: column-reverse;
-    gap: 0;
+    gap: 2rem;
     width: 100%;
   }
 
   .img_box img {
-    width: 40%;
+    width: 70%;
+    margin-top: 1rem;
   }
 }

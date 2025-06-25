@@ -100,7 +100,7 @@ export default function ReviewsLojas() {
             options={opcoesNotas}
             onChange={(e) => setFiltroNota(e.value)}
             placeholder="Filtrar por nota"
-            className={styles.dropdownFiltro}
+            className={styles.inputPadraoDropdown}
             showClear
           />
         </div>

@@ -142,7 +142,7 @@ export default function MeusProdutos() {
               onChange={(e) => setCategoriaSelecionada(e.value)}
               placeholder="Filtrar por categoria"
               showClear
-              className={styles.inputPadrao}
+              className={styles.inputPadraoDropdown}
             />
             <div className={styles.botaoWrapper}>
               <Button

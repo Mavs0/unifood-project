@@ -113,7 +113,7 @@ export default function PaginaPedidos() {
               options={opcoesStatus}
               onChange={(e) => setStatusSelecionado(e.value)}
               placeholder="Filtrar por status"
-              className={styles.inputBusca}
+              className={styles.inputPadraoDropdown}
               showClear
             />
           </div>

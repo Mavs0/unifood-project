@@ -40,6 +40,15 @@
   height: 40px;
 }
 
+.inputPadraoDropdown {
+  padding: 0rem 0.5rem 0.5rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  width: 300px;
+  font-size: 0.95rem;
+  height: 40px;
+}
+
 .tableWrapper {
   overflow-x: auto;
 }
@@ -116,6 +125,12 @@
   }
 
   .inputBusca {
+    background-color: #374151;
+    color: #f9fafb;
+    border: 1px solid #4b5563;
+  }
+
+  .inputPadraoDropdown {
     background-color: #374151;
     color: #f9fafb;
     border: 1px solid #4b5563;
