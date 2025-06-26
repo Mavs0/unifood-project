@@ -1,8 +1,7 @@
-import { getAuthHeaders, saveTokens, clearTokens } from "./auth"; // Certifique-se de importar de auth.js
+import { getAuthHeaders, saveTokens, clearTokens } from "./auth";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Core Fetch com Refresh Token
 export async function apiFetch(endpoint, options = {}, retry = true) {
   const url = `${API_URL}${
     endpoint.startsWith("/") ? endpoint : "/" + endpoint
@@ -40,7 +39,6 @@ export async function apiFetch(endpoint, options = {}, retry = true) {
   }
 }
 
-// Helpers simples
 export async function apiGet(endpoint, extraOptions = {}) {
   return apiFetch(endpoint, { method: "GET", ...extraOptions });
 }
@@ -51,17 +49,6 @@ export async function apiPost(endpoint, body, extraOptions = {}) {
     body: JSON.stringify(body),
     ...extraOptions,
   });
-}
-
-/* ===============================
-    API - Usuários - Vendedor
-=============================== */
-export async function registrarVendedor(dados) {
-  const res = await apiPost("/users/register", {
-    ...dados,
-    role: "vendedor", // força o role para vendedor
-  });
-  return res.json();
 }
 
 export async function apiPatch(endpoint, body, extraOptions = {}) {
@@ -79,7 +66,6 @@ export async function apiDelete(endpoint, extraOptions = {}) {
   });
 }
 
-// Auto Refresh
 async function tryRefreshToken() {
   const refreshToken =
     localStorage.getItem("refreshToken") ||
@@ -104,43 +90,74 @@ async function tryRefreshToken() {
   }
 }
 
-/* ===============================
-    API - Produtos
-=============================== */
+// ============================== //
+//           AUTH                //
+// ============================== //
+export async function loginUsuario(email, password) {
+  const res = await apiPost("/auth/login", { email, password });
+  return res.json();
+}
 
-// Buscar todos os produtos
+export async function logoutUsuario() {
+  await apiPost("/auth/logout", {});
+}
+
+// ============================== //
+//          USERS                //
+// ============================== //
+export async function registrarUsuario(dados) {
+  const res = await apiPost("/users/register", dados);
+  return res.json();
+}
+
+export async function registrarVendedor(dados) {
+  const res = await apiPost("/users/register", {
+    ...dados,
+    role: "vendedor",
+  });
+  return res.json();
+}
+
+export async function buscarPerfil() {
+  const res = await apiGet("/users/profile");
+  return res.json();
+}
+
+// ============================== //
+//          PRODUCT              //
+// ============================== //
 export async function buscarProdutos() {
   const res = await apiGet("/product");
   return res.json();
 }
 
-// Buscar produto por ID
 export async function buscarProdutoPorId(id) {
   const res = await apiGet(`/product/${id}`);
   return res.json();
 }
 
-// Criar novo produto
 export async function criarProduto(dados) {
   const res = await apiPost("/product", dados);
   return res.json();
 }
 
-// Atualizar produto
 export async function atualizarProduto(id, dados) {
   const res = await apiPatch(`/product/${id}`, dados);
   return res.json();
 }
 
-// Deletar produto
 export async function deletarProduto(id) {
   return apiDelete(`/product/${id}`);
 }
 
-/* ===============================
-    API - Pedidos
-=============================== */
+export async function atualizarEstoqueProduto(id, quantidade) {
+  const res = await apiPatch(`/product/${id}/quantity`, { quantidade });
+  return res.json();
+}
 
+// ============================== //
+//          ORDERS               //
+// ============================== //
 export async function buscarPedidos() {
   const res = await apiGet("/order");
   return res.json();
@@ -156,34 +173,40 @@ export async function finalizarPedido(dados) {
   return res.json();
 }
 
+export async function atualizarPedido(id, dados) {
+  const res = await apiPatch(`/order/${id}`, dados);
+  return res.json();
+}
+
 export async function cancelarPedido(id) {
   const res = await apiPatch(`/order/${id}/cancel`, {});
   return res.json();
 }
 
-/* ===============================
-    API - Auth
-=============================== */
-
-export async function loginUsuario(email, password) {
-  const res = await apiPost("/auth/login", { email, password });
+export async function buscarHistoricoPedidos() {
+  const res = await apiGet("/order/history");
   return res.json();
 }
 
-export async function logoutUsuario() {
-  await apiPost("/auth/logout", {});
-}
-
-/* ===============================
-    API - Usuários
-=============================== */
-
-export async function registrarUsuario(dados) {
-  const res = await apiPost("/users/register", dados);
+export async function buscarDetalhesPedidoUsuario(id) {
+  const res = await apiGet(`/order/${id}/details`);
   return res.json();
 }
 
-export async function buscarPerfil() {
-  const res = await apiGet("/users/profile");
+// ============================== //
+//          RATING               //
+// ============================== //
+export async function criarAvaliacao(dados) {
+  const res = await apiPost("/rating", dados);
+  return res.json();
+}
+
+export async function listarAvaliacoesProduto(productId) {
+  const res = await apiGet(`/rating/product/${productId}`);
+  return res.json();
+}
+
+export async function listarAvaliacoesVendedor(sellerId) {
+  const res = await apiGet(`/rating/seller/${sellerId}`);
   return res.json();
 }

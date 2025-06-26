@@ -5,28 +5,16 @@ import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import VisualizarProduto from "../../components/form/visualizarProduto/VisualizarProduto";
 import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buscarProdutos } from "../../utils/api";
 
 export default function Comidas() {
-  const [produtos, setProdutos] = useState([
-    {
-      id: 1,
-      nome: "Pizza de Calabresa",
-      preco: 29.9,
-      imagemUrl: "https://via.placeholder.com/300x140.png?text=Pizza",
-      categoria: "Refeições",
-      loja: "Cantina do Campus",
-      descricao: "Deliciosa pizza com calabresa, queijo e cebola.",
-    },
-  ]);
-
+  const [produtos, setProdutos] = useState([]);
   const [busca, setBusca] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const toast = useRef(null);
   const navigate = useNavigate();
@@ -42,37 +30,21 @@ export default function Comidas() {
   ];
 
   useEffect(() => {
+    async function carregarProdutos() {
+      try {
+        const lista = await buscarProdutos();
+        setProdutos(lista);
+      } catch (err) {
+        toast.current.show({
+          severity: "error",
+          summary: "Erro",
+          detail: "Falha ao carregar produtos.",
+        });
+      }
+    }
+
     carregarProdutos();
   }, []);
-
-  async function carregarProdutos() {
-    setLoading(true);
-    try {
-      const lista = await buscarProdutos();
-      setProdutos(lista);
-
-      // Mock
-      setProdutos([
-        {
-          id: 1,
-          nome: "Pizza de Calabresa",
-          preco: 29.9,
-          imagemUrl: "https://via.placeholder.com/300x140.png?text=Pizza",
-          categoria: "Refeições",
-          loja: "Cantina do Campus",
-          descricao: "Deliciosa pizza com calabresa, queijo e cebola.",
-        },
-      ]);
-    } catch (error) {
-      toast.current.show({
-        severity: "error",
-        summary: "Erro",
-        detail: "Erro ao carregar produtos.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const produtosFiltrados = produtos.filter((produto) => {
     const nomeMatch = produto.nome.toLowerCase().includes(busca.toLowerCase());
