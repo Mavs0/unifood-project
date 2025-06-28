@@ -7,47 +7,79 @@
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
-  background-color: #f7f8fa;
+  background-color: #f9fafb;
   font-family: 'Inter', sans-serif;
+}
+
+.topbarWrapper {
+  margin-bottom: 1.5rem;
 }
 
 .titulo {
   font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: #1f2937;
 }
 
-.roletaSection {
-  background-color: #fff;
+/* SEÇÕES PADRÃO (jogos, roleta, cupons) */
+.sectionPadrao {
+  background-color: #ffffff;
   padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  text-align: center;
   margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.subtitulo {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.textoAux {
+  margin-bottom: 0.5rem;
+  color: #4b5563;
+}
+
+/* BOTÕES DE JOGOS */
+.botoesJogos {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+/* ROLETA */
+.roletaVisual {
+  font-size: 3rem;
+  margin: 1rem 0;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 .botaoRoleta {
   background-color: #f0716f;
   color: white;
   border: none;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .botaoRoleta:hover {
-  background-color: #c887869c;
+  background-color: #e25e5c;
 }
 
-.recompensasSection {
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.recompensasSection ul {
+/* CUPONS */
+.listaCupons {
   list-style: none;
   padding: 0;
+  margin-top: 1rem;
 }
 
 .recompensaItem {
@@ -59,22 +91,23 @@
   color: #92400e;
 }
 
-/* Dark Mode */
+/* DARK MODE */
 @media (prefers-color-scheme: dark) {
   .mainContent {
     background-color: #111827;
     color: #f9fafb;
   }
 
-  .titulo {
+  .titulo,
+  .subtitulo,
+  .textoAux {
     color: #f9fafb;
   }
 
-  .roletaSection,
-  .recompensasSection {
+  .sectionPadrao {
     background-color: #1f2937;
     color: #f9fafb;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   }
 
   .recompensaItem {
@@ -88,6 +121,6 @@
   }
 
   .botaoRoleta:hover {
-    background-color: #c887869c;
+    background-color: #c2413c;
   }
 }

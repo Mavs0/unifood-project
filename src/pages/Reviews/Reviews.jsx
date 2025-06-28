@@ -82,7 +82,6 @@ export default function ReviewsLojas() {
     <div className={styles.container}>
       <Toast ref={toast} />
       <NavBarraSide />
-
       <div className={styles.mainContent}>
         <NavBarraTop />
         <h2>Reviews das Lojas</h2>

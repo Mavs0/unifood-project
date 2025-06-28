@@ -65,11 +65,6 @@ export default function Comidas() {
     navigate("/pagamento", { state: { produto } });
   };
 
-  const limparFiltros = () => {
-    setBusca("");
-    setCategoriaSelecionada(null);
-  };
-
   return (
     <div className={styles.layout}>
       <Toast ref={toast} />

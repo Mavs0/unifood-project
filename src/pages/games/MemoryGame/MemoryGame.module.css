@@ -1,0 +1,22 @@
+.memoryGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    gap: 10px;
+    justify-content: center;
+  }
+  .card {
+    background-color: #f0716f;
+    color: white;
+    font-size: 1.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .flipped {
+    background-color: #fecaca;
+  }
+  
