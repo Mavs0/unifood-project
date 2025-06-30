@@ -103,7 +103,7 @@ export async function logoutUsuario() {
 }
 
 // ============================== //
-//          USERS                //
+//           USERS               //
 // ============================== //
 export async function registrarUsuario(dados) {
   const res = await apiPost("/users/register", dados);
@@ -111,10 +111,7 @@ export async function registrarUsuario(dados) {
 }
 
 export async function registrarVendedor(dados) {
-  const res = await apiPost("/users/register", {
-    ...dados,
-    role: "vendedor",
-  });
+  const res = await apiPost("/users/register", { ...dados, role: "vendedor" });
   return res.json();
 }
 
@@ -156,7 +153,7 @@ export async function atualizarEstoqueProduto(id, quantidade) {
 }
 
 // ============================== //
-//          ORDERS               //
+//           ORDERS              //
 // ============================== //
 export async function buscarPedidos() {
   const res = await apiGet("/order");
@@ -165,6 +162,11 @@ export async function buscarPedidos() {
 
 export async function buscarPedidoPorId(id) {
   const res = await apiGet(`/order/${id}`);
+  return res.json();
+}
+
+export async function buscarDetalhesPedidoUsuario(id) {
+  const res = await apiGet(`/order/${id}/details`);
   return res.json();
 }
 
@@ -188,13 +190,8 @@ export async function buscarHistoricoPedidos() {
   return res.json();
 }
 
-export async function buscarDetalhesPedidoUsuario(id) {
-  const res = await apiGet(`/order/${id}/details`);
-  return res.json();
-}
-
 // ============================== //
-//          RATING               //
+//           RATING              //
 // ============================== //
 export async function criarAvaliacao(dados) {
   const res = await apiPost("/rating", dados);
@@ -209,4 +206,26 @@ export async function listarAvaliacoesProduto(productId) {
 export async function listarAvaliacoesVendedor(sellerId) {
   const res = await apiGet(`/rating/seller/${sellerId}`);
   return res.json();
+}
+
+// ============================== //
+//           COUPON              //
+// ============================== //
+export async function criarCupom(dados) {
+  const res = await apiPost("/coupon", dados);
+  return res.json();
+}
+
+export async function listarCuponsUsuario(userId) {
+  const res = await apiGet(`/coupon/user/${userId}`);
+  return res.json();
+}
+
+export async function buscarCupomPorId(id) {
+  const res = await apiGet(`/coupon/${id}`);
+  return res.json();
+}
+
+export async function deletarCupom(id) {
+  return apiDelete(`/coupon/${id}`);
 }

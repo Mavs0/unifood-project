@@ -8,8 +8,8 @@ import { Toast } from "primereact/toast";
 import { Dialog } from "primereact/dialog";
 import { useState, useEffect, useRef } from "react";
 import CadastroProduto from "../../../components/form/cadastroProduto/CadProduto";
-// import EditarProduto from "../../../components/form/editarProduto/EditarProduto";
-// import { buscarProdutos, deletarProduto } from "../../../utils/api";
+import EditProduto from "../../../components/form/editarProduto/EditProduto";
+import { buscarProdutos, deletarProduto } from "../../../utils/api";
 
 export default function MeusProdutos() {
   const [showForm, setShowForm] = useState(false);
@@ -17,15 +17,7 @@ export default function MeusProdutos() {
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [produtoParaExcluir, setProdutoParaExcluir] = useState(null);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-  const [produtos, setProdutos] = useState([
-    {
-      id: 1,
-      nome: "Hambúrguer Artesanal",
-      categorias: ["Lanches"],
-      preco: 15.9,
-      imagemUrl: "https://via.placeholder.com/50",
-    },
-  ]);
+  const [produtos, setProdutos] = useState([]);
   const [produtosFiltrados, setProdutosFiltrados] = useState([]);
   const [busca, setBusca] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
@@ -51,19 +43,9 @@ export default function MeusProdutos() {
 
   async function carregarProdutos() {
     try {
-      // const lista = await buscarProdutos();
-      // setProdutos(lista);
+      const lista = await buscarProdutos();
 
-      // Mock temporário
-      setProdutos([
-        {
-          id: 1,
-          nome: "Hambúrguer Artesanal",
-          categorias: ["Lanches"],
-          preco: 15.9,
-          imagemUrl: "https://via.placeholder.com/50",
-        },
-      ]);
+      setProdutos(lista);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
       toast.current.show({
@@ -96,7 +78,7 @@ export default function MeusProdutos() {
     if (!produtoParaExcluir) return;
 
     try {
-      // await deletarProduto(produtoParaExcluir.id);
+      await deletarProduto(produtoParaExcluir.id);
 
       toast.current.show({
         severity: "success",
@@ -184,22 +166,26 @@ export default function MeusProdutos() {
                     <td>{produto.categorias?.join(", ") || "-"}</td>
                     <td>R$ {produto.preco?.toFixed(2) || "-"}</td>
                     <td>
-                      <Button
-                        icon="pi pi-pencil"
-                        className={styles.editBtn}
-                        onClick={() => {
-                          setProdutoSelecionado(produto);
-                          setShowEditForm(true);
-                        }}
-                      />
-                      <Button
-                        icon="pi pi-trash"
-                        className={styles.deleteBtn}
-                        onClick={() => {
-                          setProdutoParaExcluir(produto);
-                          setConfirmDeleteOpen(true);
-                        }}
-                      />
+                      <span data-pr-tooltip="Editar" data-pr-position="top">
+                        <Button
+                          icon="pi pi-pencil"
+                          className={styles.editBtn}
+                          onClick={() => {
+                            setProdutoSelecionado(produto);
+                            setShowEditForm(true); // habilitar se tiver componente de edição
+                          }}
+                        />
+                      </span>
+                      <span data-pr-tooltip="Excluir" data-pr-position="top">
+                        <Button
+                          icon="pi pi-trash"
+                          className={styles.deleteBtn}
+                          onClick={() => {
+                            setProdutoParaExcluir(produto);
+                            setConfirmDeleteOpen(true);
+                          }}
+                        />
+                      </span>
                     </td>
                   </tr>
                 ))}

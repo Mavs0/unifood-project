@@ -9,6 +9,7 @@ import { Toast } from "primereact/toast";
 import { useState, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import styles from "./CadProduto.module.css";
+import { criarProduto } from "../../../utils/api";
 
 export default function FormCadProduto({ visible, onHide, onSave }) {
   const toast = useRef(null);
@@ -105,9 +106,6 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
       return;
     }
 
-    const token =
-      localStorage.getItem("token") || sessionStorage.getItem("token");
-
     const payload = {
       nome: produto.nome,
       preco: produto.preco,
@@ -119,23 +117,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     };
 
     try {
-      const response = await fetch(
-        "https://us-central1-unifood-aaa0f.cloudfunctions.net/api/product",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Erro ao cadastrar o produto.");
-      }
+      const data = await criarProduto(payload);
 
       toast.current.show({
         severity: "success",
