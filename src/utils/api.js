@@ -95,7 +95,11 @@ async function tryRefreshToken() {
 // ============================== //
 export async function loginUsuario(email, password) {
   const res = await apiPost("/auth/login", { email, password });
-  return res.json();
+  const data = await res.json();
+
+  saveTokens(data.idToken, data.refreshToken);
+
+  return data;
 }
 
 export async function logoutUsuario() {
