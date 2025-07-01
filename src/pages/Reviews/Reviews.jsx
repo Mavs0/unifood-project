@@ -7,7 +7,10 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import { Rating } from "primereact/rating";
-import { listarAvaliacoesVendedor } from "../../utils/api";
+import {
+  listarAvaliacoesTodasLojas,
+  listarAvaliacoesVendedor,
+} from "../../utils/api";
 
 import ErroGenerico from "../../components/ui/ErroGenerico";
 import Imagem from "../../assets/image/Erro.svg";
@@ -37,13 +40,14 @@ export default function ReviewsLojas() {
   const carregarLojas = async () => {
     setLoading(true);
     try {
-      const user = JSON.parse(localStorage.getItem("usuario") || "{}");
-      const response = await listarAvaliacoesVendedor(user.uid); // já vem como array
+      // const user = JSON.parse(localStorage.getItem("usuario") || "{}");
+      // const response = await listarAvaliacoesVendedor(user.uid); // já vem como array
+      const response = await listarAvaliacoesTodasLojas(); // já vem como array
 
-      const lojasComNota = response.map((item) => ({
-        id: item.sellerId,
-        nome: item.nome || `Vendedor ${item.sellerId}`,
-        nota: parseFloat(item.mediaNotas || 0).toFixed(1),
+      const lojasComNota = response.sellers.map((item) => ({
+        id: item.targetId,
+        nome: item.sellerName || `Vendedor ${item.sellerId}`,
+        nota: parseFloat(item.averageRating || 0).toFixed(1),
         imagem: item.imagem || "https://via.placeholder.com/150",
       }));
 

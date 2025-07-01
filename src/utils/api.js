@@ -1,4 +1,4 @@
-import { getAuthHeaders, saveTokens, clearTokens } from "./auth";
+import { getAuthHeaders, saveTokens, clearTokens, saveUser } from "./auth";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -121,7 +121,9 @@ export async function registrarVendedor(dados) {
 
 export async function buscarPerfil() {
   const res = await apiGet("/users/profile");
-  return res.json();
+  const user = await res.json();
+  saveUser(user);
+  return user;
 }
 
 // ============================== //
@@ -211,6 +213,19 @@ export async function listarAvaliacoesVendedor(sellerId) {
   const res = await apiGet(`/rating/seller/${sellerId}`);
   const json = await res.json();
   return Array.isArray(json) ? json : json.data || [];
+}
+
+export async function listarAvaliacoesUsuario(userId) {
+  const res = await apiGet(`/rating/user/${userId}`);
+  const json = await res.json();
+  // return Array.isArray(json) ? json : json || [];
+  return json;
+}
+export async function listarAvaliacoesTodasLojas() {
+  const res = await apiGet(`/rating/all`);
+  const json = await res.json();
+  // return Array.isArray(json) ? json : json || [];
+  return json;
 }
 
 // ============================== //

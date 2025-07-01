@@ -41,3 +41,7 @@ export function getUserRole() {
     return null;
   }
 }
+
+export function saveUser(user) {
+  localStorage.setItem("usuario", JSON.stringify(user));
+}
