@@ -1,28 +1,15 @@
-import { useEffect, useState } from "react";
 import { Avatar } from "primereact/avatar";
 import styles from "./AvatarUser.module.css";
-import { buscarPerfil } from "../../../utils/api";
+import { useContextUser } from "../../../contexts/UserContext";
 
 export default function AvatarUser() {
-  const [userName, setUserName] = useState("");
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await buscarPerfil();
-        setUserName(data.firstName || "Usuário");
-      } catch (err) {
-        console.error("Erro ao buscar dados do usuário:", err);
-        setUserName("Usuário");
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const { user, loading } = useContextUser();
 
   return (
     <div className={styles.userSection}>
-      <span className={styles.greeting}>Olá, {userName}</span>
+      <span className={styles.greeting}>
+        {loading ? "Carregando..." : `Olá, ${user?.firstName || "Usuário"}`}
+      </span>
       <Avatar icon="pi pi-user" shape="circle" size="large" />
     </div>
   );

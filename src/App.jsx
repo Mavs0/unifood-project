@@ -10,13 +10,16 @@ import "primeflex/primeflex.css";
 import { PrimeReactProvider } from "primereact/api";
 
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { UserProvider } from "./contexts/UserContext";
 
 function App() {
   return (
     <ThemeProvider>
-      <PrimeReactProvider>
-        <AppRoutes />
-      </PrimeReactProvider>
+      <UserProvider>
+        <PrimeReactProvider>
+          <AppRoutes />
+        </PrimeReactProvider>
+      </UserProvider>
     </ThemeProvider>
   );
 }
