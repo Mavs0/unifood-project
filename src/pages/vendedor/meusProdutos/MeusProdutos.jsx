@@ -8,7 +8,7 @@ import { Toast } from "primereact/toast";
 import { Dialog } from "primereact/dialog";
 import { useState, useEffect, useRef } from "react";
 import CadastroProduto from "../../../components/form/cadastroProduto/CadProduto";
-import EditProduto from "../../../components/form/editarProduto/EditProduto";
+import EditProduto from "../../../components/form/formEditProduto/EditProduto";
 import { buscarProdutos, deletarProduto } from "../../../utils/api";
 
 export default function MeusProdutos() {
@@ -172,9 +172,17 @@ export default function MeusProdutos() {
                           className={styles.editBtn}
                           onClick={() => {
                             setProdutoSelecionado(produto);
-                            setShowEditForm(true); // habilitar se tiver componente de edição
+                            setShowForm(true);
                           }}
                         />
+                        {/* <Button
+                          icon="pi pi-pencil"
+                          className={styles.editBtn}
+                          onClick={() => {
+                            setProdutoSelecionado(produto);
+                            setShowEditForm(true);
+                          }}
+                        /> */}
                       </span>
                       <span data-pr-tooltip="Excluir" data-pr-position="top">
                         <Button
@@ -199,6 +207,13 @@ export default function MeusProdutos() {
         visible={showForm}
         onHide={() => setShowForm(false)}
         onSave={carregarProdutos}
+      />
+
+      <EditProduto
+        visible={showEditForm}
+        onHide={() => setShowEditForm(false)}
+        onSave={carregarProdutos}
+        produtoEdicao={produtoSelecionado}
       />
 
       <Dialog

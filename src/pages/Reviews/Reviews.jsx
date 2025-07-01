@@ -7,7 +7,10 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import { Rating } from "primereact/rating";
-import "primeicons/primeicons.css";
+import { listarAvaliacoesVendedor } from "../../utils/api";
+
+import ErroGenerico from "../../components/ui/ErroGenerico";
+import Imagem from "../../assets/image/Erro.svg";
 
 export default function ReviewsLojas() {
   const navigate = useNavigate();
@@ -31,31 +34,26 @@ export default function ReviewsLojas() {
     carregarLojas();
   }, []);
 
-  const carregarLojas = () => {
+  const carregarLojas = async () => {
     setLoading(true);
     try {
-      const lojasSalvas = JSON.parse(localStorage.getItem("lojasUsuario"));
-      if (lojasSalvas && lojasSalvas.length > 0) {
-        setLojas(lojasSalvas);
-      } else {
-        const mock = [];
-        for (let i = 1; i <= 50; i++) {
-          mock.push({
-            id: i,
-            nome: `Loja ${i}`,
-            nota: (Math.random() * 2 + 3).toFixed(1),
-            imagem: "https://via.placeholder.com/150",
-          });
-        }
-        setLojas(mock);
-        localStorage.setItem("lojasUsuario", JSON.stringify(mock));
-      }
+      const user = JSON.parse(localStorage.getItem("usuario") || "{}");
+      const response = await listarAvaliacoesVendedor(user.uid); // já vem como array
+
+      const lojasComNota = response.map((item) => ({
+        id: item.sellerId,
+        nome: item.nome || `Vendedor ${item.sellerId}`,
+        nota: parseFloat(item.mediaNotas || 0).toFixed(1),
+        imagem: item.imagem || "https://via.placeholder.com/150",
+      }));
+
+      setLojas(lojasComNota);
     } catch (error) {
-      console.error("Erro ao carregar lojas:", error);
+      console.error("Erro ao carregar avaliações:", error);
       toast.current.show({
         severity: "error",
         summary: "Erro",
-        detail: "Falha ao carregar lojas.",
+        detail: "Não foi possível carregar as avaliações das lojas.",
       });
     } finally {
       setLoading(false);
@@ -105,7 +103,10 @@ export default function ReviewsLojas() {
         </div>
 
         {loading ? (
-          <p>Carregando lojas...</p>
+          <div className={styles.loadingContainer}>
+            <div className={styles.spinner}></div>
+            <p className={styles.loadingText}>Carregando avaliações...</p>
+          </div>
         ) : (
           <>
             <div className={styles.grid}>
@@ -128,7 +129,13 @@ export default function ReviewsLojas() {
                   </div>
                 ))
               ) : (
-                <p>Nenhuma loja encontrada.</p>
+                <ErroGenerico
+                  codigo="404"
+                  titulo="Nenhuma loja encontrada"
+                  descricao="Não encontramos nenhuma loja com os critérios informados."
+                  imagem={Imagem}
+                  onReload={() => window.location.reload()}
+                />
               )}
             </div>
 

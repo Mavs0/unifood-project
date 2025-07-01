@@ -205,7 +205,8 @@ export async function listarAvaliacoesProduto(productId) {
 
 export async function listarAvaliacoesVendedor(sellerId) {
   const res = await apiGet(`/rating/seller/${sellerId}`);
-  return res.json();
+  const json = await res.json();
+  return Array.isArray(json) ? json : json.data || [];
 }
 
 // ============================== //

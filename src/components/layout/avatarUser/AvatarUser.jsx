@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Avatar } from "primereact/avatar";
 import styles from "./AvatarUser.module.css";
+import { buscarPerfil } from "../../../utils/api";
 
 export default function AvatarUser() {
   const [userName, setUserName] = useState("");
@@ -8,12 +9,8 @@ export default function AvatarUser() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/user", {
-          headers: getAuthHeaders(),
-        });
-        if (!res.ok) throw new Error("Erro ao buscar usuário");
-        const data = await res.json();
-        setUserName(data.name || "Usuário");
+        const data = await buscarPerfil();
+        setUserName(data.firstName || "Usuário");
       } catch (err) {
         console.error("Erro ao buscar dados do usuário:", err);
         setUserName("Usuário");

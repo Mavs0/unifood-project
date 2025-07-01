@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { GoogleLogin } from "@react-oauth/google";
 
+import { registrarUsuario } from "../../utils/api";
 import estilos from "./SignupCliente.module.css";
 
 export default function SignUpCliente() {
@@ -15,7 +16,6 @@ export default function SignUpCliente() {
   const [dados, setDados] = useState({
     nome: "",
     sobrenome: "",
-    telefone: "",
     email: "",
     senha: "",
     confirmarSenha: "",
@@ -30,7 +30,6 @@ export default function SignUpCliente() {
     if (
       !dados.nome ||
       !dados.sobrenome ||
-      !dados.telefone ||
       !dados.email ||
       !dados.senha ||
       !dados.confirmarSenha
@@ -56,24 +55,13 @@ export default function SignUpCliente() {
     }
 
     try {
-      const res = await fetch(
-        "http://127.0.0.1:5001/unifood-aaa0f/us-central1/api/api/users/register",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            firstName: dados.nome.trim(),
-            lastName: dados.sobrenome.trim(),
-            telefone: dados.telefone.trim(),
-            email: dados.email.trim().toLowerCase(),
-            password: dados.senha,
-            role: "cliente",
-          }),
-        }
-      );
-
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message || "Erro ao registrar");
+      await registrarUsuario({
+        firstName: dados.nome.trim(),
+        lastName: dados.sobrenome.trim(),
+        email: dados.email.trim().toLowerCase(),
+        password: dados.senha,
+        role: "cliente",
+      });
 
       toast.current.show({
         severity: "success",
@@ -124,17 +112,6 @@ export default function SignUpCliente() {
             </div>
           </div>
           <div className={estilos.formRow}>
-            <div className={estilos.inputGroup}>
-              <label>Telefone</label>
-              <InputText
-                name="telefone"
-                value={dados.telefone}
-                onChange={handleChange}
-                placeholder="Digite seu telefone"
-                className="p-inputtext-lg"
-              />
-            </div>
-
             <div className={estilos.inputGroup}>
               <label>Email</label>
               <InputText

@@ -25,6 +25,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
   const [produto, setProduto] = useState(PRODUTO_INICIAL);
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState({});
+  const [uploadProgress, setUploadProgress] = useState(null);
 
   const categorias = [
     { label: "Refeições", value: "refeições" },
@@ -42,18 +43,41 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     if (visible) {
       setTimeout(() => nomeInputRef.current?.focus(), 200);
     } else {
-      setProduto(PRODUTO_INICIAL);
-      setTouched({});
+      resetarForm();
     }
   }, [visible]);
 
+  const resetarForm = () => {
+    setProduto(PRODUTO_INICIAL);
+    setTouched({});
+    setUploadProgress(null);
+  };
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: { "image/*": [] },
+    accept: { "image/jpeg": [], "image/png": [] },
+    maxFiles: 1,
+    maxSize: 5 * 1024 * 1024,
     onDrop: (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file) {
+        setUploadProgress(0);
+
         const reader = new FileReader();
-        reader.onload = () => handleChange("imagemUrl", reader.result);
+        reader.onload = () => {
+          setProduto((prev) => ({ ...prev, imagemUrl: reader.result }));
+          setUploadProgress(100);
+        };
+
+        const fakeProgress = () => {
+          let progress = 0;
+          const interval = setInterval(() => {
+            progress += 10;
+            if (progress >= 90) clearInterval(interval);
+            setUploadProgress(progress);
+          }, 100);
+        };
+
+        fakeProgress();
         reader.readAsDataURL(file);
       }
     },
@@ -90,7 +114,6 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     }
 
     setLoading(true);
-
     const userStorage =
       localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
     const usuario = userStorage ? JSON.parse(userStorage) : null;
@@ -118,7 +141,6 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
 
     try {
       const data = await criarProduto(payload);
-
       toast.current.show({
         severity: "success",
         summary: "Sucesso",
@@ -137,8 +159,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
       toast.current.show({
         severity: "error",
         summary: "Erro ao salvar",
-        detail:
-          "Ocorreu um problema ao salvar. Verifique sua conexão ou fale com o suporte.",
+        detail: "Ocorreu um problema ao salvar.",
         life: 4000,
       });
 
@@ -153,12 +174,6 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
     }
   };
 
-  const handleHide = () => {
-    setProduto(PRODUTO_INICIAL);
-    setTouched({});
-    onHide();
-  };
-
   const classErro = (field) =>
     touched[field] && !validaCampo(field) ? styles.inputErro : "";
 
@@ -168,7 +183,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
       <Dialog
         header="Cadastrar produto"
         visible={visible}
-        onHide={handleHide}
+        onHide={onHide}
         modal
         style={{ width: "450px" }}
         footer={
@@ -177,7 +192,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
               type="button"
               className={`p-button-secondary ${styles.botaoCancelar}`}
               label="Cancelar"
-              onClick={handleHide}
+              onClick={onHide}
               disabled={loading}
             />
             <Button
@@ -192,11 +207,10 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
       >
         <div className={styles.containerForm}>
           <div className={`${styles.nome} ${classErro("nome")}`}>
-            <label htmlFor="nome">
+            <label>
               Nome <span className={styles.astec}>*</span>
             </label>
             <InputText
-              id="nome"
               value={produto.nome}
               onChange={(e) => handleChange("nome", e.target.value)}
               ref={nomeInputRef}
@@ -205,11 +219,10 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
 
           <div className={styles.precoEcategorias}>
             <div className={`${styles.preco} ${classErro("preco")}`}>
-              <label htmlFor="preco">
+              <label>
                 Preço <span className={styles.astec}>*</span>
-              </label>{" "}
+              </label>
               <InputNumber
-                id="preco"
                 value={produto.preco}
                 onValueChange={(e) => handleChange("preco", e.value)}
                 mode="currency"
@@ -220,11 +233,10 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
             </div>
 
             <div className={`${styles.categorias} ${classErro("categoria")}`}>
-              <label htmlFor="categoria">
+              <label>
                 Categoria <span className={styles.astec}>*</span>
-              </label>{" "}
+              </label>
               <Dropdown
-                id="categoria"
                 value={produto.categoria}
                 options={categorias}
                 onChange={(e) => handleChange("categoria", e.value)}
@@ -234,14 +246,13 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
           </div>
 
           <div className={`${styles.descricao} ${classErro("descricao")}`}>
-            <label htmlFor="descricao">
+            <label>
               Descrição <span className={styles.astec}>*</span>
-            </label>{" "}
+            </label>
             <InputTextarea
-              id="descricao"
               value={produto.descricao}
               onChange={(e) => handleChange("descricao", e.target.value)}
-              rows={4}
+              rows={3}
               placeholder="Breve descrição..."
             />
           </div>
@@ -250,22 +261,49 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
             <label>
               Imagem do produto <span className={styles.astec}>*</span>
             </label>
-            <div
-              {...getRootProps()}
-              className={`${styles.dropzone} ${
-                isDragActive ? styles.ativo : ""
-              }`}
-            >
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <p>Solte a imagem aqui...</p>
-              ) : (
-                <p>Arraste e solte ou clique para selecionar uma imagem.</p>
-              )}
-            </div>
+
+            {!produto.imagemUrl && (
+              <div
+                {...getRootProps()}
+                className={`${styles.dropzone} ${
+                  isDragActive ? styles.ativo : ""
+                }`}
+              >
+                <input {...getInputProps()} />
+                <p className={styles.uploadTexto}>
+                  <span className={styles.uploadIcone}>📤</span>
+                  Arraste ou clique para fazer upload
+                </p>
+                <p className={styles.detalhesUpload}>
+                  Tipos aceitos: JPG, PNG | Máx: 5MB
+                </p>
+              </div>
+            )}
+
+            {uploadProgress !== null && (
+              <div className={styles.progressBar}>
+                <div
+                  className={styles.progress}
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+            )}
+
             {produto.imagemUrl && (
-              <div className={styles.previewImagem}>
-                <img src={produto.imagemUrl} alt="Preview" />
+              <div className={styles.uploadComImagem}>
+                <span className={styles.iconeOk}>✅</span>
+                <span className={styles.nomeImagem}>Imagem carregada</span>
+                <button
+                  type="button"
+                  className={styles.botaoRemover}
+                  onClick={() => {
+                    handleChange("imagemUrl", "");
+                    setUploadProgress(null);
+                  }}
+                  title="Remover imagem"
+                >
+                  ✖
+                </button>
               </div>
             )}
           </div>

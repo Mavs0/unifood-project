@@ -1,0 +1,66 @@
+.container {
+    height: calc(70vh - 60px); /* Subtrai altura da NavBarraTop se tiver */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 0rem 2rem 30rem;
+    color: #1f2937;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .ilustracao {
+    max-width: 220px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+  }
+  
+  .codigo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #f87171; /* salmão/destaque */
+  }
+  
+  .titulo {
+    font-size: 1.5rem;
+    margin-top: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .descricao {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+  
+  .botao {
+    background-color: #f87171;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .botao:hover {
+    background-color: #dc2626;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .container {
+      color: #f9fafb;
+    }
+    .descricao {
+      color: #d1d5db;
+    }
+    .botao {
+      background-color: #f87171;
+    }
+    .botao:hover {
+      background-color: #dc2626;
+    }
+  }
+  
