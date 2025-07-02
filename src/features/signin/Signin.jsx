@@ -55,15 +55,6 @@ export default function SignIn() {
     }
   }
 
-  const responseGoogle = (response) => {
-    toast.current.show({
-      severity: "info",
-      summary: "Google Login",
-      detail: "Funcionalidade em desenvolvimento.",
-    });
-    console.log(response);
-  };
-
   return (
     <div className={estilos.container}>
       <Toast ref={toast} />
@@ -102,7 +93,7 @@ export default function SignIn() {
             className={estilos.botaoCadastrar}
           />
 
-          <div className={estilos.divider}>Ou</div>
+          {/* <div className={estilos.divider}>Ou</div>
 
           <GoogleLogin
             onSuccess={responseGoogle}
@@ -110,7 +101,7 @@ export default function SignIn() {
             useOneTap
             theme="outline"
             className={estilos.googleBtn}
-          />
+          /> */}
         </form>
       </div>
     </div>

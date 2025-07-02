@@ -10,7 +10,7 @@ export default function Pagamento() {
   const [cupons, setCupons] = useState([]);
   const [cupomSelecionado, setCupomSelecionado] = useState(null);
   const [mensagemErro, setMensagemErro] = useState("");
-  const [qrCodePix, setQrCodePix] = useState("https://pix.qr.code.exemplo");
+  const [qrCodePix] = useState("https://pix.qr.code.exemplo");
 
   useEffect(() => {
     const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];

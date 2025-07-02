@@ -30,14 +30,14 @@ export default function NotificationIcons() {
       </div>
 
       {/* Configurações */}
-      <div
+      {/* <div
         className={`${styles.iconBox} ${styles.pink}`}
         onClick={() => navigate("/configuracoes")}
         data-pr-tooltip="Configurações"
         data-pr-position="bottom"
       >
         <PiGear className={styles.iconSetting} />
-      </div>
+      </div> */}
 
       {/* Tooltip global */}
       <Tooltip target={`.${styles.iconBox}`} />

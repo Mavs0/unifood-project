@@ -27,15 +27,15 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
   const [touched, setTouched] = useState({});
   const [uploadProgress, setUploadProgress] = useState(null);
 
-  const categorias = [
-    { label: "Refeições", value: "refeições" },
-    { label: "Lanches", value: "lanches" },
-    { label: "Doces e Sobremesas", value: "Doces e Sobremesas" },
-    { label: "Bebidas", value: "bebidas" },
-    { label: "Alimentos Saudáveis", value: "Alimentos Saudáveis" },
-    { label: "Combos e Kits", value: "Combos e Kits" },
-    { label: "Outros", value: "outros" },
-  ];
+  // const categorias = [
+  //   { label: "Refeições", value: "refeições" },
+  //   { label: "Lanches", value: "lanches" },
+  //   { label: "Doces e Sobremesas", value: "Doces e Sobremesas" },
+  //   { label: "Bebidas", value: "bebidas" },
+  //   { label: "Alimentos Saudáveis", value: "Alimentos Saudáveis" },
+  //   { label: "Combos e Kits", value: "Combos e Kits" },
+  //   { label: "Outros", value: "outros" },
+  // ];
 
   const nomeInputRef = useRef(null);
 
@@ -99,7 +99,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
   const formularioValido =
     validaCampo("nome") &&
     validaCampo("preco") &&
-    validaCampo("categoria") &&
+    // validaCampo("categoria") &&
     validaCampo("descricao");
 
   const submit = async () => {
@@ -135,7 +135,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
       descricao: produto.descricao,
       sellerId: usuario.uid,
       imagemUrl: produto.imagemUrl || "https://via.placeholder.com/150",
-      categorias: [produto.categoria],
+      // categorias: [produto.categoria],
       estoque: 10,
     };
 
@@ -232,7 +232,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
               />
             </div>
 
-            <div className={`${styles.categorias} ${classErro("categoria")}`}>
+            {/* <div className={`${styles.categorias} ${classErro("categoria")}`}>
               <label>
                 Categoria <span className={styles.astec}>*</span>
               </label>
@@ -242,7 +242,7 @@ export default function FormCadProduto({ visible, onHide, onSave }) {
                 onChange={(e) => handleChange("categoria", e.value)}
                 placeholder="Selecione"
               />
-            </div>
+            </div> */}
           </div>
 
           <div className={`${styles.descricao} ${classErro("descricao")}`}>

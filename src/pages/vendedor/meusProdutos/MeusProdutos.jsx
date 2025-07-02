@@ -26,7 +26,7 @@ export default function MeusProdutos() {
   const categorias = [
     { label: "Refeições", value: "Refeições" },
     { label: "Lanches", value: "Lanches" },
-    { label: "Doces e Sobremesas", value: "Doces e Sobremesas" },
+    { label: "Doces", value: "Doces" },
     { label: "Bebidas", value: "Bebidas" },
     { label: "Alimentos Saudáveis", value: "Alimentos Saudáveis" },
     { label: "Combos e Kits", value: "Combos e Kits" },
@@ -115,17 +115,26 @@ export default function MeusProdutos() {
             <InputText
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por nome..."
+              placeholder="Buscar por nome"
               className={styles.inputPadrao}
             />
-            <Dropdown
-              value={categoriaSelecionada}
-              options={categorias}
-              onChange={(e) => setCategoriaSelecionada(e.value)}
-              placeholder="Filtrar por categoria"
-              showClear
-              className={styles.inputPadraoDropdown}
-            />
+            <div className={styles.filtrosCategorias}>
+              {categorias.map((cat) => (
+                <button
+                  key={cat.value}
+                  className={`${styles.botaoCategoria} ${
+                    categoriaSelecionada === cat.value ? styles.ativo : ""
+                  }`}
+                  onClick={() =>
+                    setCategoriaSelecionada(
+                      categoriaSelecionada === cat.value ? null : cat.value
+                    )
+                  }
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
             <div className={styles.botaoWrapper}>
               <Button
                 label="Criar Produto"

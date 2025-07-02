@@ -92,7 +92,7 @@ export default function Comidas() {
             <InputText
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por nome..."
+              placeholder="Buscar por nome"
               className={styles.inputPadrao}
             />
 

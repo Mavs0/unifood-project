@@ -115,6 +115,53 @@
   color: #374151;
 }
 
+.filtrosCategorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.inputPadrao {
+  padding: 1rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  width: 400px;
+  font-size: 0.95rem;
+  height: 40px;
+  background-color: #1f2937;
+  color: #f9fafb;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.inputPadrao:focus {
+  border-color: #f0716f;
+  box-shadow: 0 0 0 2px rgba(240, 113, 111, 0.3);
+  outline: none;
+}
+
+.botaoCategoria {
+  padding: 0.6rem 1rem;
+  background-color: #f3f4f6;
+  border: none;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #374151;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.botaoCategoria:hover {
+  background-color: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.ativo {
+  background-color: #f0716f;
+  color: #fff;
+  font-weight: 600;
+}
+
 .deleteBtn {
   background: none;
   border: none;
@@ -174,5 +221,19 @@
 
   .botaoCustomizado:hover {
     background-color: #c887869c;
+  }
+
+  .botaoCategoria {
+    background-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .botaoCategoria:hover {
+    background-color: #4b5563;
+  }
+  
+  .ativo {
+    background-color: #f0716f;
+    color: #fff;
   }
 }
