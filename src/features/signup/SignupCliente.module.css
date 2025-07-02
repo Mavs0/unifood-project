@@ -178,35 +178,3 @@
 }
 
 /* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  .container {
-    background-color: #111827;
-    color: #f9fafb;
-  }
-
-  .loginLink {
-    color: #d1d5db;
-  }
-
-  .divider {
-    color: #9ca3af;
-  }
-
-  .divider::before,
-  .divider::after {
-    background: #4b5563;
-  }
-
-  .botaoCadastrar {
-    background-color: #f87171;
-    color: white;
-  }
-
-  .botaoCadastrar:hover {
-    background-color: #ef4444;
-  }
-
-  .loginClick {
-    color: #fb7185;
-  }
-}

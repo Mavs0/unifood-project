@@ -32,17 +32,4 @@
   }
   
   /* DARK MODE */
-  @media (prefers-color-scheme: dark) {
-    .nav_logo {
-      background-color: #1f2937;
-    }
-  
-    .LogoUnifood {
-      color: #f9fafb;
-    }
-  
-    .food {
-      color: #fb6b60;
-    }
-  }
   

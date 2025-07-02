@@ -7,10 +7,6 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import { Rating } from "primereact/rating";
-import {
-  listarAvaliacoesTodasLojas,
-  listarAvaliacoesVendedor,
-} from "../../utils/api";
 
 import ErroGenerico from "../../components/ui/ErroGenerico";
 import Imagem from "../../assets/image/Erro.svg";
@@ -34,28 +30,10 @@ export default function ReviewsLojas() {
   ];
 
   useEffect(() => {
-    carregarLojas();
-  }, []);
+    const lojasExistentes = localStorage.getItem("lojasMockadas");
 
-  const carregarLojas = async () => {
-    setLoading(true);
-    try {
-      // const user = JSON.parse(localStorage.getItem("usuario") || "{}");
-      // const response = await listarAvaliacoesVendedor(user.uid); // já vem como array
-      const response = await listarAvaliacoesTodasLojas(); // já vem como array
-
-      const lojasComNota = response.sellers.map((item) => ({
-        id: item.targetId,
-        nome: item.sellerName || `Vendedor ${item.sellerId}`,
-        nota: parseFloat(item.averageRating || 0).toFixed(1),
-        imagem: item.imagem || "https://via.placeholder.com/150",
-      }));
-
-      setLojas(lojasComNota);
-    } catch (error) {
-      console.warn("Usando dados mockados por erro na API:", error.message);
-
-      const lojasMock = [
+    if (!lojasExistentes) {
+      const mock = [
         {
           id: "mock1",
           nome: "Doces da Ana",
@@ -68,27 +46,32 @@ export default function ReviewsLojas() {
           nome: "Lanchonete do João",
           nota: "3.9",
           imagem:
-            "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80",
+            "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=400&q=80",
         },
+
         {
-          id: "mock3",
-          nome: "Açaí da UFAM",
-          nota: "4.2",
+          id: "mock4",
+          nome: "Café do Campus",
+          nota: "4.1",
           imagem:
-            "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80",
+            "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80",
         },
       ];
-
-      setLojas(lojasMock);
-
-      toast.current.show({
-        severity: "warn",
-        summary: "Aviso",
-        detail: "Exibindo dados de exemplo por falha ao carregar dados reais.",
-      });
-    } finally {
-      setLoading(false);
+      localStorage.setItem("lojasMockadas", JSON.stringify(mock));
     }
+
+    carregarLojasSimuladas();
+  }, []);
+
+  const carregarLojasSimuladas = () => {
+    setLoading(true);
+    setTimeout(() => {
+      const lojasSalvas =
+        JSON.parse(localStorage.getItem("lojasMockadas")) || [];
+      setLojas(lojasSalvas);
+
+      setLoading(false);
+    }, 500);
   };
 
   const lojasFiltradas = lojas.filter((loja) => {
@@ -113,11 +96,11 @@ export default function ReviewsLojas() {
       <NavBarraSide />
       <div className={styles.mainContent}>
         <NavBarraTop />
-        <h2>Reviews das Lojas</h2>
+        <h2 className={styles.title}>Reviews das Lojas</h2>
 
         <div className={styles.filtros}>
           <InputText
-            placeholder="Buscar loja..."
+            placeholder="Buscar loja"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
             className={styles.inputBusca}

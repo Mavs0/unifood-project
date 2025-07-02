@@ -34,10 +34,10 @@ const VisualizarProduto = ({
               R$ {produto.preco.toFixed(2)}
             </span>
             <p className={styles.loja}>
-              <strong>Loja:</strong> {produto.loja}
+              <strong>Loja:</strong> {produto.loja || "UFAM RU"}
             </p>
             <p className={styles.categoria}>
-              <strong>Categoria:</strong> {produto.categoria}
+              <strong>Categoria:</strong> {produto.categoria || "Doces"}
             </p>
           </div>
         </div>

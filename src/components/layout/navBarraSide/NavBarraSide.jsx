@@ -105,10 +105,7 @@ export default function NavBarraSide() {
       </div>
 
       <div className={styles.bottomControls}>
-        <button onClick={toggleTheme} className={styles.themeToggle}>
-          {darkMode ? <FiSun /> : <FiMoon />}
-          {!collapsed && <span>{darkMode ? "Claro" : "Escuro"}</span>}
-        </button>
+        {/* {!collapsed && <span>{darkMode ? "Claro" : "Escuro"}</span>} */}
       </div>
     </div>
   );

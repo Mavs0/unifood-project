@@ -150,39 +150,3 @@
 }
 
 /* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  .modal {
-    background: #1f2937;
-    color: #f3f4f6;
-  }
-
-  .titulo {
-    color: #f3f4f6;
-  }
-
-  .etiqueta {
-    background-color: #fb923c;
-  }
-
-  .loja,
-  .categoria {
-    color: #d1d5db;
-  }
-
-  .descricao {
-    color: #d1d5db;
-  }
-
-  .fechar {
-    color: #ccc;
-  }
-
-  .fechar:hover {
-    color: #f87171;
-  }
-
-  .botaoCarrinho,
-  .botaoComprar {
-    color: #fff;
-  }
-}

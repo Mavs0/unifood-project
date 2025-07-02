@@ -57,26 +57,3 @@
 }
 
 /* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  .mainContent {
-    background-color: #111827;
-    color: #f9fafb;
-  }
-
-  .card {
-    background-color: #1f2937;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  }
-
-  .card h4 {
-    color: #f9fafb;
-  }
-
-  .card p {
-    color: #f87171;
-  }
-
-  .card small {
-    color: #d1d5db;
-  }
-}

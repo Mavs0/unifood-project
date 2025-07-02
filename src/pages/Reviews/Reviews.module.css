@@ -128,29 +128,3 @@
 }
 
 /* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  .mainContent {
-    background-color: #111827;
-    color: #f9fafb;
-  }
-
-  .inputBusca,
-  .inputPadraoDropdown {
-    background-color: #374151;
-    color: #f9fafb;
-    border: 1px solid #4b5563;
-  }
-
-  .card {
-    background-color: #1f2937;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  }
-
-  .card h3 {
-    color: #f9fafb;
-  }
-
-  .card p {
-    color: #d1d5db;
-  }
-}

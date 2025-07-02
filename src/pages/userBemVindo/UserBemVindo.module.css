@@ -49,9 +49,3 @@
 }
 
 /* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  .wrapper {
-    background-color: #111827;
-    color: #f9fafb;
-  }
-}

@@ -16,12 +16,4 @@
   flex-wrap: nowrap;
 }
 
-@media (prefers-color-scheme: dark) {
-  .topbarra {
-    background-color: #1f2937;
-  }
 
-  .rightIcons {
-    color: #f9fafb;
-  }
-}

@@ -53,18 +53,3 @@
 }
 
 /* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  .formbox {
-    background: #1f2937;
-    border: 4px solid #4b5563;
-    color: #f9fafb;
-  }
-
-  .continuarcomo {
-    color: #d1d5db;
-  }
-
-  .bemvindoh2 {
-    color: #f9fafb;
-  }
-}

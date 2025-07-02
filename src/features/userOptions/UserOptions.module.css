@@ -40,25 +40,4 @@
   }
   
   /* DARK MODE */
-  @media (prefers-color-scheme: dark) {
-    .option {
-      background-color: #1f2937;
-      border-color: #4b5563;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    }
-  
-    .option:hover {
-      background-color: #374151;
-      border-color: #6b7280;
-    }
-  
-    .option:active {
-      background-color: #4b5563;
-      border-color: #9ca3af;
-    }
-  
-    .avatarNome {
-      color: #f9fafb;
-    }
-  }
   

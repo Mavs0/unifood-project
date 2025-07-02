@@ -7,7 +7,7 @@ import { Dialog } from "primereact/dialog";
 
 import MemoryGame from "../games/MemoryGame/MemoryGame";
 import SlotMachine from "../games/SlotMachine/SlotMachine";
-import SnakeGame from "../games/SnakeGame/SnakeGame";
+// import SnakeGame from "../games/SnakeGame/SnakeGame";
 
 import styles from "./Recompensas.module.css";
 
@@ -18,11 +18,11 @@ export default function Recompensas() {
   const [jogoAberto, setJogoAberto] = useState(null);
 
   const premiosRoleta = [
-    { descricao: "10% de desconto", tipo: "percentual", valor: 10 },
-    { descricao: "Frete grátis (R$5 OFF)", tipo: "fixo", valor: 5 },
-    { descricao: "R$5,00 de desconto", tipo: "fixo", valor: 5 },
-    { descricao: "15% de desconto", tipo: "percentual", valor: 15 },
-    { descricao: "Nenhum prêmio 😢", tipo: null, valor: 0 },
+    { descricao: "10% de desconto", tipo: "percentual", discount: 0.1 },
+    { descricao: "Frete grátis (R$5 OFF)", tipo: "fixo", discount: 5 },
+    { descricao: "R$5,00 de desconto", tipo: "fixo", discount: 5 },
+    { descricao: "15% de desconto", tipo: "percentual", discount: 0.15 },
+    { descricao: "Nenhum prêmio 😢", tipo: null, discount: 0 },
   ];
 
   useEffect(() => {
@@ -36,6 +36,7 @@ export default function Recompensas() {
         JSON.stringify({ data: hoje, contagem: 0 })
       );
     }
+
     const cuponsSalvos =
       JSON.parse(localStorage.getItem("cuponsUsuario")) || [];
     setRecompensas(cuponsSalvos);
@@ -51,25 +52,29 @@ export default function Recompensas() {
       });
       return;
     }
+
     const premio =
       premiosRoleta[Math.floor(Math.random() * premiosRoleta.length)];
+
     toast.current.show({
       severity: premio.tipo ? "success" : "info",
       summary: "Resultado da Roleta",
       detail: premio.descricao,
       life: 3000,
     });
+
     if (premio.tipo) {
       const novoCupom = {
         id: Date.now(),
         descricao: premio.descricao,
         tipo: premio.tipo,
-        valor: premio.valor,
+        discount: premio.discount,
       };
       const novosCupons = [...recompensas, novoCupom];
       setRecompensas(novosCupons);
       localStorage.setItem("cuponsUsuario", JSON.stringify(novosCupons));
     }
+
     const hoje = new Date().toDateString();
     const novaContagem = girosHoje + 1;
     setGirosHoje(novaContagem);
@@ -82,6 +87,7 @@ export default function Recompensas() {
   const abrirJogo = (jogo) => {
     const hoje = new Date().toDateString();
     const usos = JSON.parse(localStorage.getItem("usosJogos")) || {};
+
     if (usos[jogo]?.data === hoje) {
       toast.current.show({
         severity: "warn",
@@ -91,6 +97,35 @@ export default function Recompensas() {
       });
       return;
     }
+
+    const ganhou = Math.random() < 0.7; // 70% de chance de vitória
+
+    if (ganhou) {
+      const novoCupom = {
+        id: Date.now(),
+        descricao: "Cupom ganho no jogo",
+        tipo: "percentual",
+        discount: 0.1,
+      };
+      const novosCupons = [...recompensas, novoCupom];
+      setRecompensas(novosCupons);
+      localStorage.setItem("cuponsUsuario", JSON.stringify(novosCupons));
+
+      toast.current.show({
+        severity: "success",
+        summary: "Você ganhou!",
+        detail: "Cupom de 10% de desconto adicionado.",
+        life: 3000,
+      });
+    } else {
+      toast.current.show({
+        severity: "info",
+        summary: "Não foi dessa vez!",
+        detail: "Tente novamente amanhã.",
+        life: 3000,
+      });
+    }
+
     setJogoAberto(jogo);
     localStorage.setItem(
       "usosJogos",
@@ -121,11 +156,11 @@ export default function Recompensas() {
               className="p-button-sm p-button-outlined p-button-info"
               onClick={() => abrirJogo("slot")}
             />
-            <Button
+            {/* <Button
               label="Snake"
               className="p-button-sm p-button-outlined p-button-info"
               onClick={() => abrirJogo("snake")}
-            />
+            /> */}
           </div>
         </section>
 
@@ -134,7 +169,6 @@ export default function Recompensas() {
           <p className={styles.textoAux}>
             Giros restantes hoje: {2 - girosHoje}
           </p>
-          <div className={styles.roletaVisual}>🎯</div>
           <Button
             label="Girar a Roleta"
             icon="pi pi-refresh"
@@ -145,7 +179,7 @@ export default function Recompensas() {
         </section>
 
         <section className={styles.sectionPadrao}>
-          <h3 className={styles.subtitulo}>Meus Cupons </h3>
+          <h3 className={styles.subtitulo}>Meus Cupons</h3>
           {recompensas.length > 0 ? (
             <ul className={styles.listaCupons}>
               {recompensas.map((r) => (
@@ -176,14 +210,14 @@ export default function Recompensas() {
       >
         <SlotMachine />
       </Dialog>
-      <Dialog
+      {/* <Dialog
         header="Snake"
         visible={jogoAberto === "snake"}
         style={{ width: "50vw" }}
         onHide={() => setJogoAberto(null)}
       >
         <SnakeGame />
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 }

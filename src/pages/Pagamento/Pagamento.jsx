@@ -20,8 +20,11 @@ export default function Pagamento() {
     );
     setPedido({ items: carrinho, total });
 
-    const meusCupons = JSON.parse(localStorage.getItem("cupons")) || [];
-    setCupons(meusCupons);
+    const cuponsRecompensas =
+      JSON.parse(localStorage.getItem("cuponsUsuario")) || [];
+    const cuponsRoleta = JSON.parse(localStorage.getItem("cupons")) || [];
+
+    setCupons([...cuponsRecompensas, ...cuponsRoleta]);
   }, []);
 
   const aplicarCupom = (cupom) => {
@@ -33,15 +36,18 @@ export default function Pagamento() {
       const pedidosSalvos = JSON.parse(localStorage.getItem("pedidos")) || [];
 
       const novoPedido = {
-        id: Date.now(),
+        id: Date.now().toString(),
         data: new Date().toLocaleString(),
+        user: { firstName: "Cliente Simulado" },
         items: pedido.items,
         total: cupomSelecionado
-          ? (pedido.total * (1 - cupomSelecionado.discount)).toFixed(2)
-          : pedido.total.toFixed(2),
+          ? parseFloat(
+              (pedido.total * (1 - cupomSelecionado.discount)).toFixed(2)
+            )
+          : parseFloat(pedido.total.toFixed(2)),
         metodoPagamento: metodo,
         cupom: cupomSelecionado,
-        status: "Pendente",
+        status: "pendente",
       };
 
       localStorage.setItem(
@@ -49,6 +55,7 @@ export default function Pagamento() {
         JSON.stringify([...pedidosSalvos, novoPedido])
       );
       localStorage.removeItem("carrinho");
+
       alert("Compra finalizada com sucesso!");
       window.location.href = "/pedidos";
     } catch (err) {
@@ -182,23 +189,6 @@ export default function Pagamento() {
             </label>
           </div>
           {renderPagamento()}
-
-          <h3 className={styles.subtitulo}>Cupons Disponíveis</h3>
-          <div className={styles.cuponsWrapper}>
-            {cupons.map((cupom) => (
-              <button
-                key={cupom.id}
-                className={`${styles.cupomBtn} ${
-                  cupomSelecionado?.id === cupom.id
-                    ? styles.cupomSelecionado
-                    : ""
-                }`}
-                onClick={() => aplicarCupom(cupom)}
-              >
-                {cupom.descricao || `${cupom.discount * 100}% de desconto`}
-              </button>
-            ))}
-          </div>
 
           <button className={styles.btnFinalizar} onClick={finalizar}>
             Finalizar Compra

@@ -2,6 +2,7 @@
   display: flex;
   height: 100vh;
   font-family: 'Inter', sans-serif;
+  color: #000; /* Fonte preta global */
 }
 
 .mainContent {
@@ -20,7 +21,7 @@
 
 .notaGeral h1 {
   font-size: 2.5rem;
-  color: #333;
+  color: #000;
   display: flex;
   align-items: center;
 }
@@ -32,7 +33,7 @@
 }
 
 .notaGeral p {
-  color: #777;
+  color: #000;
   margin-bottom: 20px;
 }
 
@@ -60,6 +61,7 @@
   font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  color: #000;
 }
 
 .tagAtiva {
@@ -73,6 +75,7 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: #000;
 }
 
 .topoComentario {
@@ -96,53 +99,11 @@
 
 .comentario p {
   font-size: 0.9rem;
-  color: #444;
+  color: #000;
 }
 
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
-  }
-}
-
-/* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  .mainContent {
-    background-color: #111827;
-    color: #f9fafb;
-  }
-
-  .notaGeral h1 {
-    color: #f9fafb;
-  }
-
-  .notaGeral p {
-    color: #d1d5db;
-  }
-
-  .colunaAvaliacao,
-  .colunaComentarios {
-    background-color: #1f2937;
-    color: #f9fafb;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  }
-
-  .tag {
-    background-color: #374151;
-    color: #f9fafb;
-  }
-
-  .tagAtiva {
-    background-color: #f59e0b;
-    color: #fff;
-  }
-
-  .comentario {
-    background-color: #374151;
-    color: #f9fafb;
-  }
-
-  .comentario p {
-    color: #f9fafb;
   }
 }

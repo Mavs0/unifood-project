@@ -108,21 +108,3 @@
 }
 
 /* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --sidebar-bg: #1f2937;
-    --sidebar-text: #f9fafb;
-    --sidebar-hover: #374151;
-    --sidebar-active-bg: #374151;
-    --sidebar-active-text: #f0716f;
-  }
-
-  .tooltip {
-    background-color: #374151;
-    color: #f9fafb;
-  }
-
-  .themeToggle {
-    color: #f9fafb;
-  }
-}

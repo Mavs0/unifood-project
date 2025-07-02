@@ -8,7 +8,6 @@ import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import styles from "./Pedidos.module.css";
-import { buscarPedidos } from "../../utils/api";
 
 export default function PaginaPedidos() {
   const [pedidos, setPedidos] = useState([]);
@@ -17,30 +16,27 @@ export default function PaginaPedidos() {
   const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
   const [buscaCliente, setBuscaCliente] = useState("");
   const [statusSelecionado, setStatusSelecionado] = useState(null);
-
   const toast = useRef(null);
 
+  // ✅ useEffect temporário para mock inicial
   useEffect(() => {
-    const pedidosSalvos = JSON.parse(localStorage.getItem("pedidos")) || [];
-    setPedidos(pedidosSalvos);
+    const pedidosExistentes = localStorage.getItem("pedidos");
+    if (!pedidosExistentes) {
+      // cria pedidos iniciais simulados
+      localStorage.setItem("pedidos", JSON.stringify([...pedidosMock]));
+    }
+    carregarPedidosMock();
   }, []);
 
-  async function buscarPedidosData() {
+  const carregarPedidosMock = () => {
     setLoading(true);
-    try {
-      let resposta = await buscarPedidos();
-      setPedidos(resposta);
-    } catch (error) {
-      console.error("Erro ao carregar pedidos:", error);
-      toast.current.show({
-        severity: "error",
-        summary: "Erro",
-        detail: "Não foi possível carregar os pedidos.",
-      });
-    } finally {
+
+    setTimeout(() => {
+      const pedidosSalvos = JSON.parse(localStorage.getItem("pedidos")) || [];
+      setPedidos(pedidosSalvos);
       setLoading(false);
-    }
-  }
+    }, 500); // delay simulado
+  };
 
   const abrirModal = (pedido) => {
     setPedidoSelecionado(pedido);
@@ -148,7 +144,7 @@ export default function PaginaPedidos() {
             <ModalAcompanhamentoPedido
               pedido={pedidoSelecionado}
               onClose={fecharModal}
-              recarregar={buscarPedidosData}
+              recarregar={carregarPedidosMock}
             />
           )}
         </main>

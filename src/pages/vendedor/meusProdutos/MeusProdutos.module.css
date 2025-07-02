@@ -129,10 +129,18 @@
   width: 400px;
   font-size: 0.95rem;
   height: 40px;
-  background-color: #1f2937;
-  color: #f9fafb;
+  background-color: #f7f8fa;
+  color: #111827;
   transition: border 0.3s, box-shadow 0.3s;
 }
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
 
 .inputPadrao:focus {
   border-color: #f0716f;
@@ -173,67 +181,3 @@
   color: #991b1b;
 }
 
-@media (prefers-color-scheme: dark) {
-  .mainContent {
-    background-color: #1f2937;
-  }
-
-  .content {
-    background-color: #111827;
-    color: #f9fafb;
-  }
-
-  .table {
-    background-color: #1f2937;
-  }
-
-  .table th {
-    background-color: #374151;
-    color: #f9fafb;
-  }
-
-  .table td {
-    color: #d1d5db;
-    border-top: 1px solid #374151;
-  }
-
-  .title {
-    color: #f9fafb;
-  }
-
-  .inputPadrao,
-  .inputPadraoDropdown,
-  .p-inputtext,
-  .p-dropdown {
-    background-color: #374151;
-    color: #f9fafb;
-    border: 1px solid #4b5563;
-  }
-
-  .p-dropdown-label {
-    color: #f9fafb;
-  }
-
-  .botaoCustomizado {
-    background-color: #f0716f;
-    color: white;
-  }
-
-  .botaoCustomizado:hover {
-    background-color: #c887869c;
-  }
-
-  .botaoCategoria {
-    background-color: #374151;
-    color: #f9fafb;
-  }
-  
-  .botaoCategoria:hover {
-    background-color: #4b5563;
-  }
-  
-  .ativo {
-    background-color: #f0716f;
-    color: #fff;
-  }
-}

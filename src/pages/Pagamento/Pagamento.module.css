@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  background-color: #0c111f;
+  background-color: #E4E7EB;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
 }
@@ -16,20 +16,20 @@
 
 .colunaResumo, .colunaPagamento {
   flex: 1;
-  background-color: #131a2b;
+  background-color: #E4E7EB;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
 .titulo {
-  color: #ffffff;
+  color: #2a2a2a;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
 .subtitulo {
-  color: #ffffff;
+  color: #2a2a2a;
   font-size: 1.2rem;
   margin-top: 2rem;
   margin-bottom: 0.5rem;
@@ -52,7 +52,7 @@
 .infoProduto {
   display: flex;
   flex-direction: column;
-  color: #fff;
+  color: #2a2a2a;
 }
 
 .totalWrapper {
@@ -60,7 +60,7 @@
   justify-content: space-between;
   margin-top: 1rem;
   font-weight: bold;
-  color: #fff;
+  color: #2a2a2a;
   border-top: 1px solid #2a2a2a;
   padding-top: 1rem;
 }
@@ -70,11 +70,11 @@
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  color: #fff;
+  color: #2a2a2a;
 }
 
 .cartaoVisual {
-  background: linear-gradient(135deg, #f97f7f, #f36c6c);
+  background: linear-gradient(135deg, #f36c6c, #f36c6c);
   padding: 1rem;
   color: #fff;
   border-radius: 0.8rem;

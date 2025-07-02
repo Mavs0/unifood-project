@@ -3,12 +3,10 @@ import NavBarraSide from "../../../components/layout/navBarraSide/NavBarraSide";
 import NavBarraTop from "../../../components/layout/navBarraTop/NavBarraTop";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import { Dialog } from "primereact/dialog";
 import { useState, useEffect, useRef } from "react";
 import CadastroProduto from "../../../components/form/cadastroProduto/CadProduto";
-import EditProduto from "../../../components/form/formEditProduto/EditProduto";
 import { buscarProdutos, deletarProduto } from "../../../utils/api";
 
 export default function MeusProdutos() {
@@ -44,7 +42,6 @@ export default function MeusProdutos() {
   async function carregarProdutos() {
     try {
       const lista = await buscarProdutos();
-
       setProdutos(lista);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
@@ -79,14 +76,12 @@ export default function MeusProdutos() {
 
     try {
       await deletarProduto(produtoParaExcluir.id);
-
       toast.current.show({
         severity: "success",
         summary: "Produto excluído",
         detail: "Produto removido com sucesso!",
         life: 3000,
       });
-
       carregarProdutos();
     } catch (error) {
       console.error("Erro ao excluir produto:", error);
@@ -100,6 +95,25 @@ export default function MeusProdutos() {
       setConfirmDeleteOpen(false);
       setProdutoParaExcluir(null);
     }
+  };
+
+  const salvarEdicaoProduto = () => {
+    if (!produtoSelecionado) return;
+
+    const atualizados = produtos.map((p) =>
+      p.id === produtoSelecionado.id ? produtoSelecionado : p
+    );
+
+    setProdutos(atualizados);
+    setProdutosFiltrados(atualizados);
+    toast.current.show({
+      severity: "success",
+      summary: "Produto atualizado com sucesso!",
+      life: 3000,
+    });
+
+    setShowEditForm(false);
+    setProdutoSelecionado(null);
   };
 
   return (
@@ -175,34 +189,22 @@ export default function MeusProdutos() {
                     <td>{produto.categorias?.join(", ") || "-"}</td>
                     <td>R$ {produto.preco?.toFixed(2) || "-"}</td>
                     <td>
-                      <span data-pr-tooltip="Editar" data-pr-position="top">
-                        <Button
-                          icon="pi pi-pencil"
-                          className={styles.editBtn}
-                          onClick={() => {
-                            setProdutoSelecionado(produto);
-                            setShowForm(true);
-                          }}
-                        />
-                        {/* <Button
-                          icon="pi pi-pencil"
-                          className={styles.editBtn}
-                          onClick={() => {
-                            setProdutoSelecionado(produto);
-                            setShowEditForm(true);
-                          }}
-                        /> */}
-                      </span>
-                      <span data-pr-tooltip="Excluir" data-pr-position="top">
-                        <Button
-                          icon="pi pi-trash"
-                          className={styles.deleteBtn}
-                          onClick={() => {
-                            setProdutoParaExcluir(produto);
-                            setConfirmDeleteOpen(true);
-                          }}
-                        />
-                      </span>
+                      <Button
+                        icon="pi pi-pencil"
+                        className={styles.editBtn}
+                        onClick={() => {
+                          setProdutoSelecionado(produto);
+                          setShowEditForm(true);
+                        }}
+                      />
+                      <Button
+                        icon="pi pi-trash"
+                        className={styles.deleteBtn}
+                        onClick={() => {
+                          setProdutoParaExcluir(produto);
+                          setConfirmDeleteOpen(true);
+                        }}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -218,12 +220,86 @@ export default function MeusProdutos() {
         onSave={carregarProdutos}
       />
 
-      <EditProduto
+      {/* Diálogo de edição simulado */}
+      <Dialog
+        header="Editar Produto"
         visible={showEditForm}
+        style={{ width: "500px" }}
+        modal
         onHide={() => setShowEditForm(false)}
-        onSave={carregarProdutos}
-        produtoEdicao={produtoSelecionado}
-      />
+        footer={
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}
+          >
+            <Button
+              label="Cancelar"
+              icon="pi pi-times"
+              className="p-button-text"
+              onClick={() => setShowEditForm(false)}
+            />
+            <Button
+              label="Salvar"
+              icon="pi pi-check"
+              onClick={salvarEdicaoProduto}
+            />
+          </div>
+        }
+      >
+        {produtoSelecionado && (
+          <div className={styles.editForm}>
+            <label>Nome</label>
+            <InputText
+              value={produtoSelecionado.nome}
+              onChange={(e) =>
+                setProdutoSelecionado((prev) => ({
+                  ...prev,
+                  nome: e.target.value,
+                }))
+              }
+              className={styles.inputPadrao}
+            />
+
+            <label>Preço</label>
+            <InputText
+              value={produtoSelecionado.preco}
+              onChange={(e) =>
+                setProdutoSelecionado((prev) => ({
+                  ...prev,
+                  preco: parseFloat(e.target.value),
+                }))
+              }
+              className={styles.inputPadrao}
+            />
+
+            <label>Imagem (URL)</label>
+            <InputText
+              value={produtoSelecionado.imagemUrl}
+              onChange={(e) =>
+                setProdutoSelecionado((prev) => ({
+                  ...prev,
+                  imagemUrl: e.target.value,
+                }))
+              }
+              className={styles.inputPadrao}
+            />
+
+            <label>Categorias (separadas por vírgula)</label>
+            <InputText
+              value={produtoSelecionado.categorias?.join(", ") || ""}
+              onChange={(e) =>
+                setProdutoSelecionado((prev) => ({
+                  ...prev,
+                  categorias: e.target.value
+                    .split(",")
+                    .map((c) => c.trim())
+                    .filter((c) => c),
+                }))
+              }
+              className={styles.inputPadrao}
+            />
+          </div>
+        )}
+      </Dialog>
 
       <Dialog
         header="Confirmar Exclusão"

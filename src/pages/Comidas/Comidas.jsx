@@ -59,7 +59,22 @@ export default function Comidas() {
     return nomeMatch && categoriaMatch;
   });
 
-  const adicionarAoCarrinho = async (produto) => {
+  const adicionarAoCarrinho = (produto) => {
+    const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho")) || [];
+    const existente = carrinhoAtual.find((p) => p.id === produto.id);
+
+    let novoCarrinho;
+
+    if (existente) {
+      novoCarrinho = carrinhoAtual.map((p) =>
+        p.id === produto.id ? { ...p, quantidade: p.quantidade + 1 } : p
+      );
+    } else {
+      novoCarrinho = [...carrinhoAtual, { ...produto, quantidade: 1 }];
+    }
+
+    localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
+
     toast.current.show({
       severity: "success",
       summary: "Carrinho",
@@ -147,9 +162,9 @@ export default function Comidas() {
                       <span className={styles.tagPreco}>
                         R$ {produto.preco.toFixed(2)}
                       </span>
-                      <span className={styles.tagCategoria}>
+                      {/* <span className={styles.tagCategoria}>
                         {produto.categoria}
-                      </span>
+                      </span> */}
                       <div className={styles.botoesCard}>
                         <button
                           className={`${styles.botaoAcao} ${styles.botaoVisualizar}`}

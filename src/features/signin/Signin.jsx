@@ -4,15 +4,19 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
-import { GoogleLogin } from "@react-oauth/google";
-import { loginUsuario } from "../../utils/api";
+// import { loginUsuario } from "../../utils/api"; // Desnecessário para mock
 import estilos from "./Signin.module.css";
 
 export default function SignIn() {
   const navigate = useNavigate();
   const toast = useRef(null);
 
-  const [dados, setDados] = useState({ email: "", senha: "" });
+  // Dados preenchidos automaticamente
+  const [dados, setDados] = useState({
+    email: "manuelavieira732@gmail.com",
+    senha: "Pjm12105",
+  });
+
   const [erros, setErros] = useState({ email: "", senha: "" });
 
   const handleChange = (field, value) => {
@@ -38,19 +42,34 @@ export default function SignIn() {
     return valido;
   };
 
+  // Login simulado com localStorage
   async function submit(e) {
     e.preventDefault();
     if (!validar()) return;
 
     try {
-      await loginUsuario(dados.email, dados.senha);
-      toast.current.show({ severity: "success", summary: "Login feito!" });
+      // Dados fake simulando resposta da API
+      const usuarioMock = {
+        id: "123",
+        nome: "Usuário Teste",
+        email: dados.email,
+        token: "fake-jwt-token",
+      };
+
+      // Salva no localStorage como se fosse login real
+      localStorage.setItem("usuario", JSON.stringify(usuarioMock));
+
+      toast.current.show({
+        severity: "success",
+        summary: "Login  com sucesso!",
+      });
+
       navigate("/comidas");
     } catch (error) {
       toast.current.show({
         severity: "error",
         summary: "Erro no Login",
-        detail: error.message || "E-mail ou senha inválidos.",
+        detail: "E-mail ou senha inválidos.",
       });
     }
   }
@@ -92,16 +111,6 @@ export default function SignIn() {
             label="Entrar"
             className={estilos.botaoCadastrar}
           />
-
-          {/* <div className={estilos.divider}>Ou</div>
-
-          <GoogleLogin
-            onSuccess={responseGoogle}
-            onError={responseGoogle}
-            useOneTap
-            theme="outline"
-            className={estilos.googleBtn}
-          /> */}
         </form>
       </div>
     </div>
