@@ -8,13 +8,16 @@ import { InputText } from "primereact/inputtext";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buscarProdutos } from "../../utils/api";
+import ErroGenerico from "../../components/ui/ErroGenerico";
+import Imagem from "../../assets/image/Erro.svg";
+import { Tooltip } from "primereact/tooltip";
 
 export default function Comidas() {
   const [produtos, setProdutos] = useState([]);
   const [busca, setBusca] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const toast = useRef(null);
   const navigate = useNavigate();
@@ -31,6 +34,7 @@ export default function Comidas() {
 
   useEffect(() => {
     async function carregarProdutos() {
+      setLoading(true);
       try {
         const lista = await buscarProdutos();
         setProdutos(lista);
@@ -40,6 +44,8 @@ export default function Comidas() {
           summary: "Erro",
           detail: "Falha ao carregar produtos.",
         });
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -68,14 +74,21 @@ export default function Comidas() {
   return (
     <div className={styles.layout}>
       <Toast ref={toast} />
+      <Tooltip target="[data-pr-tooltip]" position="top" />
       <NavBarraSide />
       <div className={styles.mainContent}>
         <NavBarraTop />
 
         <div className={styles.container}>
-          <h2 className={styles.titulo}>Comidas</h2>
+          <div className={styles.headerBar}>
+            <h2 className={styles.titulo}>Comidas</h2>
+            <p className={styles.subtitulo}>
+              Explore refeições saborosas preparadas por vendedores locais.
+              Filtre por categoria ou busque pelo nome.
+            </p>
+          </div>
 
-          <div className={styles.filtrosWrapper}>
+          <div className={styles.filtroContainerNovo}>
             <InputText
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
@@ -83,18 +96,38 @@ export default function Comidas() {
               className={styles.inputPadrao}
             />
 
-            <Dropdown
-              value={categoriaSelecionada}
-              options={categorias}
-              onChange={(e) => setCategoriaSelecionada(e.value)}
-              placeholder="Filtrar por categoria"
-              showClear
-              className={styles.inputPadraoDropdown}
-            />
+            <div className={styles.filtrosCategorias}>
+              {categorias.map((cat) => (
+                <button
+                  key={cat.value}
+                  className={`${styles.botaoCategoria} ${
+                    categoriaSelecionada === cat.value ? styles.ativo : ""
+                  }`}
+                  onClick={() =>
+                    setCategoriaSelecionada(
+                      categoriaSelecionada === cat.value ? null : cat.value
+                    )
+                  }
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {loading ? (
-            <p>Carregando...</p>
+            <div className={styles.loadingContainer}>
+              <div className={styles.spinner}></div>
+              <p className={styles.loadingText}>Carregando produtos...</p>
+            </div>
+          ) : produtosFiltrados.length === 0 ? (
+            <ErroGenerico
+              codigo="404"
+              titulo="Nenhum produto encontrado"
+              descricao="Não encontramos nenhum produto com os critérios informados."
+              imagem={Imagem}
+              onReload={() => window.location.reload()}
+            />
           ) : (
             <div className={styles.gridProdutos}>
               {produtosFiltrados.map((produto) => (
@@ -109,8 +142,68 @@ export default function Comidas() {
                     className={styles.imagemProduto}
                   />
                   <div className={styles.info}>
-                    <h4>{produto.nome}</h4>
-                    <span>R$ {produto.preco.toFixed(2)}</span>
+                    <h4 className={styles.nomeProduto}>{produto.nome}</h4>
+                    <div className={styles.tagsWrapper}>
+                      <span className={styles.tagPreco}>
+                        R$ {produto.preco.toFixed(2)}
+                      </span>
+                      <span className={styles.tagCategoria}>
+                        {produto.categoria}
+                      </span>
+                      <div className={styles.botoesCard}>
+                        <button
+                          className={`${styles.botaoAcao} ${styles.botaoVisualizar}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setProdutoSelecionado(produto);
+                          }}
+                          data-pr-tooltip="Visualizar Produto"
+                          aria-label="Visualizar Produto"
+                        >
+                          <i className="pi pi-eye" />
+                        </button>
+
+                        <button
+                          className={`${styles.botaoAcao} ${styles.botaoFavoritar}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toast.current.show({
+                              severity: "info",
+                              summary: "Favorito",
+                              detail: `Produto ${produto.nome} favoritado!`,
+                            });
+                          }}
+                          data-pr-tooltip="Favoritar Produto"
+                          aria-label="Favoritar Produto"
+                        >
+                          <i className="pi pi-heart" />
+                        </button>
+
+                        <button
+                          className={`${styles.botaoAcao} ${styles.botaoCarrinho}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            adicionarAoCarrinho(produto);
+                          }}
+                          data-pr-tooltip="Adicionar ao Carrinho"
+                          aria-label="Adicionar ao Carrinho"
+                        >
+                          <i className="pi pi-shopping-cart" />
+                        </button>
+
+                        <button
+                          className={`${styles.botaoAcao} ${styles.botaoComprar}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleComprarAgora(produto);
+                          }}
+                          data-pr-tooltip="Comprar Agora"
+                          aria-label="Comprar Agora"
+                        >
+                          <i className="pi pi-credit-card" />
+                        </button>
+                      </div>
+                    </div>
                     <p className={styles.loja}>{produto.loja}</p>
                   </div>
                 </div>
@@ -118,15 +211,12 @@ export default function Comidas() {
             </div>
           )}
 
-          {produtoSelecionado && (
-            <VisualizarProduto
-              produto={produtoSelecionado}
-              aberto={!!produtoSelecionado}
-              aoFechar={() => setProdutoSelecionado(null)}
-              adicionarAoCarrinho={adicionarAoCarrinho}
-              comprarAgora={handleComprarAgora}
-            />
-          )}
+          <VisualizarProduto
+            produto={produtoSelecionado}
+            onClose={() => setProdutoSelecionado(null)} // <- nome correto da prop
+            adicionarAoCarrinho={adicionarAoCarrinho}
+            comprarAgora={handleComprarAgora}
+          />
         </div>
       </div>
     </div>

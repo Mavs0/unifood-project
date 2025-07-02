@@ -2,6 +2,7 @@
 .layout {
   display: flex;
   height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
 .mainContent {
@@ -9,66 +10,142 @@
   display: flex;
   flex-direction: column;
   background-color: #f7f8fa;
-  font-family: 'Inter', sans-serif;
 }
 
+/* Conteúdo principal */
 .container {
   padding: 2rem;
-  font-family: 'Inter', sans-serif;
+}
+
+/* Cabeçalho com título e subtítulo */
+.headerBar {
+  margin-bottom: 1.5rem;
+}
+
+/* Botões dentro dos cards */
+.botoesCard {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.botaoAcao {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Estilo botão - Carrinho */
+.botaoCarrinho {
+  background-color: #f9fafb;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+.botaoCarrinho:hover {
+  background-color: #f3f4f6;
+}
+
+/* Estilo botão - Comprar Agora */
+.botaoComprar {
+  background-color: #f0716f;
+  color: white;
+  border: none;
+}
+
+.botaoComprar:hover {
+  background-color: #de5e5c;
 }
 
 .titulo {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
   color: #111827;
+  margin-bottom: 0.5rem;
 }
 
-/* Filtros e Busca - Padrão MeusProdutos */
-.filtrosWrapper {
+.subtitulo {
+  font-size: 1rem;
+  color: #6b7280;
+  max-width: 800px;
+}
+
+/* Filtros */
+.filtroContainerNovo {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
   margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  align-items: center;
 }
 
-.inputPadraoDropdown {
-  padding: 0rem 0.5rem 0.5rem 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  width: 300px;
-  font-size: 0.95rem;
-  height: 40px;
+.filtrosCategorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .inputPadrao {
   padding: 1rem 0.5rem;
   border-radius: 8px;
   border: 1px solid #d1d5db;
-  width: 300px;
+  width: 400px;
   font-size: 0.95rem;
   height: 40px;
+  background-color: #1f2937;
+  color: #f9fafb;
+  transition: border 0.3s, box-shadow 0.3s;
 }
 
-.botaoWrapper {
-  margin-left: auto;
+.inputPadrao:focus {
+  border-color: #f0716f;
+  box-shadow: 0 0 0 2px rgba(240, 113, 111, 0.3);
+  outline: none;
 }
 
-.botaoCustomizado {
-  background-color: #f0716f;
-  color: white;
+.botaoCategoria {
+  padding: 0.6rem 1rem;
+  background-color: #f3f4f6;
   border: none;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #374151;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
 }
 
-.botaoCustomizado:hover {
-  background-color: #c887869c;
+.botaoCategoria:hover {
+  background-color: #e5e7eb;
+  transform: scale(1.05);
 }
+
+.ativo {
+  background-color: #f0716f;
+  color: #fff;
+  font-weight: 600;
+}
+
+
+
+/* .inputPadrao {
+  padding: 0.8rem;
+  border-radius: 0.75rem;
+  border: 1px solid #d1d5db;
+  width: 350px;
+  font-size: 0.95rem;
+  background: white;
+} */
+
 
 /* Grid de produtos */
 .gridProdutos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1.5rem;
 }
 
@@ -76,50 +153,88 @@
   background: white;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 
 .cardProduto:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .imagemProduto {
   width: 100%;
-  height: 140px;
+  height: 150px;
   object-fit: cover;
 }
 
 .info {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
-.nomePreco {
+.nomeProduto {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.tagsWrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tagPreco {
+  background: #fef3c7;
+  color: #b45309;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.tagCategoria {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.85rem;
 }
 
 .loja {
   font-size: 0.85rem;
-  color: #888;
-  margin-top: 0.3rem;
+  color: #6b7280;
 }
 
-.dialogImage {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 8px;
+/* Loading */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #f0716f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
   margin-bottom: 1rem;
 }
 
-.dialogCategoria {
-  background: #f0f0f0;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  color: #374151;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Dark Mode */
@@ -128,48 +243,119 @@
     background-color: #111827;
   }
 
+  /* Botões dentro dos cards */
+.botoesCard {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.inputPadrao {
+  background-color: #1f2937;
+  color: #f9fafb;
+  border: 1px solid #4b5563;
+}
+
+.botaoCategoria {
+  background-color: #374151;
+  color: #f9fafb;
+}
+
+.botaoCategoria:hover {
+  background-color: #4b5563;
+}
+
+.ativo {
+  background-color: #f0716f;
+  color: #fff;
+}
+
+.botaoAcao {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Estilo botão - Carrinho */
+.botoesCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-top: 2rem;
+}
+
+.botaoAcao {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  background-color: #f3f4f6;
+  transition: background 0.3s;
+}
+
+.botaoAcao:hover {
+  background-color: #e5e7eb;
+}
+
+.botaoVisualizar i {
+  color: #6b7280;
+}
+
+.botaoFavoritar i {
+  color: #ef4444;
+}
+
+.botaoCarrinho i {
+  color: #10b981;
+}
+
+.botaoComprar i {
+  color: #f97316;
+}
+
+
   .container {
     background-color: #111827;
     color: #f9fafb;
   }
 
-  .titulo {
-    color: #f9fafb;
-  }
-
-  .labelFiltro {
+  .titulo,
+  .subtitulo {
     color: #f9fafb;
   }
 
   .inputPadrao,
-  .inputBusca,
-  .inputPadraoDropdown,
-  .dropdownFiltro {
-    background-color: #374151;
+  .inputPadraoDropdown {
+    background-color: #1f2937;
     color: #f9fafb;
-    border: 1px solid #4b5563;
+    border: 1px solid #374151;
   }
 
   .cardProduto {
-    background: #374151;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    background: #1f2937;
+  }
+
+  .nomeProduto {
+    color: #f9fafb;
   }
 
   .loja {
     color: #d1d5db;
   }
 
-  .dialogCategoria {
-    background: #374151;
-    color: #f9fafb;
+  .tagPreco {
+    background: #78350f;
+    color: #fde68a;
   }
 
-  .botaoCustomizado {
-    background-color: #f0716f;
-    color: white;
-  }
-
-  .botaoCustomizado:hover {
-    background-color: #c887869c;
+  .tagCategoria {
+    background: #1e40af;
+    color: #bfdbfe;
   }
 }

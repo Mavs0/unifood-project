@@ -1,191 +1,151 @@
-.gridContainer {
-  display: grid;
-  grid-template-columns: 5fr 2fr;
-  gap: 1rem;
-  padding: 1rem;
-  font-family: 'Inter', sans-serif;
-  background-color: #f7f8fa;
+.container {
+  display: flex;
+  background-color: #0c111f;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
-.colResumo,
-.colPagamento {
-  background-color: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+  justify-content: space-between;
 }
 
-h2 {
+.colunaResumo, .colunaPagamento {
+  flex: 1;
+  background-color: #131a2b;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.titulo {
+  color: #ffffff;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.cardResumo {
+.subtitulo {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.cardProduto {
   display: flex;
+  align-items: center;
   gap: 1rem;
-  border: 1px solid #e5e7eb;
-  padding: 1rem;
-  border-radius: 8px;
   margin-bottom: 1rem;
-  align-items: center;
-  justify-content: space-between;
 }
 
-.cardResumo img {
-  width: 80px;
-  height: 80px;
+.imagemProduto {
+  width: 60px;
+  height: 60px;
+  border-radius: 0.5rem;
   object-fit: cover;
-  border-radius: 8px;
 }
 
-.quantidadeControls {
+.infoProduto {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  color: #fff;
+}
+
+.totalWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #fff;
+  border-top: 1px solid #2a2a2a;
+  padding-top: 1rem;
+}
+
+.metodosWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.cartaoVisual {
+  background: linear-gradient(135deg, #f97f7f, #f36c6c);
+  padding: 1rem;
+  color: #fff;
+  border-radius: 0.8rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+input[type="text"] {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+}
+
+.qrcodeWrapper {
+  background-color: #fff;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  border-radius: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.qrcodeImg {
+  width: 160px;
+  height: 160px;
+}
+
+.cuponsWrapper {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   margin-top: 0.5rem;
 }
 
-.btnRemove {
-  background: none;
-  border: none;
-  color: #dc2626;
-  cursor: pointer;
-}
-
-.btnRemove:hover {
-  color: #991b1b;
-}
-
-.radioGroup {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.inputGroup {
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.flex {
-  display: flex;
-  gap: 1rem;
-}
-
-.qrCodeContainer {
-  background-color: #f9f9f9;
-  padding: 1rem;
-  border-radius: 10px;
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.cuponsWrapper {
-  background-color: #fff5f5;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.listaCupons {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.cupomItem {
-  background-color: #fde2e2;
-  border: 1px solid #fca5a5;
+.cupomBtn {
+  background-color: transparent;
+  border: 1px solid #f97f7f;
+  color: #f97f7f;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
   cursor: pointer;
-  font-size: 0.9rem;
-  color: #7f1d1d;
-  transition: 0.2s ease;
 }
 
-.cupomItem:hover {
-  background-color: #fca5a5;
+.cupomBtn:hover {
+  background-color: #f97f7f;
   color: #fff;
 }
 
-.selecionado {
-  background-color: #ef4444 !important;
-  color: white !important;
-  border-color: #b91c1c;
+.cupomSelecionado {
+  background-color: #f97f7f;
+  color: #fff;
 }
 
 .btnFinalizar {
-  background-color: #f0716f;
-  color: white;
+  background-color: #f97f7f;
+  color: #fff;
+  padding: 0.75rem;
+  width: 100%;
+  font-weight: bold;
   border: none;
-  margin-top: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .btnFinalizar:hover {
-  background-color: #c887869c;
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  .gridContainer {
-    background-color: #111827;
-  }
-
-  .colResumo,
-  .colPagamento {
-    background-color: #1f2937;
-    color: #f9fafb;
-    box-shadow: none;
-  }
-
-  .cardResumo {
-    background-color: #374151;
-    border: 1px solid #4b5563;
-  }
-
-  .btnRemove {
-    color: #f87171;
-  }
-
-  .btnRemove:hover {
-    color: #dc2626;
-  }
-
-  .cuponsWrapper {
-    background-color: #1f2937;
-  }
-
-  .cupomItem {
-    background-color: #374151;
-    border: 1px solid #f87171;
-    color: #f9fafb;
-  }
-
-  .cupomItem:hover {
-    background-color: #f87171;
-    color: white;
-  }
-
-  .selecionado {
-    background-color: #dc2626 !important;
-    border-color: #991b1b;
-  }
-
-  .qrCodeContainer {
-    background-color: #374151;
-  }
-
-  .btnFinalizar {
-    background-color: #f0716f;
-  }
-
-  .btnFinalizar:hover {
-    background-color: #c887869c;
-  }
+  background-color: #f36c6c;
 }

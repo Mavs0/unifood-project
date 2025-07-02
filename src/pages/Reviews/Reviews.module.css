@@ -1,6 +1,5 @@
 .container {
   display: flex;
-  
   font-family: 'Inter', sans-serif;
 }
 
@@ -11,13 +10,14 @@
   background-color: #f7f8fa;
 }
 
-.grid {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: 20px;
+.titulo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #111827;
 }
 
+/* Filtros */
 .filtros {
   display: flex;
   gap: 15px;
@@ -26,32 +26,24 @@
   margin-bottom: 20px;
 }
 
-.inputBusca {
+.inputBusca,
+.inputPadraoDropdown {
   flex: 1;
+  max-width: 300px;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   border: 1px solid #d1d5db;
-  width: 300px;
-  font-size: 0.95rem;
-  height: 40px;
-}
-.rating .p-rating-icon {
-  color: #f0716f;
-}
-
-.rating .p-rating-icon.pi-star-fill {
-  color: #f0716f;
-}
-
-.inputPadraoDropdown {
-  padding: 0rem 0.5rem 0.5rem 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  width: 300px;
   font-size: 0.95rem;
   height: 40px;
 }
 
+/* Cards */
+.grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
 
 .card {
   width: 200px;
@@ -86,16 +78,42 @@
   color: #555;
 }
 
-.paginacao {
+/* Empty State */
+.errorWrapper {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  font-family: 'Inter', sans-serif;
+  justify-content: center;
+  padding: 60px 0;
+  text-align: center;
 }
 
-.paginacao button {
+.errorCode {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f0716f;
+}
+
+.errorTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  color: #fff;
+}
+
+.errorDescription {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: #9ca3af;
+}
+
+.errorImage {
+  width: 250px;
+  max-width: 90%;
+}
+
+.reloadButton {
+  margin-top: 1rem;
   padding: 0.5rem 1rem;
   background-color: #f0716f;
   color: white;
@@ -105,50 +123,9 @@
   transition: background 0.2s ease;
 }
 
-.paginacao button:hover {
+.reloadButton:hover {
   background-color: #dc2626;
 }
-
-.paginacao button:disabled {
-  background-color: #e5e7eb;
-  color: #9ca3af;
-  cursor: not-allowed;
-}
-
-.paginacao span {
-  font-weight: 500;
-  color: #374151;
-}
-
-.loadingContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 300px;
-}
-
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #dc2626; 
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loadingText {
-  color: #9ca3af;
-  font-size: 1rem;
-}
-
-
 
 /* DARK MODE */
 @media (prefers-color-scheme: dark) {
@@ -157,12 +134,7 @@
     color: #f9fafb;
   }
 
-  .inputBusca {
-    background-color: #374151;
-    color: #f9fafb;
-    border: 1px solid #4b5563;
-  }
-
+  .inputBusca,
   .inputPadraoDropdown {
     background-color: #374151;
     color: #f9fafb;
@@ -180,14 +152,5 @@
 
   .card p {
     color: #d1d5db;
-  }
-
-  .paginacao span {
-    color: #f9fafb;
-  }
-
-  .paginacao button:disabled {
-    background-color: #374151;
-    color: #9ca3af;
   }
 }

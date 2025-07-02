@@ -8,6 +8,7 @@ import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import styles from "./Pedidos.module.css";
+import { buscarPedidos } from "../../utils/api";
 
 export default function PaginaPedidos() {
   const [pedidos, setPedidos] = useState([]);
@@ -20,39 +21,15 @@ export default function PaginaPedidos() {
   const toast = useRef(null);
 
   useEffect(() => {
-    buscarPedidosData();
+    const pedidosSalvos = JSON.parse(localStorage.getItem("pedidos")) || [];
+    setPedidos(pedidosSalvos);
   }, []);
 
   async function buscarPedidosData() {
     setLoading(true);
     try {
-      const pedidosSalvos = JSON.parse(localStorage.getItem("pedidosUsuario"));
-      if (pedidosSalvos && pedidosSalvos.length > 0) {
-        setPedidos(pedidosSalvos);
-      } else {
-        const mock = [
-          {
-            id: "001",
-            userId: "cliente1",
-            total: 39.9,
-            status: "pendente",
-          },
-          {
-            id: "002",
-            userId: "cliente2",
-            total: 59.5,
-            status: "entregue",
-          },
-          {
-            id: "003",
-            userId: "cliente3",
-            total: 22.0,
-            status: "cancelado",
-          },
-        ];
-        setPedidos(mock);
-        localStorage.setItem("pedidosUsuario", JSON.stringify(mock));
-      }
+      let resposta = await buscarPedidos();
+      setPedidos(resposta);
     } catch (error) {
       console.error("Erro ao carregar pedidos:", error);
       toast.current.show({
@@ -76,7 +53,7 @@ export default function PaginaPedidos() {
   };
 
   const pedidosFiltrados = pedidos.filter((pedido) => {
-    const clienteMatch = pedido.userId
+    const clienteMatch = pedido.user?.firstName
       ?.toLowerCase()
       .includes(buscaCliente.toLowerCase());
     const statusMatch =
@@ -119,7 +96,10 @@ export default function PaginaPedidos() {
           </div>
 
           {loading ? (
-            <p>Carregando pedidos...</p>
+            <div className={styles.loadingContainer}>
+              <div className={styles.spinner}></div>
+              <p className={styles.loadingText}>Carregando pedidos...</p>
+            </div>
           ) : (
             <div className={styles.tableWrapper}>
               <table className={styles.table}>
@@ -136,7 +116,7 @@ export default function PaginaPedidos() {
                   {pedidosFiltrados.map((pedido) => (
                     <tr key={pedido.id}>
                       <td>{pedido.id}</td>
-                      <td>{pedido.userId}</td>
+                      <td>{pedido.user?.firstName || "-"}</td>
                       <td>R$ {pedido.total?.toFixed(2) || "-"}</td>
                       <td>
                         <span

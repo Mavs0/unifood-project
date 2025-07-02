@@ -53,11 +53,38 @@ export default function ReviewsLojas() {
 
       setLojas(lojasComNota);
     } catch (error) {
-      console.error("Erro ao carregar avaliações:", error);
+      console.warn("Usando dados mockados por erro na API:", error.message);
+
+      const lojasMock = [
+        {
+          id: "mock1",
+          nome: "Doces da Ana",
+          nota: "4.7",
+          imagem:
+            "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80",
+        },
+        {
+          id: "mock2",
+          nome: "Lanchonete do João",
+          nota: "3.9",
+          imagem:
+            "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80",
+        },
+        {
+          id: "mock3",
+          nome: "Açaí da UFAM",
+          nota: "4.2",
+          imagem:
+            "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80",
+        },
+      ];
+
+      setLojas(lojasMock);
+
       toast.current.show({
-        severity: "error",
-        summary: "Erro",
-        detail: "Não foi possível carregar as avaliações das lojas.",
+        severity: "warn",
+        summary: "Aviso",
+        detail: "Exibindo dados de exemplo por falha ao carregar dados reais.",
       });
     } finally {
       setLoading(false);

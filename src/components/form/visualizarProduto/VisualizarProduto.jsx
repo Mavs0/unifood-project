@@ -1,38 +1,16 @@
 import React from "react";
 import styles from "./VisualizarProduto.module.css";
-import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 import { Button } from "primereact/button";
-import { toast } from "react-toastify";
-import { ShoppingCart, CreditCard, X } from "lucide-react";
+import { ShoppingCart, CreditCard } from "lucide-react";
 
-const VisualizarProduto = ({ produto, onClose }) => {
-  const navigate = useNavigate();
-
+const VisualizarProduto = ({
+  produto,
+  onClose,
+  adicionarAoCarrinho,
+  comprarAgora,
+}) => {
   if (!produto) return null;
-
-  const adicionarAoCarrinho = () => {
-    try {
-      const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho")) || [];
-      const novoCarrinho = [...carrinhoAtual, produto];
-      localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
-      toast.success("Produto adicionado ao carrinho!");
-    } catch (error) {
-      console.error("Erro ao adicionar ao carrinho:", error);
-      toast.error("Erro ao adicionar ao carrinho!");
-    }
-  };
-
-  const comprarAgora = () => {
-    try {
-      const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho")) || [];
-      const novoCarrinho = [...carrinhoAtual, produto];
-      localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
-      navigate("/pagamento");
-    } catch (error) {
-      console.error("Erro ao preparar a compra:", error);
-      toast.error("Erro ao iniciar a compra!");
-    }
-  };
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -41,41 +19,45 @@ const VisualizarProduto = ({ produto, onClose }) => {
           <X size={20} />
         </button>
 
-        <h2 className={styles.titulo}>{produto.nome}</h2>
-        <img
-          src={produto.imagem}
-          alt={produto.nome}
-          className={styles.imagem}
-        />
-
-        <div className={styles.detalhes}>
-          <div className={styles.coluna}>
-            <p>
+        <div className={styles.headerProduto}>
+          <img
+            src={produto.imagemUrl}
+            alt={produto.nome}
+            className={styles.imagem}
+            onError={
+              (e) => (e.target.src = "/imagens/placeholder.png") // fallback opcional
+            }
+          />
+          <div className={styles.infoTopo}>
+            <h2 className={styles.titulo}>{produto.nome}</h2>
+            <span className={styles.etiqueta}>
+              R$ {produto.preco.toFixed(2)}
+            </span>
+            <p className={styles.loja}>
               <strong>Loja:</strong> {produto.loja}
             </p>
-            <p>
-              <strong>Categoria:</strong>{" "}
-              <span className={styles.categoria}>{produto.categoria}</span>
-            </p>
-          </div>
-          <div className={styles.coluna}>
-            <p className={styles.descricao}>{produto.descricao}</p>
-            <p className={styles.preco}>
-              <strong>Preço:</strong> R$
-              {produto.preco.toFixed(2).replace(".", ",")}
+            <p className={styles.categoria}>
+              <strong>Categoria:</strong> {produto.categoria}
             </p>
           </div>
         </div>
 
-        <div className={styles.botoes}>
+        <div className={styles.descricaoBox}>
+          <p className={styles.descricao}>{produto.descricao}</p>
+        </div>
+
+        <div className={styles.botoesAcao}>
           <Button
             className={styles.botaoCarrinho}
-            onClick={adicionarAoCarrinho}
+            onClick={() => adicionarAoCarrinho(produto)}
           >
             <ShoppingCart size={16} className={styles.icone} />
             Adicionar ao Carrinho
           </Button>
-          <Button className={styles.botaoComprar} onClick={comprarAgora}>
+          <Button
+            className={styles.botaoComprar}
+            onClick={() => comprarAgora(produto)}
+          >
             <CreditCard size={16} className={styles.icone} />
             Comprar Agora
           </Button>
